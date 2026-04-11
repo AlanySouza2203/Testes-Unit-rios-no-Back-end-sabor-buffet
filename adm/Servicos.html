@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Sabor & Arte - Serviços</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f172a, #020617);
+      color: #e2e8f0;
+    }
+
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+
+    .container {
+      display: flex;
+      height: calc(100vh - 60px);
+    }
+
+
+    .sidebar {
+      width: 230px;
+      min-width: 230px;
+      background: #111827;
+      padding: 20px;
+    }
+
+    .menu a {
+      display: block;
+      padding: 12px;
+      margin: 8px 0;
+      color: #cbd5f5;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: 0.2s;
+    }
+
+    .menu a.active,
+    .menu a:hover {
+      background: #facc15;
+      color: #000;
+    }
+
+
+    .content {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .topo {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+
+    button {
+      background: #facc15;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+
+    select,
+    input {
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      margin-bottom: 10px;
+      width: 100%;
+    }
+
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #1e293b;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    th,
+    td {
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background: #111827;
+    }
+
+    tr {
+      border-bottom: 1px solid #334155;
+    }
+
+    /* MODAL */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 10px;
+      width: 300px;
+    }
+  </style>
+</head>
+
+<body>
+
+  < <div class="header">
+    <div>Sabor & Arte</div>
+    </div>
+
+    <div class="container">
+
+
+      <div class="sidebar">
+        <div class="menu">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="clientes.html">Clientes</a>
+        <a href="servicos.html">Serviços</a>
+        <a href="eventos.html">Eventos</a>
+        <a href="pedidos.html">Pedidos</a>
+        <a href="orcamentos.html">Orçamentos</a>
+      </div>
+      </div>
+
+      <!-- CONTEÚDO -->
+      <div class="content">
+
+        <div class="topo">
+          <h2>Itens do Cardápio</h2>
+          <button onclick="abrirModal()">+ Novo Item</button>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Categoria</th>
+              <th>Valor</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="lista"></tbody>
+        </table>
+
+      </div>
+    </div>
+
+
+    <div class="modal" id="modal">
+      <div class="modal-content">
+        <h3>Novo Item</h3>
+
+        <input type="text" id="nome" placeholder="Nome">
+
+        <select id="tipo">
+          <option value="entrada">Entrada</option>
+          <option value="principal">Prato Principal</option>
+          <option value="sobremesa">Sobremesa</option>
+          <option value="bebida">Bebida</option>
+          <option value="cafe">Café da Manhã</option>
+        </select>
+
+        <input type="number" id="valor" placeholder="Valor">
+
+        <input type="file" id="imagem" accept="image/*">
+
+        <button onclick="salvar()">Salvar</button>
+        <button onclick="fecharModal()">Cancelar</button>
+      </div>
+    </div>
+
+    <script>
+      let itens = JSON.parse(localStorage.getItem("cardapio")) || []
+      let editando = null
+
+      const modal = document.getElementById("modal")
+
+      function render() {
+        const tabela = document.getElementById("lista")
+        tabela.innerHTML = ""
+
+        itens.forEach((item, i) => {
+          tabela.innerHTML += `
+    <tr>
+      <td>${item.nome}</td>
+      <td>${item.categoria}</td>
+      <td>R$ ${item.valor}</td>
+      <td>
+        <button onclick="editar(${i})"></button>
+        <button onclick="remover(${i})"></button>
+      </td>
+    </tr>`
+        })
+      }
+
+      function abrirModal() {
+        modal.style.display = "flex"
+      }
+
+      function fecharModal() {
+        modal.style.display = "none"
+        limpar()
+      }
+
+      function limpar() {
+        document.getElementById("nome").value = ""
+        document.getElementById("tipo").value = "entrada"
+        document.getElementById("valor").value = ""
+        document.getElementById("imagem").value = ""
+        editando = null
+      }
+
+      function salvar() {
+        const file = document.getElementById("imagem").files[0]
+
+        if (!file) {
+          alert("Selecione uma imagem!")
+          return
+        }
+
+        const reader = new FileReader()
+
+        reader.onload = function (e) {
+
+          const item = {
+            nome: document.getElementById("nome").value,
+            categoria: document.getElementById("tipo").value,
+            valor: parseFloat(document.getElementById("valor").value).toFixed(2),
+            imagem: e.target.result
+          }
+
+          if (editando !== null) {
+            itens[editando] = item
+          } else {
+            itens.push(item)
+          }
+
+          localStorage.setItem("cardapio", JSON.stringify(itens))
+
+          fecharModal()
+          render()
+        }
+
+        reader.readAsDataURL(file)
+      }
+
+      function editar(i) {
+        editando = i
+        const item = itens[i]
+
+        document.getElementById("nome").value = item.nome
+        document.getElementById("tipo").value = item.categoria
+        document.getElementById("valor").value = item.valor
+
+        abrirModal()
+      }
+
+      function remover(i) {
+        itens.splice(i, 1)
+        localStorage.setItem("cardapio", JSON.stringify(itens))
+        render()
+      }
+
+      render()
+    </script>
+
+</body>
+
+</html>

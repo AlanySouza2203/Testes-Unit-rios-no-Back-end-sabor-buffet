@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Painel Completo</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial;
+            background: linear-gradient(135deg, #0f172a, #020617);
+            color: #e2e8f0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #facc15;
+        }
+
+        .container {
+            display: flex;
+            height: calc(100vh - 70px);
+        }
+
+        .sidebar {
+            width: 220px;
+            background: #111827;
+            padding: 20px;
+        }
+
+        .menu a {
+            display: block;
+            padding: 12px;
+            margin: 8px 0;
+            color: #cbd5f5;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .menu a.active,
+        .menu a:hover {
+            background: #facc15;
+            color: #000;
+        }
+
+        .content {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .lista-pedidos {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+
+        .pedido {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: 0.2s;
+            border-left: 5px solid transparent;
+        }
+
+        .pedido:hover {
+            transform: scale(1.02);
+        }
+
+
+        .pedido-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+        }
+
+        .cliente {
+            opacity: 0.8;
+        }
+
+
+        .pedido-body {
+            font-size: 13px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .evento {
+            font-size: 11px;
+            opacity: 0.6;
+        }
+
+
+        .pedido-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+
+        .status {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            width: fit-content;
+        }
+
+        .pendente {
+            background: orange;
+        }
+
+        .preparando {
+            background: dodgerblue;
+        }
+
+        .entregue {
+            background: green;
+        }
+
+
+        .pedido.pendente {
+            border-left-color: orange;
+        }
+
+        .pedido.preparando {
+            border-left-color: dodgerblue;
+        }
+
+        .pedido.entregue {
+            border-left-color: green;
+        }
+
+
+        .acoes {
+            display: flex;
+            gap: 5px;
+        }
+
+        .acoes button {
+            border: none;
+            padding: 6px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            flex: 1;
+        }
+
+        .btn-preparar {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-entregar {
+            background: #22c55e;
+            color: white;
+        }
+
+        .btn-remover {
+            background: #ef4444;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <div class="logo">Sabor <span>& Arte</span></div>
+    </div>
+
+    <div class="container">
+
+        <div class="sidebar">
+            <div class="menu">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="clientes.html">Clientes</a>
+        <a href="servicos.html">Serviços</a>
+        <a href="eventos.html">Eventos</a>
+        <a href="pedidos.html">Pedidos</a>
+        <a href="orcamentos.html">Orçamentos</a>
+      </div>
+        </div>
+
+        <div class="content">
+
+            <div id="dashboard" class="section">
+                <h2>Dashboard</h2>
+                <p>Bem-vindo ao painel.</p>
+            </div>
+
+            <div id="pedidos" class="section active">
+                <h2>Pedidos</h2>
+                <div class="lista-pedidos" id="listaPedidos"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+
+
+
+
+        let pedidos = [
+            { id: 1, cliente: "João", item: "X-Burger", status: "pendente", evento: "Casamento" },
+            { id: 2, cliente: "Maria", item: "Pizza", status: "preparando", evento: "Aniversário" },
+            { id: 3, cliente: "Carlos", item: "Suco", status: "entregue", evento: "Corporativo" },
+            { id: 4, cliente: "Ana", item: "Café", status: "pendente", evento: null }
+        ]
+
+        function renderPedidos() {
+            let container = document.getElementById('listaPedidos')
+            container.innerHTML = ''
+
+            pedidos.forEach(p => {
+                let div = document.createElement('div')
+
+
+                div.className = `pedido ${p.status}`
+
+                div.innerHTML = `
+<div class="pedido-header">
+    <strong>#${p.id}</strong>
+    <span class="cliente">${p.cliente}</span>
+</div>
+
+<div class="pedido-body">
+    <span class="item">${p.item}</span>
+    <span class="evento">Evento: ${p.evento || '—'}</span>
+</div>
+
+<div class="pedido-footer">
+    <span class="status ${p.status}">${p.status}</span>
+
+    <div class="acoes">
+        <button class="btn-preparar" onclick="preparar(${p.id})">Prep</button>
+        <button class="btn-entregar" onclick="entregar(${p.id})">OK</button>
+        <button class="btn-remover" onclick="remover(${p.id})">X</button>
+    </div>
+</div>
+`
+
+                container.appendChild(div)
+            })
+        }
+
+        function preparar(id) {
+            let p = pedidos.find(x => x.id == id)
+            p.status = "preparando"
+            renderPedidos()
+        }
+
+        function entregar(id) {
+            let p = pedidos.find(x => x.id == id)
+            p.status = "entregue"
+            renderPedidos()
+        }
+
+        function remover(id) {
+            pedidos = pedidos.filter(p => p.id != id)
+            renderPedidos()
+        }
+
+        renderPedidos()
+
+    </script>
+
+</body>
+
+</html>

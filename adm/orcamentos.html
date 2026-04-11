@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Sabor & Arte - Orçamentos</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f172a, #020617);
+      color: #e2e8f0;
+    }
+
+    .container {
+      display: flex;
+      height: 100vh;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      padding: 15px 30px;
+      background: rgba(0, 0, 0, 0.7);
+    }
+
+    .logo span {
+      color: #facc15;
+    }
+
+    .sidebar {
+      width: 230px;
+      background: #111827;
+      padding: 20px;
+    }
+
+    .menu a {
+      display: block;
+      padding: 12px;
+      margin: 8px 0;
+      color: #cbd5f5;
+      border-radius: 8px;
+      text-decoration: none;
+    }
+
+    .menu a.active,
+    .menu a:hover {
+      background: #facc15;
+      color: #000;
+    }
+
+    .content {
+      flex: 1;
+      padding: 20px;
+    }
+
+    .topo {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background: #facc15;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+
+    .orcamento {
+      background: #1e293b;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+
+
+    .modal {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 10px;
+      width: 350px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: none;
+    }
+
+    .item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+
+    .total {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <div class="logo">Sabor <span>& Arte</span></div>
+  </div>
+
+  <div class="container">
+
+    <div class="sidebar">
+      <div class="menu">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="clientes.html">Clientes</a>
+        <a href="servicos.html">Serviços</a>
+        <a href="eventos.html">Eventos</a>
+        <a href="pedidos.html">Pedidos</a>
+        <a href="orcamentos.html">Orçamentos</a>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <div class="topo">
+        <h2>Orçamentos</h2>
+        <button onclick="abrirModal()">+ Novo Orçamento</button>
+      </div>
+
+      <div id="listaOrcamentos"></div>
+
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+
+      <h3>Novo Orçamento</h3>
+
+      <!-- EVENTO (AGORA CORRETO DO SISTEMA) -->
+      <input type="text" id="evento" placeholder="Nome do Evento">
+
+      <!-- ITEM DO CARDÁPIO -->
+      <select id="itemNome">
+        <option value="">Selecione o item</option>
+      </select>
+
+      <input type="number" id="quantidade" placeholder="Quantidade">
+
+      <button onclick="adicionarItem()">Adicionar Item</button>
+
+      <div id="itens"></div>
+
+      <div class="total">
+        Total: R$ <span id="total">0</span>
+      </div>
+
+      <select id="status">
+        <option value="Pendente">Pendente</option>
+        <option value="Aprovado">Aprovado</option>
+        <option value="Recusado">Recusado</option>
+      </select>
+
+      <button onclick="salvarOrcamento()">Salvar</button>
+      <button onclick="fecharModal()">Cancelar</button>
+
+    </div>
+  </div>
+
+  <script>
+
+    let orcamentos = []
+    let itens = []
+    let total = 0
+
+    // 👉 SIMULAÇÃO DO CARDÁPIO (depois vem do localStorage ou API)
+    let cardapio = [
+      { nome: "Hambúrguer", valor: 15 },
+      { nome: "Pizza", valor: 30 },
+      { nome: "Sushi", valor: 40 }
+    ]
+
+    // preencher select do cardápio
+    function carregarCardapio() {
+      const select = document.getElementById("itemNome")
+
+      cardapio.forEach(item => {
+        select.innerHTML += `
+      <option value="${item.nome}" data-valor="${item.valor}">
+        ${item.nome} - R$${item.valor}
+      </option>
+    `
+      })
+    }
+    carregarCardapio()
+
+    function abrirModal() {
+      document.getElementById("modal").style.display = "flex"
+    }
+
+    function fecharModal() {
+      document.getElementById("modal").style.display = "none"
+      limpar()
+    }
+
+    function limpar() {
+      itens = []
+      total = 0
+      document.getElementById("itens").innerHTML = ""
+      document.getElementById("total").innerText = 0
+    }
+
+    function adicionarItem() {
+
+      const select = document.getElementById("itemNome")
+      const quantidade = Number(document.getElementById("quantidade").value)
+
+      if (!select.value || !quantidade) {
+        alert("Selecione item e quantidade")
+        return
+      }
+
+      const valor = Number(select.options[select.selectedIndex].dataset.valor)
+
+      const item = {
+        nome: select.value,
+        quantidade,
+        valor,
+        subtotal: valor * quantidade
+      }
+
+      itens.push(item)
+      total += item.subtotal
+
+      renderItens()
+    }
+
+    function renderItens() {
+      const lista = document.getElementById("itens")
+      lista.innerHTML = ""
+
+      itens.forEach(i => {
+        lista.innerHTML += `
+      <div class="item">
+        <span>${i.nome} x${i.quantidade}</span>
+        <span>R$ ${i.subtotal}</span>
+      </div>
+    `
+      })
+
+      document.getElementById("total").innerText = total
+    }
+
+    function salvarOrcamento() {
+
+      const evento = document.getElementById("evento").value
+      const status = document.getElementById("status").value
+
+      if (!evento || itens.length === 0) {
+        alert("Evento e itens são obrigatórios")
+        return
+      }
+
+      const orcamento = {
+        evento,
+        itens,
+        total,
+        status
+      }
+
+      orcamentos.push(orcamento)
+
+      renderOrcamentos()
+      fecharModal()
+    }
+
+    function renderOrcamentos() {
+
+      const lista = document.getElementById("listaOrcamentos")
+      lista.innerHTML = ""
+
+      orcamentos.forEach(o => {
+
+        let itensHTML = o.itens
+          .map(i => `${i.nome} x${i.quantidade}`)
+          .join(", ")
+
+        lista.innerHTML += `
+      <div class="orcamento">
+        <strong>${o.evento}</strong><br>
+        Itens: ${itensHTML}<br>
+        Total: R$ ${o.total}<br>
+        Status: ${o.status}
+      </div>
+    `
+      })
+    }
+
+  </script>
+
+</body>
+
+</html>

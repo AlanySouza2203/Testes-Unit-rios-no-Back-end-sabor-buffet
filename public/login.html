@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+        url('https://i.pinimg.com/1200x/fa/8e/10/fa8e102520ba7a404f0f159745d265c4.jpg');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .login-box {
+      width: 320px;
+      padding: 30px;
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      color: white;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .titulo {
+      color: #ae8625;
+      margin-bottom: 5px;
+      font-size: 27px;
+    }
+
+
+    .subtitulo {
+      font-size: 22px;
+      font-weight: bold;
+      color: #ffffff;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+
+
+
+    .login-box h2 {
+      margin-bottom: 10px;
+    }
+
+    .login-box p {
+      font-size: 17px;
+      margin-bottom: 20px;
+      color: #ddd;
+    }
+
+    .input-box {
+      margin-bottom: 15px;
+      text-align: left;
+    }
+
+    .input-box input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+
+    .input-box input::placeholder {
+      color: #ccc;
+    }
+
+    .options {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-bottom: 15px;
+    }
+
+    .options a {
+      color: #ccc;
+      text-decoration: none;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 20px;
+      background: white;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="login-box">
+    <div class="title">
+      <h2 class="titulo">Bem-vindo!</h2>
+      <p class="subtitulo">Sabor Arte</p>
+
+    </div>
+
+
+
+    <div class="input-box">
+      <input type="email" placeholder="email">
+    </div>
+
+    <div class="input-box">
+      <input type="password" placeholder="Senha">
+    </div>
+
+
+    <button class="btn">Entrar</button>
+
+
+
+  </div>
+
+</body>
+
+</html>

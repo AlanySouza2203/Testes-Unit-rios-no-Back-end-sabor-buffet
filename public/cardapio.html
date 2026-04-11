@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cardápio Digital</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #0f0f0f;
+            color: white;
+            margin: 0;
+        }
+
+
+
+        .container {
+            display: flex;
+        }
+
+
+
+        .sidebar {
+            width: 220px;
+            background: linear-gradient(180deg, #0c0c0c, #0f0f0f);
+            padding: 25px;
+            height: 100vh;
+            border-right: 2px solid #d4af37;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            font-size: 26px;
+            margin-bottom: 40px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .logo span {
+            background: #d4af37;
+            padding: 5px 12px;
+            border-radius: 6px;
+            color: #1a1a1a;
+            margin-left: 5px;
+        }
+
+
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #fcf8f8;
+            text-decoration: none;
+            margin: 10px 0;
+            padding: 12px;
+            border-radius: 10px;
+            transition: 0.3s;
+            font-size: 16px;
+        }
+
+
+
+        .sidebar a:hover {
+            background: #f5f4f4;
+            color: #d4af37;
+            transform: translateX(5px);
+        }
+
+
+
+        .sidebar a:first-of-type {
+            background: #d4af37;
+            color: #1a1a1a;
+            font-weight: bold;
+        }
+
+        .pedido-titulo {
+            color: #d4af37;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #d4af37;
+            letter-spacing: 1px;
+        }
+
+
+        .menu {
+            flex: 1;
+            padding: 30px;
+            background:
+                linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                url("https://i.pinimg.com/736x/e6/0a/09/e60a0998632c4fbc8d0ab8866985fb92.jpg");
+            background-size: cover;
+            background-position: center;
+        }
+
+
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: #1a1a1a;
+            border-radius: 18px;
+            padding: 20px;
+            text-align: center;
+            transition: 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .card img {
+            width: 120px;
+        }
+
+        .card h3 {
+            margin: 10px 0;
+        }
+
+        .card p {
+            color: #ff4d4d;
+            font-weight: bold;
+        }
+
+        .card button {
+            margin-top: 10px;
+            background: #ff4d4d;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+        }
+
+
+        .cart {
+            width: 300px;
+            padding: 25px;
+            background: linear-gradient(180deg, #1c1c1c, #262626);
+            border-left: 3px solid #d4af37;
+            box-shadow: -6px 0 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .cart::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at top, rgba(255, 255, 255, 0.05), transparent);
+            pointer-events: none;
+        }
+
+        .cart h2 {
+            margin-bottom: 20px;
+        }
+
+        .item {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+        }
+
+        .total {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        .confirm {
+            margin-top: 20px;
+            width: 100%;
+            padding: 14px;
+            background: #ff4d4d;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .remover {
+            background: none;
+            border: none;
+            color: red;
+            cursor: pointer;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+
+        .filtros {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filtro {
+            border: none;
+            padding: 10px 18px;
+            border-radius: 25px;
+            background: #1f1f1f;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 14px;
+        }
+
+        .filtro:hover {
+            background: #d4af37;
+            color: #1a1a1a;
+        }
+
+        .filtro.ativo {
+            background: #d4af37;
+            color: #1a1a1a;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- MENU LATERAL -->
+
+        <div class="sidebar">
+
+            <div class="logo">Sabor & <span>Arte</span></div>
+
+            <a href="index.html">Home</a>
+            <a href="Servicos.html">Serviços</a>
+            <a href="#">Sair</a>
+
+        </div>
+
+
+
+        <div class="menu">
+            <div class="menu" id="servicos" style="display:none;">
+
+                <h1>Serviços</h1>
+
+                <div id="lista-servicos"></div>
+
+            </div>
+
+            <h1>Cardápio</h1>
+            <div class="filtros">
+
+                <button class="filtro ativo" data-categoria="todos">Todos</button>
+                <button class="filtro" data-categoria="entrada">Entradas</button>
+                <button class="filtro" data-categoria="principal">Pratos Principais</button>
+                <button class="filtro" data-categoria="sobremesa">Sobremesas</button>
+                <button class="filtro" data-categoria="bebida">Bebidas</button>
+                <button class="filtro" data-categoria="cafe">Café da Manhã</button>
+
+            </div>
+
+
+            <div class="cards">
+
+                <div class="card" data-categoria="principal">
+                    <img src="https://i.pinimg.com/736x/c9/c5/01/c9c5013a47c78dde12d22a8659cdb945.jpg">
+                    <h3>Hambúrguer</h3>
+                    <p>R$ 15,00</p>
+                    <button class="adicionar" data-nome="Hambúrguer" data-preco="15">Adicionar</button>
+                </div>
+
+                <div class="card" data-categoria="principal">
+                    <img src="https://i.pinimg.com/736x/93/50/c0/9350c0f6116de6745968b8d92d26ef4e.jpg">
+                    <h3>Pizza</h3>
+                    <p>R$ 30,00</p>
+                    <button class="adicionar" data-nome="Pizza" data-preco="30">Adicionar</button>
+                </div>
+
+                <div class="card" data-categoria="entrada">
+                    <img src="https://i.pinimg.com/736x/63/46/10/6346107216394b1136e3243f4bc84efa.jpg">
+                    <h3>Sushi</h3>
+                    <p>R$ 40,00</p>
+                    <button class="adicionar" data-nome="Sushi" data-preco="40">Adicionar</button>
+                </div>
+
+                <div class="card" data-categoria="sobremesa">
+                    <img src="https://i.pinimg.com/736x/fe/50/6b/fe506b764c144d32330995c945a0f364.jpg">
+                    <h3>Bolo Pedaço</h3>
+                    <p>R$ 12,00</p>
+                    <button class="adicionar" data-nome="Bolo" data-preco="12">Adicionar</button>
+                </div>
+
+                <div class="card" data-categoria="principal">
+                    <img src="https://i.pinimg.com/736x/96/4d/fb/964dfbd9d27f85e7b1fc155bccd04bac.jpg">
+                    <h3>Macarrão</h3>
+                    <p>R$ 28,00</p>
+                    <button class="adicionar" data-nome="Macarrão" data-preco="28">Adicionar</button>
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="cart">
+
+            <div class="pedido-titulo">Seu Pedido</div>
+
+            <div id="lista"></div>
+
+            <div class="total">
+                Total: R$ <span id="total">0</span>
+            </div>
+
+            <a href="pagamento.html">
+                <button class="confirm" onclick="irPagamento()">Confirmar Pedido</button>
+
+            </a>
+
+
+
+        </div>
+
+
+        <script>
+
+            // 🔥 CARREGAR CARDÁPIO DO BACKEND
+            async function carregarCardapio(categoria = "todos") {
+
+                const res = await fetch(`http://localhost:3000/itens?categoria=${categoria}`)
+                const itens = await res.json()
+
+                const container = document.querySelector(".cards")
+                container.innerHTML = ""
+
+                itens.forEach(item => {
+
+                    container.innerHTML += `
+      <div class="card">
+        <h3>${item.nome}</h3>
+        <p>R$ ${item.valor}</p>
+        <button onclick="adicionar('${item.nome}', ${item.valor})">
+          Adicionar
+        </button>
+      </div>
+    `
+                })
+            }
+
+            // 🔥 FILTROS
+            document.querySelectorAll(".filtro").forEach(btn => {
+                btn.addEventListener("click", () => {
+
+                    // remove ativo de todos
+                    document.querySelectorAll(".filtro").forEach(b => b.classList.remove("ativo"))
+
+                    // adiciona no clicado
+                    btn.classList.add("ativo")
+
+                    let categoria = btn.dataset.categoria
+                    carregarCardapio(categoria)
+                })
+            })
+
+            // 🔥 CARRINHO
+            let carrinho = []
+
+            function adicionar(nome, preco) {
+
+                let itemExistente = carrinho.find(i => i.nome === nome)
+
+                if (itemExistente) {
+                    itemExistente.qtd++
+                } else {
+                    carrinho.push({
+                        id: Date.now(),
+                        nome,
+                        preco,
+                        qtd: 1
+                    })
+                }
+
+                renderCarrinho()
+            }
+
+            function renderCarrinho() {
+
+                let lista = document.getElementById("lista")
+                lista.innerHTML = ""
+
+                let total = 0
+
+                carrinho.forEach((item, index) => {
+
+                    let div = document.createElement("div")
+                    div.className = "item"
+
+                    let subtotal = item.preco * item.qtd
+                    total += subtotal
+
+                    div.innerHTML = `
+      <span>${item.nome} (${item.qtd}x)</span>
+      <span>R$ ${subtotal}</span>
+      <button class="remover" onclick="remover(${index})">X</button>
+    `
+
+                    lista.appendChild(div)
+                })
+
+                document.getElementById("total").innerText = total
+            }
+
+            function remover(index) {
+                carrinho.splice(index, 1)
+                renderCarrinho()
+            }
+
+            // 🔥 FINALIZAR PEDIDO
+            async function irPagamento() {
+
+                if (carrinho.length === 0) {
+                    alert("Carrinho vazio!")
+                    return
+                }
+
+                let total = carrinho.reduce((acc, item) => acc + (item.preco * item.qtd), 0)
+
+                let pedido = {
+                    cliente: "Cliente",
+                    itens: carrinho,
+                    total: total,
+                    status: "Pendente"
+                }
+
+                localStorage.setItem("pedidoAtual", JSON.stringify(pedido))
+
+                window.location.href = "pagamento.html"
+            }
+
+            // 🔥 CARREGAR AO ABRIR
+            carregarCardapio()
+
+        </script>
+
+
+
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Sabor & Arte - Eventos</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f172a, #020617);
+      color: #e2e8f0;
+    }
+
+    .container {
+      display: flex;
+      height: 100vh;
+    }
+
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+
+    .logo span {
+      color: #facc15;
+    }
+
+
+    .sidebar {
+      width: 230px;
+      background: #111827;
+      padding: 20px;
+    }
+
+    .menu a {
+      display: block;
+      padding: 12px;
+      margin: 8px 0;
+      color: #cbd5f5;
+      border-radius: 8px;
+      text-decoration: none;
+    }
+
+    .menu a.active,
+    .menu a:hover {
+      background: #facc15;
+      color: #000;
+    }
+
+
+    .content {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .topo {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background: #facc15;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+
+    .evento {
+      background: #1e293b;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+    }
+
+    .empty {
+      text-align: center;
+      margin-top: 100px;
+      opacity: 0.6;
+    }
+
+
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 10px;
+      width: 300px;
+    }
+
+    .modal-content input,
+    .modal-content select {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 8px;
+      border-radius: 5px;
+      border: none;
+      outline: none;
+    }
+  </style>
+</head>
+
+<body>
+
+
+  <div class="header">
+    <div class="logo">Sabor <span>& Arte</span></div>
+  </div>
+
+  <div class="container">
+
+
+    <div class="sidebar">
+      <div class="menu">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="clientes.html">Clientes</a>
+        <a href="servicos.html">Serviços</a>
+        <a href="eventos.html">Eventos</a>
+        <a href="pedidos.html">Pedidos</a>
+        <a href="orcamentos.html">Orçamentos</a>
+      </div>
+    </div>
+
+
+    <div class="content">
+
+      <div class="topo">
+        <h2>Eventos</h2>
+        <button onclick="abrirModal()">+ Novo Evento</button>
+      </div>
+
+      <div id="listaEventos"></div>
+      <p class="empty" id="mensagem">Nenhum evento cadastrado</p>
+
+    </div>
+  </div>
+
+
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <h3>Novo Evento</h3>
+
+      <input type="text" id="cliente" placeholder="Cliente">
+
+      <select id="tipo">
+        <option value="">Tipo de Evento</option>
+        <option>Casamento</option>
+        <option>Aniversário</option>
+        <option>Corporativo</option>
+      </select>
+
+      <input type="date" id="data">
+      <input type="text" id="local" placeholder="Local">
+      <input type="number" id="convidados" placeholder="Nº Convidados">
+
+      <button onclick="salvarEvento()">Salvar</button>
+      <button onclick="fecharModal()">Cancelar</button>
+    </div>
+  </div>
+
+  <script>
+    let eventos = [];
+
+    function abrirModal() {
+      document.getElementById("modal").style.display = "flex";
+    }
+
+    function fecharModal() {
+      document.getElementById("modal").style.display = "none";
+    }
+
+    function salvarEvento() {
+      const cliente = document.getElementById("cliente").value;
+      const tipo = document.getElementById("tipo").value;
+      const data = document.getElementById("data").value;
+      const local = document.getElementById("local").value;
+      const convidados = document.getElementById("convidados").value;
+
+      if (!cliente || !tipo || !data || !local || !convidados) {
+        alert("Preencha todos os campos!");
+        return;
+      }
+
+      const evento = { cliente, tipo, data, local, convidados };
+      eventos.push(evento);
+
+      renderizarEventos();
+      fecharModal();
+    }
+
+    function renderizarEventos() {
+      const lista = document.getElementById("listaEventos");
+      const mensagem = document.getElementById("mensagem");
+
+      lista.innerHTML = "";
+
+      if (eventos.length === 0) {
+        mensagem.style.display = "block";
+        return;
+      }
+
+      mensagem.style.display = "none";
+
+      eventos.forEach(e => {
+        const div = document.createElement("div");
+        div.className = "evento";
+
+        div.innerHTML = `
+          <strong>${e.tipo}</strong><br>
+          Cliente: ${e.cliente}<br>
+          Data: ${e.data}<br>
+          Local: ${e.local}<br>
+          Convidados: ${e.convidados}
+        `;
+
+        lista.appendChild(div);
+      });
+    }
+  </script>
+
+</body>
+
+</html>

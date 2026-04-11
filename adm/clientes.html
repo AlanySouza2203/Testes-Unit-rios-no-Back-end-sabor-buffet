@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Sabor & Arte</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f172a, #020617);
+      color: #e2e8f0;
+    }
+
+
+    .container {
+      display: flex;
+      height: 100vh;
+    }
+
+
+    .sidebar {
+      width: 230px;
+      background: #111827;
+      padding: 20px;
+    }
+
+    .menu a {
+      display: block;
+      padding: 12px;
+      margin: 8px 0;
+      color: #cbd5f5;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .menu a.active,
+    .menu a:hover {
+      background: #facc15;
+      color: #000;
+    }
+
+
+    .content {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+
+    .topo {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background: #facc15;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+
+    input {
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      margin-bottom: 15px;
+    }
+
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #1e293b;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    th,
+    td {
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background: #111827;
+    }
+
+    tr {
+      border-bottom: 1px solid #334155;
+    }
+
+    .actions button {
+      margin-right: 5px;
+    }
+
+
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 10px;
+      width: 300px;
+    }
+
+    .modal-content input {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+
+    .logo span {
+      color: #facc15;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <div class="logo">Sabor <span>& Arte</span></div>
+  </div>
+
+  <div class="container">
+
+
+    <div class="sidebar">
+      <div class="menu">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="clientes.html">Clientes</a>
+        <a href="servicos.html">Serviços</a>
+        <a href="eventos.html">Eventos</a>
+        <a href="pedidos.html">Pedidos</a>
+        <a href="orcamentos.html">Orçamentos</a>
+      </div>
+    </div>
+
+
+    <div class="content">
+      <div class="topo">
+        <h2>Clientes</h2>
+        <button onclick="abrirModal()">+ Novo Cliente</button>
+      </div>
+
+      <input type="text" placeholder="Buscar Cliente..." oninput="buscar(this.value)">
+
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Telefone</th>
+            <th>Email</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="listaClientes"></tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- MODAL -->
+  <div class="modal">
+    <div class="modal-content">
+      <h3>Novo Cliente</h3>
+
+      <input type="text" id="nome" placeholder="Nome">
+      <input type="text" id="telefone" placeholder="Telefone">
+      <input type="text" id="email" placeholder="Email">
+
+      <button onclick="salvar()">Salvar</button>
+    </div>
+  </div>
+
+  <script>
+
+    let clientes = []
+    let editando = null
+
+    const modal = document.querySelector(".modal")
+
+    function render(lista = clientes) {
+      const tabela = document.getElementById("listaClientes")
+      tabela.innerHTML = ""
+
+      lista.forEach((c, i) => {
+        tabela.innerHTML += `
+    <tr>
+      <td>${c.nome}</td>
+      <td>${c.telefone}</td>
+      <td>${c.email}</td>
+      <td class="actions">
+        <button onclick="editar(${i})"></button>
+        <button onclick="remover(${i})"></button>
+      </td>
+    </tr>`
+      })
+    }
+
+    function abrirModal() {
+      modal.style.display = "flex"
+    }
+
+    function fecharModal() {
+      modal.style.display = "none"
+      limpar()
+    }
+
+    function limpar() {
+      nome.value = ""
+      telefone.value = ""
+      email.value = ""
+      editando = null
+    }
+
+    function salvar() {
+      const cliente = {
+        nome: nome.value,
+        telefone: telefone.value,
+        email: email.value
+      }
+
+      if (editando !== null) {
+        clientes[editando] = cliente
+      } else {
+        clientes.push(cliente)
+      }
+
+      fecharModal()
+      render()
+    }
+
+    function editar(i) {
+      editando = i
+      const c = clientes[i]
+
+      nome.value = c.nome
+      telefone.value = c.telefone
+      email.value = c.email
+
+      abrirModal()
+    }
+
+    function remover(i) {
+      clientes.splice(i, 1)
+      render()
+    }
+
+    function buscar(texto) {
+      const filtrados = clientes.filter(c =>
+        c.nome.toLowerCase().includes(texto.toLowerCase())
+      )
+
+      render(filtrados)
+    }
+
+    render()
+
+  </script>
+
+</body>
+
+</html>
