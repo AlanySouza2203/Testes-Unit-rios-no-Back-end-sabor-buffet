@@ -1,138 +1,233 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
 
-    body {
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
-        url('https://i.pinimg.com/1200x/fa/8e/10/fa8e102520ba7a404f0f159745d265c4.jpg');
-      background-size: cover;
-      background-position: center;
-    }
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: Arial, sans-serif;
+}
 
-    .login-box {
-      width: 320px;
-      padding: 30px;
-      border-radius: 15px;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      color: white;
-      text-align: center;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    }
+body{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:#ffffff; /* FUNDO BRANCO */
+}
 
-    .titulo {
-      color: #ae8625;
-      margin-bottom: 5px;
-      font-size: 27px;
-    }
+/* CONTAINER PRETO */
+.container{
+  width:100%;
+  max-width:480px;
+  padding:50px;
+  border-radius:20px;
+  background:#000; /* PRETO */
+  box-shadow:0 20px 60px rgba(0,0,0,0.2);
+  text-align:center;
+}
 
+/* LOGO */
+.logo{
+  font-size:22px;
+  font-weight:bold;
+  margin-bottom:25px;
+  color:#fff;
+}
 
-    .subtitulo {
-      font-size: 22px;
-      font-weight: bold;
-      color: #ffffff;
-      margin-bottom: 20px;
-      letter-spacing: 1px;
-    }
+.logo span{
+  color:#d4a762;
+}
 
+/* TITULO */
+h1{
+  font-size:32px;
+  margin-bottom:10px;
+  color:#fff;
+}
 
+.sub{
+  font-size:15px;
+  color:#bbb;
+  margin-bottom:30px;
+}
 
-    .login-box h2 {
-      margin-bottom: 10px;
-    }
+/* ABAS */
+.tabs{
+  display:flex;
+  background:#222;
+  border-radius:40px;
+  margin-bottom:30px;
+  overflow:hidden;
+}
 
-    .login-box p {
-      font-size: 17px;
-      margin-bottom: 20px;
-      color: #ddd;
-    }
+.tabs div{
+  flex:1;
+  padding:14px;
+  font-size:15px;
+  cursor:pointer;
+  transition:0.3s;
+  color:#bbb;
+}
 
-    .input-box {
-      margin-bottom: 15px;
-      text-align: left;
-    }
+.tabs .active{
+  background:#d4a762;
+  color:#000;
+  font-weight:bold;
+  border-radius:40px;
+}
 
-    .input-box input {
-      width: 100%;
-      padding: 10px;
-      border-radius: 8px;
-      border: none;
-      outline: none;
-      background: rgba(255, 255, 255, 0.2);
-      color: white;
-    }
+/* INPUT */
+.input-box{
+  margin-bottom:18px;
+}
 
-    .input-box input::placeholder {
-      color: #ccc;
-    }
+.input-box input{
+  width:100%;
+  padding:16px;
+  border-radius:12px;
+  border:1px solid #333;
+  background:#111;
+  outline:none;
+  font-size:15px;
+  color:#fff;
+}
 
-    .options {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      margin-bottom: 15px;
-    }
+.input-box input::placeholder{
+  color:#777;
+}
 
-    .options a {
-      color: #ccc;
-      text-decoration: none;
-    }
+.input-box input:focus{
+  border-color:#d4a762;
+  background:#000;
+}
 
-    .btn {
-      width: 100%;
-      padding: 10px;
-      border: none;
-      border-radius: 20px;
-      background: white;
-      color: black;
-      font-weight: bold;
-      cursor: pointer;
-      margin-bottom: 10px;
-    }
-  </style>
+/* BOTÃO */
+.btn{
+  width:100%;
+  padding:16px;
+  border:none;
+  border-radius:40px;
+  background:#d4a762;
+  color:#000;
+  font-weight:bold;
+  cursor:pointer;
+  transition:0.3s;
+  margin-top:10px;
+  font-size:16px;
+}
+
+.btn:hover{
+  background:#fff;
+  color:#000;
+  transform:scale(1.03);
+}
+
+/* RODAPÉ */
+.footer-text{
+  margin-top:20px;
+  font-size:13px;
+  color:#777;
+}
+</style>
 </head>
 
 <body>
 
-  <div class="login-box">
-    <div class="title">
-      <h2 class="titulo">Bem-vindo!</h2>
-      <p class="subtitulo">Sabor Arte</p>
+<div class="container">
 
-    </div>
+  <div class="logo">Sabor <span>& Arte</span></div>
 
+  <h1>Bem-vindo de volta</h1>
+  <p class="sub">Entre para acessar seus eventos</p>
 
-
-    <div class="input-box">
-      <input type="email" placeholder="email">
-    </div>
-
-    <div class="input-box">
-      <input type="password" placeholder="Senha">
-    </div>
-
-
-    <button class="btn">Entrar</button>
-
-
-
+  <div class="tabs">
+    <div class="active">Entrar</div>
+    <div onclick="irCadastro()">Cadastrar</div>
   </div>
 
-</body>
+  <div class="input-box">
+    <input type="email" id="email" placeholder="E-mail">
+  </div>
 
+  <div class="input-box">
+    <input type="password" id="senha" placeholder="Senha">
+  </div>
+
+  <button class="btn" onclick="logar()">Entrar na minha conta</button>
+
+  <p class="footer-text">© 2026 Sabor & Arte</p>
+
+</div>
+
+<script>
+function irCadastro(){
+  window.location.href = "cadastro.html";
+}
+
+async function logar() {
+
+  const email = document.getElementById("email").value.trim();
+  const senha = document.getElementById("senha").value.trim();
+
+  if (!email || !senha) {
+    return alert("Preencha email e senha");
+  }
+
+  try {
+
+    const res = await fetch("http://localhost:3000/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ email, senha })
+    });
+
+    const data = await res.json();
+
+    console.log("Resposta do backend:", data); // 🔥 DEBUG
+
+    if (!data.success) {
+      return alert("Login inválido");
+    }
+
+    // salva usuário
+    localStorage.setItem("usuario", JSON.stringify(data.usuario));
+    localStorage.setItem("role", data.usuario.tipo);
+
+    //  CLIENTE
+    if (data.usuario.tipo === "cliente") {
+
+      //  se backend NÃO mandou clienteId
+      if (!data.clienteId) {
+        alert("Erro: cliente não vinculado (backend não retornou clienteId)");
+        return;
+      }
+
+      localStorage.setItem("clienteId", data.clienteId);
+      console.log("Cliente ID salvo:", data.clienteId);
+    }
+
+    //  REDIRECIONAMENTO
+    if (data.usuario.tipo === "admin" || data.usuario.tipo === "funcionario") {
+      window.location.href = "../adm/dashboard.html";
+    } else if (data.usuario.tipo === "cliente") {
+      window.location.href = "pacotes.html";
+    } else {
+      alert("Tipo de usuário inválido");
+    }
+
+  } catch (erro) {
+    console.error("Erro no login:", erro);
+    alert("Erro ao conectar com o servidor");
+  }
+}
+</script>
+</body>
 </html>

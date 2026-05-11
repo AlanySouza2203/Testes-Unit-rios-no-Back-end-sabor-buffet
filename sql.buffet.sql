@@ -1,57 +1,97 @@
-DROP DATABASE IF EXISTS buffet_db;
 CREATE DATABASE buffet_db;
 USE buffet_db;
 
 
+-- 🔹 USUÁRIO
 CREATE TABLE usuario (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    email VARCHAR(100) UNIQUE NOT NULL,
-    senha VARCHAR(255) NOT NULL,
-    tipo ENUM('admin', 'funcionario') DEFAULT 'funcionario'
-);
-
-
-CREATE TABLE cliente (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     telefone VARCHAR(20),
-    email VARCHAR(100)
+    email VARCHAR(100) UNIQUE NOT NULL,
+    senha VARCHAR(255) NOT NULL,
+    tipo ENUM('admin', 'funcionario', 'cliente') DEFAULT 'cliente',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 
+-- 🔹 CLIENTE
+CREATE TABLE cliente (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    telefone VARCHAR(20) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    usuario_id INT NULL UNIQUE,
+    admin_id INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (usuario_id) REFERENCES usuario(id)
+    ON DELETE SET NULL ON UPDATE CASCADE,
+
+    FOREIGN KEY (admin_id) REFERENCES usuario(id)
+);
+
+
+
+-- 🔹 EVENTO
 CREATE TABLE evento (
     id INT AUTO_INCREMENT PRIMARY KEY,
     cliente_id INT NOT NULL,
+    admin_id INT,
     tipo VARCHAR(50),
     data DATE,
     local VARCHAR(150),
     convidados INT,
     status ENUM('Planejado', 'Em andamento', 'Finalizado') DEFAULT 'Planejado',
 
-    FOREIGN KEY (cliente_id) REFERENCES cliente(id) ON DELETE CASCADE
+    FOREIGN KEY (cliente_id) REFERENCES cliente(id) ON DELETE CASCADE,
+    FOREIGN KEY (admin_id) REFERENCES usuario(id)
 );
 
 
+-- 🔹 PEDIDOS
+CREATE TABLE pedidos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cliente VARCHAR(100),
+    evento_id INT NULL,
+    admin_id INT,
+    itens JSON,
+    total DECIMAL(10,2),
+    status VARCHAR(50) DEFAULT 'Pendente',
+    metodo_pagamento ENUM('pix', 'credito', 'debito') NULL,
+    status_pagamento ENUM('pendente', 'processando', 'pago', 'recusado') DEFAULT 'pendente',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (evento_id) REFERENCES evento(id) ON DELETE SET NULL,
+    FOREIGN KEY (admin_id) REFERENCES usuario(id)
+);
+
+-- 🔹 ITENS
 CREATE TABLE item_servico (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     tipo ENUM('comida', 'bebida', 'servico') NOT NULL,
-    categoria VARCHAR(50), -- 🔥 usado nos filtros do frontend
+    categoria VARCHAR(50),
     valor DECIMAL(10,2) NOT NULL,
-    imagem TEXT            -- 🔥 usada no cardápio
+    imagem VARCHAR(255) NOT NULL DEFAULT 'https://via.placeholder.com/120',
+    status ENUM('ativo', 'inativo') DEFAULT 'ativo',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
 );
 
 
+-- 🔹 ORÇAMENTO
 CREATE TABLE orcamento (
     id INT AUTO_INCREMENT PRIMARY KEY,
     evento_id INT UNIQUE,
     valor_total DECIMAL(10,2) DEFAULT 0,
     status ENUM('pendente', 'aprovado', 'recusado') DEFAULT 'pendente',
+    status_pagamento ENUM('pendente', 'pago', 'parcial', 'cancelado') DEFAULT 'pendente',
 
     FOREIGN KEY (evento_id) REFERENCES evento(id) ON DELETE CASCADE
 );
 
 
+-- 🔹 ITEM ORÇAMENTO
 CREATE TABLE item_orcamento (
     id INT AUTO_INCREMENT PRIMARY KEY,
     orcamento_id INT NOT NULL,
@@ -64,29 +104,37 @@ CREATE TABLE item_orcamento (
 );
 
 
+-- 🔹 PAGAMENTO
 CREATE TABLE pagamento (
     id INT AUTO_INCREMENT PRIMARY KEY,
     orcamento_id INT NOT NULL,
+    metodo_pagamento ENUM('pix', 'credito', 'debito') NOT NULL,
     valor DECIMAL(10,2) NOT NULL,
-    data DATE,
-    status ENUM('pendente', 'pago') DEFAULT 'pendente',
+    status ENUM('pendente', 'processando', 'pago', 'recusado', 'cancelado') DEFAULT 'pendente',
+    transacao_id VARCHAR(120),
+    codigo_pix TEXT,
+    parcelas INT DEFAULT 1,
+    data_pagamento DATETIME DEFAULT CURRENT_TIMESTAMP,
+    gateway VARCHAR(50),
+    resposta_gateway JSON,
 
     FOREIGN KEY (orcamento_id) REFERENCES orcamento(id) ON DELETE CASCADE
 );
 
 
 
--- Usuário
-INSERT INTO usuario (email, senha, tipo)
-VALUES ('admin@buffet.com', '123456', 'admin');
+INSERT INTO usuario (nome, email, senha, tipo)
+VALUES 
+('Admin', 'admin@email.com', '123', 'admin'),
+('Cliente', 'cliente@email.com', '123', 'cliente');
 
--- Cliente
-INSERT INTO cliente (nome, telefone, email)
-VALUES ('Maria Silva', '61999999999', 'maria@email.com');
+-- 🔥 CLIENTE COM ADMIN
+INSERT INTO cliente (nome, telefone, email, admin_id)
+VALUES ('Maria Silva', '61999999999', 'maria@email.com', 1);
 
--- Evento
-INSERT INTO evento (cliente_id, tipo, data, local, convidados)
-VALUES (1, 'Casamento', '2026-12-20', 'Salão Brasília', 150);
+-- 🔥 EVENTO COM ADMIN
+INSERT INTO evento (cliente_id, tipo, data, local, convidados, admin_id)
+VALUES (1, 'Casamento', '2026-12-20', 'Salão Brasília', 150, 1);
 
 
 INSERT INTO item_servico (nome, tipo, categoria, valor, imagem)
@@ -101,7 +149,17 @@ VALUES
 
 ('Macarrão', 'comida', 'principal', 28.00, 'https://i.pinimg.com/736x/96/4d/fb/964dfbd9d27f85e7b1fc155bccd04bac.jpg');
 
+-- 🔥 PEDIDO COM ADMIN (EXEMPLO)
+INSERT INTO pedidos (cliente, evento_id, itens, total, admin_id)
+VALUES (
+  'Maria Silva',
+  1,
+  JSON_ARRAY(JSON_OBJECT('nome','Hambúrguer','qtd',2)),
+  30.00,
+  1
+);
 
+-- 🔥 ORÇAMENTO
 INSERT INTO orcamento (evento_id)
 VALUES (1);
 
@@ -117,7 +175,42 @@ SET valor_total = (
     WHERE orcamento_id = 1
 )
 WHERE id = 1;
+-- 🔥 PAGAMENTO
+INSERT INTO pagamento (orcamento_id, metodo_pagamento, valor, status)
+VALUES (1, 'pix', 2000.00, 'pendente');
 
 -- Pagamento
-INSERT INTO pagamento (orcamento_id, valor, data, status)
-VALUES (1, 2000.00, '2026-11-01', 'pago');
+INSERT INTO pagamento (
+    orcamento_id,
+    metodo_pagamento,
+    valor,
+    status,
+    parcelas
+)
+VALUES (
+    1,
+    'pix',
+    2000.00,
+    'pendente',
+    1
+);
+
+UPDATE pedidos 
+SET evento_id = 1 
+WHERE evento_id IS NULL;
+
+
+SELECT * FROM usuario WHERE email = 'joaomartins2@gmail.com';
+
+
+
+
+
+
+
+
+
+
+
+
+

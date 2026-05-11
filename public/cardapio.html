@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cardápio Digital</title>
+    <title>Cardápio </title>
 
     <style>
         body {
@@ -327,7 +327,7 @@
                 Total: R$ <span id="total">0</span>
             </div>
 
-            <a href="pagamento.html">
+            <a href="confirpedi.html">
                 <button class="confirm" onclick="irPagamento()">Confirmar Pedido</button>
 
             </a>
@@ -337,128 +337,180 @@
         </div>
 
 
-        <script>
+       <script>
 
-            // 🔥 CARREGAR CARDÁPIO DO BACKEND
-            async function carregarCardapio(categoria = "todos") {
+let carrinho = []
+let cardapio = []
 
-                const res = await fetch(`http://localhost:3000/itens?categoria=${categoria}`)
-                const itens = await res.json()
+/* =========================
+   PROTEÇÃO: PRECISA TER EVENTO
+========================= */
+const eventoId = localStorage.getItem("eventoId")
 
-                const container = document.querySelector(".cards")
-                container.innerHTML = ""
+if (!eventoId) {
+  alert("Crie um evento primeiro!")
+  window.location.href = "evento.html"
+}
 
-                itens.forEach(item => {
+/* =========================
+   CARREGAR CARDÁPIO DO BACKEND
+========================= */
+async function carregarCardapio(categoria = "todos") {
 
-                    container.innerHTML += `
+  const res = await fetch(`http://localhost:3000/itens?categoria=${categoria}`)
+  const itens = await res.json()
+
+  const container = document.querySelector(".cards")
+  container.innerHTML = ""
+
+  itens.forEach(item => {
+    container.innerHTML += `
       <div class="card">
+        <img src="${item.imagem || 'https://via.placeholder.com/120'}">
+
         <h3>${item.nome}</h3>
-        <p>R$ ${item.valor}</p>
+        <p>R$ ${Number(item.valor).toFixed(2)}</p>
+
         <button onclick="adicionar('${item.nome}', ${item.valor})">
           Adicionar
         </button>
       </div>
     `
-                })
-            }
+  })
+}
 
-            // 🔥 FILTROS
-            document.querySelectorAll(".filtro").forEach(btn => {
-                btn.addEventListener("click", () => {
+/* =========================
+    FILTROS
+========================= */
+document.querySelectorAll(".filtro").forEach(btn => {
+  btn.addEventListener("click", () => {
 
-                    // remove ativo de todos
-                    document.querySelectorAll(".filtro").forEach(b => b.classList.remove("ativo"))
+    document.querySelectorAll(".filtro").forEach(b => b.classList.remove("ativo"))
+    btn.classList.add("ativo")
 
-                    // adiciona no clicado
-                    btn.classList.add("ativo")
+    let categoria = btn.dataset.categoria
+    carregarCardapio(categoria)
+  })
+})
 
-                    let categoria = btn.dataset.categoria
-                    carregarCardapio(categoria)
-                })
-            })
+/* =========================
+    ADICIONAR ITEM AO CARRINHO
+========================= */
+function adicionar(nome, preco) {
 
-            // 🔥 CARRINHO
-            let carrinho = []
+  let itemExistente = carrinho.find(i => i.nome === nome)
 
-            function adicionar(nome, preco) {
+  if (itemExistente) {
+    itemExistente.qtd++
+  } else {
+    carrinho.push({
+      id: Date.now(),
+      nome,
+      preco,
+      qtd: 1
+    })
+  }
 
-                let itemExistente = carrinho.find(i => i.nome === nome)
+  renderCarrinho()
+  salvarCarrinho()
+}
 
-                if (itemExistente) {
-                    itemExistente.qtd++
-                } else {
-                    carrinho.push({
-                        id: Date.now(),
-                        nome,
-                        preco,
-                        qtd: 1
-                    })
-                }
+/* =========================
+    CARRINHO
+========================= */
+function renderCarrinho() {
 
-                renderCarrinho()
-            }
+  let lista = document.getElementById("lista")
+  lista.innerHTML = ""
 
-            function renderCarrinho() {
+  let total = 0
 
-                let lista = document.getElementById("lista")
-                lista.innerHTML = ""
+  carrinho.forEach((item, index) => {
 
-                let total = 0
+    let subtotal = item.preco * item.qtd
+    total += subtotal
 
-                carrinho.forEach((item, index) => {
+    let div = document.createElement("div")
+    div.className = "item"
 
-                    let div = document.createElement("div")
-                    div.className = "item"
-
-                    let subtotal = item.preco * item.qtd
-                    total += subtotal
-
-                    div.innerHTML = `
+    div.innerHTML = `
       <span>${item.nome} (${item.qtd}x)</span>
       <span>R$ ${subtotal}</span>
       <button class="remover" onclick="remover(${index})">X</button>
     `
 
-                    lista.appendChild(div)
-                })
+    lista.appendChild(div)
+  })
 
-                document.getElementById("total").innerText = total
-            }
+  document.getElementById("total").innerText = total
 
-            function remover(index) {
-                carrinho.splice(index, 1)
-                renderCarrinho()
-            }
+  salvarCarrinho()
+}
 
-            // 🔥 FINALIZAR PEDIDO
-            async function irPagamento() {
+function remover(index) {
+  carrinho.splice(index, 1)
+  renderCarrinho()
+  salvarCarrinho()
+}
 
-                if (carrinho.length === 0) {
-                    alert("Carrinho vazio!")
-                    return
-                }
+/* =========================
+   LOCALSTORAGE
+========================= */
+function salvarCarrinho() {
+  localStorage.setItem("carrinhoAtual", JSON.stringify(carrinho))
+}
 
-                let total = carrinho.reduce((acc, item) => acc + (item.preco * item.qtd), 0)
+function carregarCarrinhoSalvo() {
+  let dados = localStorage.getItem("carrinhoAtual")
+  if (dados) {
+    carrinho = JSON.parse(dados)
+    renderCarrinho()
+  }
+}
 
-                let pedido = {
-                    cliente: "Cliente",
-                    itens: carrinho,
-                    total: total,
-                    status: "Pendente"
-                }
+function carregarPedidoExistente() {
 
-                localStorage.setItem("pedidoAtual", JSON.stringify(pedido))
+  let pedidoSalvo = localStorage.getItem("pedidoAtual")
 
-                window.location.href = "pagamento.html"
-            }
+  if (pedidoSalvo) {
+    let pedido = JSON.parse(pedidoSalvo)
+    carrinho = pedido.itens || []
+    renderCarrinho()
+  }
+}
 
-            // 🔥 CARREGAR AO ABRIR
-            carregarCardapio()
+/* =========================
+   FINALIZAR PEDIDO
+========================= */
+function irPagamento() {
 
-        </script>
+  if (carrinho.length === 0) {
+    alert("Carrinho vazio!")
+    return
+  }
 
+  let total = carrinho.reduce((acc, item) => acc + (item.preco * item.qtd), 0)
 
+  let pedido = {
+    cliente: "Cliente",
+    eventoId: eventoId, // AGORA VINCULADO AO EVENTO
+    itens: carrinho,
+    total: total,
+    status: "Pendente"
+  }
 
+  localStorage.setItem("pedidoAtual", JSON.stringify(pedido))
+
+  window.location.href = "pagamento.html"
+}
+
+/* =========================
+    INICIALIZAÇÃO
+========================= */
+carregarCardapio()
+carregarCarrinhoSalvo()
+
+</script>
 
 
 

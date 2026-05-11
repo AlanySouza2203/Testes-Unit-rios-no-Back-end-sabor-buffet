@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pagamento - Sabor & Arte</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+<style>
+:root {
+  --preto: #0d0d0d;
+  --branco: #ffffff;
+  --cinza: #f5f5f5;
+  --borda: #e6e6e6;
+  --dourado: #d4a762;
+}
+
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial;
+}
+
+body {
+  background: var(--cinza);
+  color: var(--preto);
+}
+
+/* HEADER IGUAL INDEX + PAGAMENTO SEGURO */
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:25px 10%;
+background:rgba(0,0,0,0.6);
+backdrop-filter:blur(10px);
+position:absolute;
+width:100%;
+top:0;
+left:0;
+z-index:100;
+border-bottom:1px solid rgba(255,255,255,0.1);
+}
+
+.logo{
+font-size:32px;
+font-weight:bold;
+letter-spacing:2px;
+text-transform:uppercase;
+color:white;
+}
+
+.logo span{
+color:#d4a762;
+}
+
+.seguro{
+background:#d4a762;
+color:#000;
+padding:8px 18px;
+border-radius:20px;
+font-size:14px;
+font-weight:bold;
+}
+
+/* LAYOUT */
+.wrapper {
+  padding:120px 60px 60px;
+  display:flex;
+  justify-content:center;
+}
+
+.container {
+  width:95%;
+  max-width:1600px;
+  display:flex;
+  gap:40px;
+}
+
+/* COLUNAS */
+.left { flex:2; }
+
+.right {
+  flex:1;
+  background:var(--branco);
+  padding:30px;
+  border-radius:18px;
+  border:1px solid var(--borda);
+}
+
+/* TITULOS */
+h2 {
+  font-size:32px;
+  margin-bottom:10px;
+}
+
+.sub {
+  color:#777;
+  margin-bottom:25px;
+}
+
+/* MÉTODOS */
+.metodos {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+
+.metodo {
+  background:var(--branco);
+  border:1px solid var(--borda);
+  border-radius:16px;
+  padding:20px;
+  text-align:center;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.metodo:hover {
+  transform:translateY(-3px);
+}
+
+.metodo small {
+  display:block;
+  margin-top:6px;
+  color:#777;
+}
+
+.metodo.ativo {
+  border:2px solid var(--dourado);
+  background:#fff8e6;
+}
+
+/* BOX */
+.box {
+  margin-top:25px;
+  background:var(--branco);
+  border-radius:16px;
+  padding:25px;
+  border:1px solid var(--borda);
+}
+
+.hidden {
+  display:none;
+}
+
+/* INPUTS */
+input, select {
+  width:100%;
+  padding:14px;
+  margin-top:12px;
+  border-radius:10px;
+  border:1px solid var(--borda);
+}
+
+.row {
+  display:flex;
+  gap:10px;
+}
+
+/* PIX */
+.pix-box {
+  text-align:center;
+}
+
+.qr {
+  width:180px;
+  height:180px;
+  background:#ddd;
+  margin:20px auto;
+  border-radius:10px;
+}
+
+/* RESUMO */
+.resumo div {
+  display:flex;
+  justify-content:space-between;
+  margin:12px 0;
+}
+
+.total {
+  margin-top:20px;
+  font-size:26px;
+  font-weight:bold;
+  color:var(--dourado);
+}
+
+/* BOTÃO */
+button {
+  width:100%;
+  padding:16px;
+  margin-top:25px;
+  border-radius:10px;
+  border:none;
+  font-weight:bold;
+  background:linear-gradient(135deg,#e6b422,#c99700);
+  cursor:pointer;
+}
+
+/* RESPONSIVO */
+@media(max-width:900px){
+  .container{
+    flex-direction:column;
+  }
+
+  .metodos{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">Sabor & <span>Arte</span></div>
+ <div class="seguro">
+    <i class="bi bi-lock-fill"></i> Pagamento Seguro
+</div>
+</header>
+
+<div class="wrapper">
+<div class="container">
+
+<!-- ESQUERDA -->
+<div class="left">
+
+  <h2>Forma de pagamento</h2>
+  <div class="sub">Escolha como deseja pagar</div>
+
+  <div class="metodos">
+
+    <div class="metodo ativo" onclick="selecionar(event,'credito')">
+      Crédito
+      <small>Até 12x</small>
+    </div>
+
+    <div class="metodo" onclick="selecionar(event,'debito')">
+      Débito
+      <small>Imediato</small>
+    </div>
+
+    <div class="metodo" onclick="selecionar(event,'pix')">
+      PIX
+      <small>Instantâneo</small>
+    </div>
+
+  </div>
+
+  <!-- CRÉDITO -->
+  <div id="credito" class="box">
+    <input placeholder="Nome no cartão">
+    <input placeholder="Número do cartão">
+
+    <div class="row">
+      <input placeholder="MM/AA">
+      <input placeholder="CVV">
+    </div>
+
+    <select>
+      <option>1x de R$ 8.500,00</option>
+      <option>2x de R$ 4.250,00</option>
+    </select>
+  </div>
+
+  <!-- DÉBITO -->
+  <div id="debito" class="box hidden">
+    <input placeholder="Nome no cartão">
+    <input placeholder="Número do cartão">
+
+    <div class="row">
+      <input placeholder="MM/AA">
+      <input placeholder="CVV">
+    </div>
+
+    <p style="margin-top:10px; color:#777;">
+      O valor será debitado imediatamente.
+    </p>
+  </div>
+
+  <!-- PIX -->
+  <div id="pix" class="box hidden pix-box">
+    <div class="qr"></div>
+    <p>Escaneie o QR Code</p>
+
+    <div class="row">
+      <input value="saborarte@pix.com.br" readonly>
+      <button onclick="copiar()">Copiar</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- DIREITA -->
+<div class="right">
+  <h3>Resumo do pedido</h3>
+
+  <div class="resumo">
+    <div><span>Pacote</span><span>Premium</span></div>
+    <div><span>Evento</span><span>Casamento</span></div>
+    <div><span>Data</span><span>21/05/2026</span></div>
+    <div><span>Convidados</span><span>100</span></div>
+
+    <div class="total">
+      <span>Total</span>
+      <span>R$ 8.500,00</span>
+    </div>
+  </div>
+
+  <button onclick="confirmar()">Confirmar pagamento</button>
+</div>
+
+</div>
+</div>
+
+<script>
+
+// PEGAR PACOTE (SE EXISTIR)
+let pacote = JSON.parse(localStorage.getItem("pacote"))
+
+
+// ===============================
+// 🔥 FINALIZAR PEDIDO (CRIA NO BACKEND)
+// ===============================
+async function finalizarPedido() {
+
+  const pedido = JSON.parse(localStorage.getItem("pedidoAtual"))
+  const usuario = JSON.parse(localStorage.getItem("usuario"))
+
+  if (!pedido || !usuario) {
+    alert("Erro no pedido")
+    return null
+  }
+
+  try {
+
+    const res = await fetch("http://localhost:3000/pedidos", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        cliente: pedido.cliente,
+        itens: pedido.itens,
+        total: pedido.total,
+        status: "pendente",
+        evento_id: pedido.eventoId,
+        admin_id: usuario.id,
+        pacote_nome: pacote ? pacote.nome : null
+      })
+    })
+
+    const data = await res.json()
+
+    if (!res.ok) {
+      throw new Error("Erro ao criar pedido")
+    }
+
+    const novoPedido = {
+      id: data.id,
+      ...pedido,
+      status: "pendente"
+    }
+
+    localStorage.setItem("pedidoPagamento", JSON.stringify(novoPedido))
+
+    return novoPedido
+
+  } catch (err) {
+    console.error(err)
+    alert("Erro ao enviar pedido")
+    return null
+  }
+}
+
+
+// ===============================
+// CONFIRMAR PAGAMENTO
+// ===============================
+async function confirmar() {
+
+  let dados = JSON.parse(localStorage.getItem("pedidoPagamento"))
+
+  // 🔥 SE NÃO EXISTE, CRIA PRIMEIRO
+  if (!dados || !dados.id) {
+    dados = await finalizarPedido()
+  }
+
+  if (!dados || !dados.id) {
+    alert("Erro: pedido inválido")
+    return
+  }
+
+  try {
+
+    const res = await fetch(`http://localhost:3000/pedidos/${dados.id}/status`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        status: "pago"
+      })
+    })
+
+    if (!res.ok) {
+      throw new Error("Erro ao atualizar status")
+    }
+
+  } catch (err) {
+    console.error("Erro real:", err)
+    alert("Erro ao finalizar pagamento")
+    return
+  }
+
+  //  ATUALIZA LOCAL
+  dados.status = "pago"
+  localStorage.setItem("pedidoPagamento", JSON.stringify(dados))
+
+
+ //  MENSAGEM BONITA NA TELA (SEM ALERT)
+document.body.innerHTML = `
+  <div style="
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    flex-direction:column;
+    font-family:Arial;
+    background:#f5f5f5;
+    text-align:center;
+  ">
+    <h1 style="color:green;">
+      <i class="bi bi-check-circle-fill"></i>
+      Pagamento aprovado
+    </h1>
+
+    <p style="font-size:18px; margin-top:10px;">
+      Obrigado pela preferência.<br>
+      Entraremos em contato em breve.
+    </p>
+  </div>
+`;
+
+  // 🔥 LIMPA DADOS
+  localStorage.removeItem("pedidoPagamento")
+  localStorage.removeItem("pedidoAtual")
+
+  // 🔥 REDIRECIONA PRO INDEX
+  setTimeout(() => {
+    window.location.href = "index.html"
+  }, 3000)
+
+}
+
+</script>
+</body>
+</html>

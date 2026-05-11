@@ -2,303 +2,904 @@
 <html lang="pt-br">
 
 <head>
-  <meta charset="UTF-8">
-  <title>Sabor & Arte</title>
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    body {
-      background: linear-gradient(135deg, #0f172a, #020617);
-      color: #e2e8f0;
-    }
+<title>Sabor & Arte - Clientes</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
 
-    .container {
-      display: flex;
-      height: 100vh;
-    }
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+<script src="https://unpkg.com/lucide@latest"></script>
 
-    .sidebar {
-      width: 230px;
-      background: #111827;
-      padding: 20px;
-    }
+<style>
 
-    .menu a {
-      display: block;
-      padding: 12px;
-      margin: 8px 0;
-      color: #cbd5f5;
-      border-radius: 8px;
-      cursor: pointer;
-    }
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Inter',sans-serif;
+}
 
-    .menu a.active,
-    .menu a:hover {
-      background: #facc15;
-      color: #000;
-    }
+:root{
 
+  --bg:#020617;
+  --sidebar:#0f172a;
+  --card:#111827;
 
-    .content {
-      flex: 1;
-      padding: 20px;
-      overflow-y: auto;
-    }
+  --text:#e2e8f0;
+  --muted:#94a3b8;
 
+  --yellow:#facc15;
+  --green:#22c55e;
+  --red:#ef4444;
 
-    .topo {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
+  --border:rgba(255,255,255,0.06);
 
-    button {
-      background: #facc15;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-    }
+  --radius:18px;
+}
 
+body{
+  background:var(--bg);
+  color:var(--text);
+}
 
-    input {
-      padding: 10px;
-      border-radius: 8px;
-      border: none;
-      outline: none;
-      margin-bottom: 15px;
-    }
+.container{
+  display:flex;
+  min-height:100vh;
+}
 
+/* SIDEBAR */
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: #1e293b;
-      border-radius: 10px;
-      overflow: hidden;
-    }
+.sidebar{
+  width:260px;
+  background:var(--sidebar);
 
-    th,
-    td {
-      padding: 12px;
-      text-align: left;
-    }
+  border-right:1px solid var(--border);
 
-    th {
-      background: #111827;
-    }
+  padding:24px 18px;
 
-    tr {
-      border-bottom: 1px solid #334155;
-    }
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
 
-    .actions button {
-      margin-right: 5px;
-    }
+.sidebar-top{
+  display:flex;
+  flex-direction:column;
+}
 
+.logo{
+  font-size:28px;
+  font-weight:700;
+  margin-bottom:40px;
+}
 
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      display: none;
-      justify-content: center;
-      align-items: center;
-    }
+.logo span{
+  color:var(--yellow);
+}
 
-    .modal-content {
-      background: #1e293b;
-      padding: 20px;
-      border-radius: 10px;
-      width: 300px;
-    }
+.menu{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
 
-    .modal-content input {
-      width: 100%;
-      margin-bottom: 10px;
-    }
+.menu a{
+  display:flex;
+  align-items:center;
+  gap:12px;
 
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 30px;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
+  text-decoration:none;
 
-    .logo {
-      font-size: 22px;
-      font-weight: bold;
-      letter-spacing: 2px;
-    }
+  color:var(--muted);
 
-    .logo span {
-      color: #facc15;
-    }
-  </style>
+  padding:14px 16px;
+
+  border-radius:14px;
+
+  transition:0.2s;
+
+  font-size:15px;
+  font-weight:500;
+}
+
+.menu a svg{
+  width:18px;
+  height:18px;
+}
+
+.menu a:hover{
+  background:rgba(250,204,21,0.08);
+  color:white;
+}
+
+.menu a.active{
+  background:var(--yellow);
+  color:black;
+  font-weight:700;
+}
+
+/* FOOTER SIDEBAR */
+
+.sidebar-footer{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+
+  padding-top:20px;
+
+  border-top:1px solid rgba(255,255,255,0.05);
+}
+
+.sidebar-footer a{
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  text-decoration:none;
+
+  color:var(--muted);
+
+  padding:12px 14px;
+
+  border-radius:12px;
+
+  transition:0.2s;
+
+  font-size:14px;
+}
+
+.sidebar-footer a svg{
+  width:17px;
+  height:17px;
+}
+
+.sidebar-footer a:hover{
+  background:rgba(255,255,255,0.05);
+  color:white;
+}
+
+/* CONTENT */
+
+.content{
+  flex:1;
+  padding:28px;
+  overflow-y:auto;
+}
+
+.topo{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  margin-bottom:24px;
+}
+
+.titulo h1{
+  font-size:38px;
+  margin-bottom:5px;
+}
+
+.titulo p{
+  color:var(--muted);
+}
+
+.btn{
+  background:var(--yellow);
+
+  border:none;
+
+  padding:14px 18px;
+
+  border-radius:12px;
+
+  cursor:pointer;
+
+  font-weight:600;
+
+  display:flex;
+  align-items:center;
+  gap:8px;
+
+  transition:0.2s;
+}
+
+.btn:hover{
+  transform:scale(1.03);
+}
+
+/* BOX */
+
+.box{
+  background:var(--card);
+
+  border:1px solid var(--border);
+
+  border-radius:24px;
+
+  padding:22px;
+}
+
+.busca{
+  position:relative;
+  margin-bottom:24px;
+}
+
+.busca i{
+  position:absolute;
+
+  left:16px;
+  top:15px;
+
+  color:var(--muted);
+}
+
+.busca input{
+  width:100%;
+
+  background:#0b1120;
+
+  border:1px solid var(--border);
+
+  color:white;
+
+  padding:14px 16px 14px 45px;
+
+  border-radius:14px;
+
+  outline:none;
+}
+
+/* CLIENTES */
+
+.lista-clientes{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.cliente{
+  background:#0b1120;
+
+  border:1px solid rgba(255,255,255,0.04);
+
+  border-radius:18px;
+
+  padding:18px;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  transition:0.2s;
+}
+
+.cliente:hover{
+  transform:translateY(-2px);
+}
+
+.cliente-esquerda{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.avatar{
+  width:42px;
+  height:42px;
+
+  border-radius:50%;
+
+  background:rgba(250,204,21,0.12);
+
+  color:var(--yellow);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-weight:700;
+}
+
+.info h3{
+  margin-bottom:5px;
+}
+
+.info small{
+  color:var(--muted);
+
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.info small span{
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+
+.cliente-direita{
+  display:flex;
+  align-items:center;
+  gap:28px;
+}
+
+.metricas{
+  text-align:center;
+}
+
+.metricas small{
+  color:var(--muted);
+}
+
+.metricas strong{
+  display:block;
+  margin-top:4px;
+  color:var(--yellow);
+}
+
+.status{
+  background:rgba(34,197,94,0.15);
+
+  color:var(--green);
+
+  padding:8px 14px;
+
+  border-radius:999px;
+
+  font-size:13px;
+  font-weight:600;
+}
+
+.acoes{
+  display:flex;
+  gap:8px;
+}
+
+.acoes button{
+  width:38px;
+  height:38px;
+
+  border:none;
+
+  border-radius:10px;
+
+  cursor:pointer;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  transition:0.2s;
+}
+
+.btn-editar{
+  background:rgba(250,204,21,0.12);
+  color:var(--yellow);
+}
+
+.btn-remover{
+  background:rgba(239,68,68,0.12);
+  color:var(--red);
+}
+
+.acoes button:hover{
+  transform:scale(1.05);
+}
+
+/* MODAL */
+
+.modal{
+  position:fixed;
+  inset:0;
+
+  background:rgba(0,0,0,0.7);
+
+  display:none;
+  justify-content:center;
+  align-items:center;
+
+  z-index:999;
+}
+
+.modal-content{
+  width:100%;
+  max-width:400px;
+
+  background:var(--card);
+
+  border:1px solid var(--border);
+
+  border-radius:24px;
+
+  padding:24px;
+}
+
+.modal-content h3{
+  margin-bottom:20px;
+  font-size:24px;
+}
+
+.modal-content input{
+  width:100%;
+
+  background:#0b1120;
+
+  border:1px solid var(--border);
+
+  color:white;
+
+  padding:14px;
+
+  border-radius:12px;
+
+  outline:none;
+
+  margin-bottom:14px;
+}
+
+.modal-botoes{
+  display:flex;
+  gap:10px;
+  margin-top:10px;
+}
+
+.cancelar{
+  background:#1e293b;
+  color:white;
+}
+
+/* RESPONSIVO */
+
+@media(max-width:900px){
+
+  .sidebar{
+    display:none;
+  }
+
+  .content{
+    padding:20px;
+  }
+
+  .cliente{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:20px;
+  }
+
+  .cliente-direita{
+    width:100%;
+    justify-content:space-between;
+  }
+}
+
+</style>
+
 </head>
 
 <body>
 
-  <div class="header">
-    <div class="logo">Sabor <span>& Arte</span></div>
-  </div>
+<div class="container">
 
-  <div class="container">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
 
+    <div class="sidebar-top">
 
-    <div class="sidebar">
-      <div class="menu">
-        <a href="dashboard.html">Dashboard</a>
-        <a href="clientes.html">Clientes</a>
-        <a href="servicos.html">Serviços</a>
-        <a href="eventos.html">Eventos</a>
-        <a href="pedidos.html">Pedidos</a>
-        <a href="orcamentos.html">Orçamentos</a>
-      </div>
-    </div>
-
-
-    <div class="content">
-      <div class="topo">
-        <h2>Clientes</h2>
-        <button onclick="abrirModal()">+ Novo Cliente</button>
+      <div class="logo">
+        Sabor<span>&Arte</span>
       </div>
 
-      <input type="text" placeholder="Buscar Cliente..." oninput="buscar(this.value)">
+      <nav class="menu">
 
-      <table>
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Telefone</th>
-            <th>Email</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody id="listaClientes"></tbody>
-      </table>
+        <a href="dashboard.html">
+          <i data-lucide="layout-dashboard"></i>
+          Dashboard
+        </a>
+
+        <a href="clientes.html" class="active">
+          <i data-lucide="users"></i>
+          Clientes
+        </a>
+
+        <a href="servicos.html">
+          <i data-lucide="utensils-crossed"></i>
+          Serviços
+        </a>
+
+        <a href="eventos.html">
+          <i data-lucide="calendar"></i>
+          Eventos
+        </a>
+
+        <a href="pedidos.html">
+          <i data-lucide="shopping-bag"></i>
+          Pedidos
+        </a>
+
+        <a href="orcamentos.html">
+          <i data-lucide="file-text"></i>
+          Orçamentos
+        </a>
+
+      </nav>
+
+    </div>
+
+    <div class="sidebar-footer">
+
+      <a href="#">
+        <i data-lucide="panel-left-close"></i>
+        Recolher
+      </a>
+
+      <a href="../public/login.html">
+        <i data-lucide="log-out"></i>
+        Sair
+      </a>
+
+    </div>
+
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <div class="topo">
+
+      <div class="titulo">
+        <h1>Clientes</h1>
+        <p id="totalClientes">0 clientes cadastrados</p>
+      </div>
+
+      <button class="btn" onclick="abrirModal()">
+        <i data-lucide="plus"></i>
+        Novo Cliente
+      </button>
+
+    </div>
+
+    <div class="box">
+
+      <div class="busca">
+
+        <i data-lucide="search"></i>
+
+        <input
+          type="text"
+          placeholder="Buscar clientes..."
+          oninput="buscar(this.value)"
+        >
+
+      </div>
+
+      <div class="lista-clientes" id="listaClientes"></div>
+
+    </div>
+
+  </main>
+
+</div>
+
+<!-- MODAL -->
+
+<div class="modal">
+
+  <div class="modal-content">
+
+    <h3>Novo Cliente</h3>
+
+    <input type="text" id="nome" placeholder="Nome">
+
+    <input type="text" id="telefone" placeholder="Telefone">
+
+    <input type="email" id="email" placeholder="Email">
+
+    <div class="modal-botoes">
+
+      <button class="btn" onclick="salvar()">
+        Salvar
+      </button>
+
+      <button class="btn cancelar" onclick="fecharModal()">
+        Cancelar
+      </button>
+
     </div>
 
   </div>
 
-  <!-- MODAL -->
-  <div class="modal">
-    <div class="modal-content">
-      <h3>Novo Cliente</h3>
+</div>
 
-      <input type="text" id="nome" placeholder="Nome">
-      <input type="text" id="telefone" placeholder="Telefone">
-      <input type="text" id="email" placeholder="Email">
+<script>
 
-      <button onclick="salvar()">Salvar</button>
-    </div>
-  </div>
+lucide.createIcons()
 
-  <script>
+const usuario = JSON.parse(localStorage.getItem("usuario"))
 
-    let clientes = []
-    let editando = null
+if(!usuario || usuario.tipo !== "admin"){
+  window.location.href = "../public/login.html"
+}
 
-    const modal = document.querySelector(".modal")
+let clientes = []
 
-    function render(lista = clientes) {
-      const tabela = document.getElementById("listaClientes")
-      tabela.innerHTML = ""
+let editando = null
 
-      lista.forEach((c, i) => {
-        tabela.innerHTML += `
-    <tr>
-      <td>${c.nome}</td>
-      <td>${c.telefone}</td>
-      <td>${c.email}</td>
-      <td class="actions">
-        <button onclick="editar(${i})"></button>
-        <button onclick="remover(${i})"></button>
-      </td>
-    </tr>`
-      })
+const modal = document.querySelector(".modal")
+
+// CARREGAR CLIENTES
+async function carregarClientes(){
+
+  try{
+
+    const res = await fetch(
+      `http://localhost:3000/clientes?admin_id=${usuario.id}`
+    )
+
+    clientes = await res.json()
+
+    if(!Array.isArray(clientes)){
+      clientes = []
     }
 
-    function abrirModal() {
-      modal.style.display = "flex"
-    }
+    render(clientes)
 
-    function fecharModal() {
-      modal.style.display = "none"
-      limpar()
-    }
+  }catch(err){
 
-    function limpar() {
-      nome.value = ""
-      telefone.value = ""
-      email.value = ""
-      editando = null
-    }
+    console.log(err)
+  }
+}
 
-    function salvar() {
-      const cliente = {
-        nome: nome.value,
-        telefone: telefone.value,
-        email: email.value
-      }
+// RENDER
+function render(lista = clientes){
 
-      if (editando !== null) {
-        clientes[editando] = cliente
-      } else {
-        clientes.push(cliente)
-      }
+  const container =
+    document.getElementById("listaClientes")
 
-      fecharModal()
-      render()
-    }
+  const total =
+    document.getElementById("totalClientes")
 
-    function editar(i) {
-      editando = i
-      const c = clientes[i]
+  container.innerHTML = ""
 
-      nome.value = c.nome
-      telefone.value = c.telefone
-      email.value = c.email
+  total.innerText =
+    `${lista.length} clientes cadastrados`
 
-      abrirModal()
-    }
+  lista.forEach(c => {
 
-    function remover(i) {
-      clientes.splice(i, 1)
-      render()
-    }
+    let inicial =
+      c.nome ? c.nome.charAt(0).toUpperCase() : "C"
 
-    function buscar(texto) {
-      const filtrados = clientes.filter(c =>
-        c.nome.toLowerCase().includes(texto.toLowerCase())
+    container.innerHTML += `
+
+      <div class="cliente">
+
+        <div class="cliente-esquerda">
+
+          <div class="avatar">
+            ${inicial}
+          </div>
+
+          <div class="info">
+
+            <h3>${c.nome}</h3>
+
+            <small>
+
+              <span>
+                <i data-lucide="mail"></i>
+                ${c.email}
+              </span>
+
+              <span>
+                <i data-lucide="phone"></i>
+                ${c.telefone}
+              </span>
+
+            </small>
+
+          </div>
+
+        </div>
+
+        <div class="cliente-direita">
+
+          <div class="metricas">
+
+            <small>Eventos</small>
+
+            <strong>${c.eventos || 0}</strong>
+
+          </div>
+
+          <div class="metricas">
+
+            <small>Total gasto</small>
+
+            <strong>
+              R$ ${(c.total_gasto || 0).toFixed(2)}
+            </strong>
+
+          </div>
+
+          <span class="status">
+            Ativo
+          </span>
+
+          <div class="acoes">
+
+            <button
+              class="btn-editar"
+              onclick="editar(${c.id})"
+            >
+              <i data-lucide="pencil"></i>
+            </button>
+
+            <button
+              class="btn-remover"
+              onclick="remover(${c.id})"
+            >
+              <i data-lucide="trash-2"></i>
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    `
+  })
+
+  lucide.createIcons()
+}
+
+// MODAL
+function abrirModal(){
+
+  document.querySelector(
+    ".modal-content h3"
+  ).innerText = "Novo Cliente"
+
+  modal.style.display = "flex"
+}
+
+function fecharModal(){
+
+  modal.style.display = "none"
+
+  limpar()
+}
+
+function limpar(){
+
+  nome.value = ""
+  telefone.value = ""
+  email.value = ""
+
+  editando = null
+}
+
+// SALVAR
+async function salvar(){
+
+  const cliente = {
+
+    nome:nome.value,
+
+    telefone:telefone.value,
+
+    email:email.value,
+
+    admin_id:usuario.id
+  }
+
+  try{
+
+    if(editando !== null){
+
+      await fetch(
+        `http://localhost:3000/clientes/${editando}`,
+        {
+          method:"PUT",
+
+          headers:{
+            "Content-Type":"application/json"
+          },
+
+          body:JSON.stringify(cliente)
+        }
       )
 
-      render(filtrados)
+    }else{
+
+      await fetch(
+        "http://localhost:3000/clientes",
+        {
+          method:"POST",
+
+          headers:{
+            "Content-Type":"application/json"
+          },
+
+          body:JSON.stringify(cliente)
+        }
+      )
     }
 
-    render()
+    fecharModal()
 
-  </script>
+    carregarClientes()
+
+  }catch(err){
+
+    console.log(err)
+  }
+}
+
+// EDITAR
+async function editar(id){
+
+  const res =
+    await fetch(`http://localhost:3000/clientes/${id}`)
+
+  const c = await res.json()
+
+  editando = id
+
+  nome.value = c.nome
+  telefone.value = c.telefone
+  email.value = c.email
+
+  document.querySelector(
+    ".modal-content h3"
+  ).innerText = "Editar Cliente"
+
+  modal.style.display = "flex"
+}
+
+// REMOVER
+async function remover(id){
+
+  if(!confirm("Deseja remover este cliente?")) return
+
+  try{
+
+    await fetch(
+      `http://localhost:3000/clientes/${id}`,
+      {
+        method:"DELETE"
+      }
+    )
+
+    carregarClientes()
+
+  }catch(err){
+
+    console.log(err)
+  }
+}
+
+// BUSCAR
+function buscar(texto){
+
+  const filtrados = clientes.filter(c =>
+
+    c.nome.toLowerCase()
+    .includes(texto.toLowerCase())
+
+  )
+
+  render(filtrados)
+}
+
+// INIT
+carregarClientes()
+
+</script>
 
 </body>
-
 </html>

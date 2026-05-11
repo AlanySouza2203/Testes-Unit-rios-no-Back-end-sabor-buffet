@@ -2,301 +2,737 @@
 <html lang="pt-br">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Painel Completo</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial;
-            background: linear-gradient(135deg, #0f172a, #020617);
-            color: #e2e8f0;
-        }
+<title>Sabor & Arte - Pedidos</title>
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 30px;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            position: sticky;
-            top: 0;
-        }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-        .logo {
-            font-size: 22px;
-            font-weight: bold;
-        }
+<script src="https://unpkg.com/lucide@latest"></script>
 
-        .logo span {
-            color: #facc15;
-        }
+<style>
 
-        .container {
-            display: flex;
-            height: calc(100vh - 70px);
-        }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Inter', sans-serif;
+}
 
-        .sidebar {
-            width: 220px;
-            background: #111827;
-            padding: 20px;
-        }
+:root{
 
-        .menu a {
-            display: block;
-            padding: 12px;
-            margin: 8px 0;
-            color: #cbd5f5;
-            border-radius: 8px;
-            cursor: pointer;
-            text-decoration: none;
-        }
+    --bg:#020617;
+    --sidebar:#0f172a;
+    --card:#111827;
 
-        .menu a.active,
-        .menu a:hover {
-            background: #facc15;
-            color: #000;
-        }
+    --text:#e2e8f0;
+    --muted:#94a3b8;
 
-        .content {
-            flex: 1;
-            padding: 25px;
-            overflow-y: auto;
-        }
+    --yellow:#facc15;
+    --green:#22c55e;
+    --blue:#3b82f6;
+    --orange:#fb923c;
+    --red:#ef4444;
 
-        .section {
-            display: none;
-        }
+    --border:rgba(255,255,255,0.06);
 
-        .section.active {
-            display: block;
-        }
+    --radius:20px;
+}
 
-        .lista-pedidos {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 15px;
-        }
+body{
+    background:var(--bg);
+    color:var(--text);
+}
 
+.container{
+    display:flex;
+    min-height:100vh;
+}
 
-        .pedido {
-            background: #1e293b;
-            border-radius: 12px;
-            padding: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            transition: 0.2s;
-            border-left: 5px solid transparent;
-        }
+/* SIDEBAR */
 
-        .pedido:hover {
-            transform: scale(1.02);
-        }
+.sidebar{
+    width:260px;
+    background:var(--sidebar);
 
+    border-right:1px solid var(--border);
 
-        .pedido-header {
-            display: flex;
-            justify-content: space-between;
-            font-size: 14px;
-        }
+    padding:24px 18px;
 
-        .cliente {
-            opacity: 0.8;
-        }
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+}
 
+.sidebar-top{
+    display:flex;
+    flex-direction:column;
+}
 
-        .pedido-body {
-            font-size: 13px;
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-        }
+.logo{
+    font-size:28px;
+    font-weight:800;
+    margin-bottom:40px;
+    color:white;
+}
 
-        .evento {
-            font-size: 11px;
-            opacity: 0.6;
-        }
+.logo span{
+    color:var(--yellow);
+}
 
+.menu{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
 
-        .pedido-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+.menu a{
+    display:flex;
+    align-items:center;
+    gap:12px;
 
+    text-decoration:none;
 
-        .status {
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 11px;
-            width: fit-content;
-        }
+    color:var(--muted);
 
-        .pendente {
-            background: orange;
-        }
+    padding:14px 16px;
 
-        .preparando {
-            background: dodgerblue;
-        }
+    border-radius:14px;
 
-        .entregue {
-            background: green;
-        }
+    transition:0.2s;
 
+    font-size:15px;
+    font-weight:500;
+}
 
-        .pedido.pendente {
-            border-left-color: orange;
-        }
+.menu a svg{
+    width:19px;
+    height:19px;
+}
 
-        .pedido.preparando {
-            border-left-color: dodgerblue;
-        }
+.menu a:hover{
+    background:rgba(250,204,21,0.08);
+    color:white;
+}
 
-        .pedido.entregue {
-            border-left-color: green;
-        }
+.menu a.active{
+    background:var(--yellow);
+    color:black;
+    font-weight:700;
+}
 
+.sidebar-footer{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    padding-top:20px;
+}
 
-        .acoes {
-            display: flex;
-            gap: 5px;
-        }
+.sidebar-footer a{
+    display:flex;
+    align-items:center;
+    gap:12px;
 
-        .acoes button {
-            border: none;
-            padding: 6px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 11px;
-            flex: 1;
-        }
+    text-decoration:none;
 
-        .btn-preparar {
-            background: #3b82f6;
-            color: white;
-        }
+    color:var(--muted);
 
-        .btn-entregar {
-            background: #22c55e;
-            color: white;
-        }
+    padding:14px 16px;
 
-        .btn-remover {
-            background: #ef4444;
-            color: white;
-        }
-    </style>
+    border-radius:14px;
+
+    transition:0.2s;
+
+    font-size:15px;
+    font-weight:500;
+}
+
+.sidebar-footer a svg{
+    width:18px;
+    height:18px;
+}
+
+.sidebar-footer a:hover{
+    background:rgba(255,255,255,0.05);
+    color:white;
+}
+
+/* CONTENT */
+
+.content{
+    flex:1;
+    padding:30px;
+    overflow-y:auto;
+}
+
+.topo{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin-bottom:30px;
+}
+
+.titulo h1{
+    font-size:36px;
+    margin-bottom:6px;
+}
+
+.titulo p{
+    color:var(--muted);
+    font-size:15px;
+}
+
+/* PEDIDOS */
+
+.lista-pedidos{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(360px,1fr));
+    gap:22px;
+}
+
+.pedido{
+    background:var(--card);
+
+    border:1px solid var(--border);
+
+    border-radius:24px;
+
+    padding:22px;
+
+    transition:0.2s;
+}
+
+.pedido:hover{
+    transform:translateY(-4px);
+}
+
+.pedido-topo{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+
+    margin-bottom:18px;
+}
+
+.pedido-info{
+    display:flex;
+    gap:14px;
+}
+
+.pedido-icone{
+    width:50px;
+    height:50px;
+
+    border-radius:14px;
+
+    background:rgba(250,204,21,0.12);
+
+    color:var(--yellow);
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.pedido small{
+    color:var(--muted);
+}
+
+.pedido strong{
+    font-size:16px;
+}
+
+.pedido h3{
+    font-size:22px;
+    margin:18px 0;
+    line-height:1.4;
+}
+
+.pedido p{
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+    color:var(--muted);
+
+    margin-bottom:10px;
+}
+
+.status{
+    padding:6px 12px;
+
+    border-radius:999px;
+
+    font-size:12px;
+    font-weight:700;
+}
+
+.pendente{
+    background:rgba(251,146,60,0.15);
+    color:var(--orange);
+}
+
+.preparando{
+    background:rgba(59,130,246,0.15);
+    color:var(--blue);
+}
+
+.entregue{
+    background:rgba(34,197,94,0.15);
+    color:var(--green);
+}
+
+.acoes{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+
+    margin-top:20px;
+}
+
+.acoes button{
+    border:none;
+
+    padding:12px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-weight:700;
+
+    transition:0.2s;
+}
+
+.acoes button:hover{
+    transform:scale(1.02);
+}
+
+.btn-preparar{
+    background:#2563eb;
+    color:white;
+}
+
+.btn-entregar{
+    background:#16a34a;
+    color:white;
+}
+
+.btn-editar{
+    background:var(--yellow);
+    color:black;
+}
+
+.btn-remover{
+    background:rgba(239,68,68,0.15);
+    color:var(--red);
+}
+
+.vazio{
+    color:var(--muted);
+    text-align:center;
+    margin-top:60px;
+    font-size:16px;
+}
+
+/* RESPONSIVO */
+
+@media(max-width:900px){
+
+    .sidebar{
+        display:none;
+    }
+
+    .content{
+        padding:20px;
+    }
+
+    .lista-pedidos{
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
 </head>
 
 <body>
 
-    <div class="header">
-        <div class="logo">Sabor <span>& Arte</span></div>
-    </div>
+<div class="container">
 
-    <div class="container">
+    <!-- SIDEBAR -->
 
-        <div class="sidebar">
-            <div class="menu">
-        <a href="dashboard.html">Dashboard</a>
-        <a href="clientes.html">Clientes</a>
-        <a href="servicos.html">Serviços</a>
-        <a href="eventos.html">Eventos</a>
-        <a href="pedidos.html">Pedidos</a>
-        <a href="orcamentos.html">Orçamentos</a>
-      </div>
-        </div>
+    <aside class="sidebar">
 
-        <div class="content">
+        <div class="sidebar-top">
 
-            <div id="dashboard" class="section">
-                <h2>Dashboard</h2>
-                <p>Bem-vindo ao painel.</p>
+            <div class="logo">
+                Sabor<span>&Arte</span>
             </div>
 
-            <div id="pedidos" class="section active">
-                <h2>Pedidos</h2>
-                <div class="lista-pedidos" id="listaPedidos"></div>
+            <nav class="menu">
+
+                <a href="dashboard.html">
+                    <i data-lucide="layout-dashboard"></i>
+                    Dashboard
+                </a>
+
+                <a href="clientes.html">
+                    <i data-lucide="users"></i>
+                    Clientes
+                </a>
+
+                <a href="servicos.html">
+                    <i data-lucide="utensils-crossed"></i>
+                    Serviços
+                </a>
+
+                <a href="eventos.html">
+                    <i data-lucide="calendar"></i>
+                    Eventos
+                </a>
+
+                <a href="pedidos.html" class="active">
+                    <i data-lucide="shopping-bag"></i>
+                    Pedidos
+                </a>
+
+                <a href="orcamentos.html">
+                    <i data-lucide="file-text"></i>
+                    Orçamentos
+                </a>
+
+            </nav>
+
+        </div>
+
+        <div class="sidebar-footer">
+
+            <a href="#">
+                <i data-lucide="panel-left-close"></i>
+                Recolher
+            </a>
+
+            <a href="../public/login.html">
+                <i data-lucide="log-out"></i>
+                Sair
+            </a>
+
+        </div>
+
+    </aside>
+
+    <!-- CONTENT -->
+
+    <main class="content">
+
+        <div class="topo">
+
+            <div class="titulo">
+                <h1>Pedidos</h1>
+                <p id="quantidadePedidos">0 pedidos encontrados</p>
             </div>
 
         </div>
 
-    </div>
+        <div class="lista-pedidos" id="listaPedidos"></div>
 
-    <script>
+    </main>
 
-
-
-
-        let pedidos = [
-            { id: 1, cliente: "João", item: "X-Burger", status: "pendente", evento: "Casamento" },
-            { id: 2, cliente: "Maria", item: "Pizza", status: "preparando", evento: "Aniversário" },
-            { id: 3, cliente: "Carlos", item: "Suco", status: "entregue", evento: "Corporativo" },
-            { id: 4, cliente: "Ana", item: "Café", status: "pendente", evento: null }
-        ]
-
-        function renderPedidos() {
-            let container = document.getElementById('listaPedidos')
-            container.innerHTML = ''
-
-            pedidos.forEach(p => {
-                let div = document.createElement('div')
-
-
-                div.className = `pedido ${p.status}`
-
-                div.innerHTML = `
-<div class="pedido-header">
-    <strong>#${p.id}</strong>
-    <span class="cliente">${p.cliente}</span>
 </div>
 
-<div class="pedido-body">
-    <span class="item">${p.item}</span>
-    <span class="evento">Evento: ${p.evento || '—'}</span>
-</div>
+<script>
 
-<div class="pedido-footer">
-    <span class="status ${p.status}">${p.status}</span>
+lucide.createIcons()
 
-    <div class="acoes">
-        <button class="btn-preparar" onclick="preparar(${p.id})">Prep</button>
-        <button class="btn-entregar" onclick="entregar(${p.id})">OK</button>
-        <button class="btn-remover" onclick="remover(${p.id})">X</button>
-    </div>
-</div>
-`
+let pedidos = []
 
-                container.appendChild(div)
-            })
+// EVENTO URL
+const params = new URLSearchParams(window.location.search)
+
+const eventoId = params.get("evento_id")
+
+// CARREGAR PEDIDOS
+async function carregarPedidos() {
+
+    try {
+
+        const usuario =
+            JSON.parse(localStorage.getItem("usuario"))
+
+        if (!usuario || !usuario.id) return
+
+        let url =
+            `http://localhost:3000/pedidos?admin_id=${usuario.id}`
+
+        if (eventoId) {
+            url += `&evento_id=${eventoId}`
         }
 
-        function preparar(id) {
-            let p = pedidos.find(x => x.id == id)
-            p.status = "preparando"
-            renderPedidos()
-        }
+        const res = await fetch(url)
 
-        function entregar(id) {
-            let p = pedidos.find(x => x.id == id)
-            p.status = "entregue"
-            renderPedidos()
-        }
+        pedidos = await res.json()
 
-        function remover(id) {
-            pedidos = pedidos.filter(p => p.id != id)
-            renderPedidos()
+        if (!Array.isArray(pedidos)) {
+            pedidos = []
         }
 
         renderPedidos()
 
-    </script>
+    } catch(err) {
+
+        console.log(err)
+    }
+}
+
+// RENDER
+function renderPedidos() {
+
+    const container =
+        document.getElementById("listaPedidos")
+
+    const quantidade =
+        document.getElementById("quantidadePedidos")
+
+    container.innerHTML = ""
+
+    quantidade.innerText =
+        `${pedidos.length} pedidos encontrados`
+
+    if (!pedidos.length) {
+
+        container.innerHTML = `
+            <p class="vazio">
+                Nenhum pedido encontrado
+            </p>
+        `
+
+        return
+    }
+
+    pedidos.forEach(p => {
+
+        let itens = []
+
+        try {
+
+            itens =
+                typeof p.itens === "string"
+                ? JSON.parse(p.itens)
+                : p.itens
+
+        } catch {
+
+            itens = []
+        }
+
+        let itensTexto = Array.isArray(itens)
+            ? itens.map(i =>
+                `${i.nome} (${i.qtd}x)`
+              ).join(", ")
+            : "Sem itens"
+
+        let status =
+            (p.status || "pendente").toLowerCase()
+
+        let statusTexto = "Pendente"
+
+        if (status === "preparando") {
+            statusTexto = "Em preparo"
+        }
+
+        if (status === "entregue") {
+            statusTexto = "Finalizado"
+        }
+
+        container.innerHTML += `
+
+        <div class="pedido">
+
+            <div class="pedido-topo">
+
+                <div class="pedido-info">
+
+                    <div class="pedido-icone">
+                        <i data-lucide="shopping-bag"></i>
+                    </div>
+
+                    <div>
+                        <small>Pedido #${p.id}</small>
+                        <br>
+                        <strong>${p.cliente || "Cliente"}</strong>
+                    </div>
+
+                </div>
+
+                <span class="status ${status}">
+                    ${statusTexto}
+                </span>
+
+            </div>
+
+            <h3>${itensTexto}</h3>
+
+            <p>
+                <i data-lucide="calendar-days"></i>
+                Evento #${p.evento_id || "-"}
+            </p>
+
+            <p>
+                <i data-lucide="wallet"></i>
+                Total: R$ ${Number(p.total || 0).toFixed(2)}
+            </p>
+
+            <div class="acoes">
+
+                <button
+                    class="btn-preparar"
+                    onclick="preparar(${p.id})">
+
+                    Preparar
+
+                </button>
+
+                <button
+                    class="btn-entregar"
+                    onclick="entregar(${p.id})">
+
+                    Finalizar
+
+                </button>
+
+                <button
+                    class="btn-editar"
+                    onclick="editarPedido(${p.id})">
+
+                    Editar
+
+                </button>
+
+                <button
+                    class="btn-remover"
+                    onclick="remover(${p.id})">
+
+                    Remover
+
+                </button>
+
+            </div>
+
+        </div>
+
+        `
+    })
+
+    lucide.createIcons()
+}
+
+// PREPARAR
+async function preparar(id) {
+
+    await fetch(
+        `http://localhost:3000/pedidos/${id}/status`,
+        {
+            method:"PUT",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify({
+                status:"preparando"
+            })
+        }
+    )
+
+    carregarPedidos()
+}
+
+// FINALIZAR
+async function entregar(id) {
+
+    await fetch(
+        `http://localhost:3000/pedidos/${id}/status`,
+        {
+            method:"PUT",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify({
+                status:"entregue"
+            })
+        }
+    )
+
+    carregarPedidos()
+}
+
+// EDITAR
+function editarPedido(id) {
+
+    const pedido =
+        pedidos.find(p => p.id === id)
+
+    if (!pedido) return
+
+    let novoStatus = prompt(
+        "Novo status:",
+        pedido.status
+    )
+
+    if (!novoStatus) return
+
+    alterarPedido(id, {
+        status:novoStatus
+    })
+}
+
+// ALTERAR
+async function alterarPedido(id, dados) {
+
+    await fetch(
+        `http://localhost:3000/pedidos/${id}`,
+        {
+            method:"PUT",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify(dados)
+        }
+    )
+
+    carregarPedidos()
+}
+
+// REMOVER
+async function remover(id) {
+
+    if (!confirm("Deseja remover este pedido?")) return
+
+    await fetch(
+        `http://localhost:3000/pedidos/${id}`,
+        {
+            method:"DELETE"
+        }
+    )
+
+    carregarPedidos()
+}
+
+// INIT
+carregarPedidos()
+
+// AUTO UPDATE
+setInterval(carregarPedidos, 4000)
+
+</script>
 
 </body>
-
 </html>

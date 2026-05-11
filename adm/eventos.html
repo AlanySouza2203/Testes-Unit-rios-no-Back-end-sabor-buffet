@@ -3,259 +3,814 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Sabor & Arte - Eventos</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial;
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Inter', sans-serif;
     }
 
-    body {
-      background: linear-gradient(135deg, #0f172a, #020617);
-      color: #e2e8f0;
+    :root{
+      --bg:#020617;
+      --sidebar:#0f172a;
+      --card:#111827;
+
+      --text:#e2e8f0;
+      --muted:#94a3b8;
+
+      --yellow:#facc15;
+      --green:#22c55e;
+      --orange:#fb923c;
+      --red:#ef4444;
+
+      --border:rgba(255,255,255,0.06);
+
+      --radius:18px;
     }
 
-    .container {
-      display: flex;
-      height: 100vh;
+    body{
+      background:var(--bg);
+      color:var(--text);
     }
 
-
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 30px;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
+    .container{
+      display:flex;
+      min-height:100vh;
     }
 
-    .logo {
-      font-size: 22px;
-      font-weight: bold;
-      letter-spacing: 2px;
+    /* SIDEBAR */
+
+    .sidebar{
+      width:260px;
+      background:var(--sidebar);
+      border-right:1px solid var(--border);
+
+      padding:24px 18px;
+
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
     }
 
-    .logo span {
-      color: #facc15;
+    .sidebar-top{
+      display:flex;
+      flex-direction:column;
     }
 
-
-    .sidebar {
-      width: 230px;
-      background: #111827;
-      padding: 20px;
+    .logo{
+      font-size:28px;
+      font-weight:800;
+      margin-bottom:40px;
+      color:white;
     }
 
-    .menu a {
-      display: block;
-      padding: 12px;
-      margin: 8px 0;
-      color: #cbd5f5;
-      border-radius: 8px;
-      text-decoration: none;
+    .logo span{
+      color:var(--yellow);
     }
 
-    .menu a.active,
-    .menu a:hover {
-      background: #facc15;
-      color: #000;
+    .menu{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
     }
 
+    .menu a{
+      display:flex;
+      align-items:center;
+      gap:12px;
 
-    .content {
-      flex: 1;
-      padding: 20px;
-      overflow-y: auto;
+      text-decoration:none;
+
+      color:var(--muted);
+
+      padding:14px 16px;
+
+      border-radius:14px;
+
+      transition:0.2s;
+
+      font-size:15px;
+      font-weight:500;
     }
 
-    .topo {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
+    .menu a svg{
+      width:19px;
+      height:19px;
     }
 
-    button {
-      background: #facc15;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
+    .menu a:hover{
+      background:rgba(250,204,21,0.08);
+      color:white;
     }
 
-
-    .evento {
-      background: #1e293b;
-      padding: 15px;
-      margin-bottom: 10px;
-      border-radius: 10px;
+    .menu a.active{
+      background:var(--yellow);
+      color:black;
+      font-weight:700;
     }
 
-    .empty {
-      text-align: center;
-      margin-top: 100px;
-      opacity: 0.6;
+    .sidebar-footer{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      padding-top:20px;
     }
 
+    .sidebar-footer a{
+      display:flex;
+      align-items:center;
+      gap:12px;
 
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      display: none;
-      justify-content: center;
-      align-items: center;
+      text-decoration:none;
+
+      color:var(--muted);
+
+      padding:14px 16px;
+
+      border-radius:14px;
+
+      transition:0.2s;
+
+      font-size:15px;
+      font-weight:500;
     }
 
-    .modal-content {
-      background: #1e293b;
-      padding: 20px;
-      border-radius: 10px;
-      width: 300px;
+    .sidebar-footer a svg{
+      width:18px;
+      height:18px;
+    }
+
+    .sidebar-footer a:hover{
+      background:rgba(255,255,255,0.05);
+      color:white;
+    }
+
+    /* CONTENT */
+
+    .content{
+      flex:1;
+      padding:30px;
+      overflow-y:auto;
+    }
+
+    .topo{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+
+      margin-bottom:25px;
+    }
+
+    .titulo h1{
+      font-size:36px;
+      margin-bottom:6px;
+    }
+
+    .titulo p{
+      color:var(--muted);
+      font-size:15px;
+    }
+
+    .btn{
+      background:var(--yellow);
+      border:none;
+
+      padding:14px 20px;
+
+      border-radius:14px;
+
+      cursor:pointer;
+
+      font-weight:700;
+
+      display:flex;
+      align-items:center;
+      gap:8px;
+
+      transition:0.2s;
+
+      color:black;
+    }
+
+    .btn:hover{
+      transform:scale(1.03);
+    }
+
+    /* EVENTOS */
+
+    .eventos-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+      gap:20px;
+    }
+
+    .evento{
+      background:var(--card);
+
+      border:1px solid var(--border);
+
+      border-radius:24px;
+
+      padding:22px;
+
+      transition:0.2s;
+    }
+
+    .evento:hover{
+      transform:translateY(-3px);
+    }
+
+    .evento-topo{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+
+      margin-bottom:18px;
+    }
+
+    .evento-info{
+      display:flex;
+      gap:14px;
+    }
+
+    .evento-icone{
+      width:50px;
+      height:50px;
+
+      border-radius:14px;
+
+      background:rgba(250,204,21,0.12);
+
+      color:var(--yellow);
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .evento small{
+      color:var(--muted);
+    }
+
+    .evento h3{
+      margin-top:12px;
+      margin-bottom:16px;
+      font-size:24px;
+    }
+
+    .evento p{
+      color:var(--muted);
+      margin-bottom:10px;
+
+      display:flex;
+      align-items:center;
+      gap:8px;
+
+      font-size:14px;
+    }
+
+    .status{
+      padding:6px 12px;
+
+      border-radius:999px;
+
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .confirmado{
+      background:rgba(34,197,94,0.15);
+      color:var(--green);
+    }
+
+    .pendente{
+      background:rgba(251,146,60,0.15);
+      color:var(--orange);
+    }
+
+    .planejado{
+      background:rgba(250,204,21,0.15);
+      color:var(--yellow);
+    }
+
+    .acoes{
+      display:flex;
+      gap:10px;
+      margin-top:20px;
+    }
+
+    .btn-secundario{
+      flex:1;
+
+      background:#1e293b;
+
+      border:none;
+
+      color:white;
+
+      padding:12px;
+
+      border-radius:12px;
+
+      cursor:pointer;
+
+      font-weight:600;
+
+      transition:0.2s;
+    }
+
+    .btn-secundario:hover{
+      opacity:0.9;
+    }
+
+    .btn-remover{
+      background:rgba(239,68,68,0.15);
+      color:var(--red);
+    }
+
+    .empty{
+      text-align:center;
+      margin-top:120px;
+      color:var(--muted);
+    }
+
+    /* MODAL */
+
+    .modal{
+      position:fixed;
+      inset:0;
+
+      background:rgba(0,0,0,0.7);
+
+      display:none;
+      align-items:center;
+      justify-content:center;
+
+      z-index:999;
+    }
+
+    .modal-content{
+      width:100%;
+      max-width:420px;
+
+      background:var(--card);
+
+      border:1px solid var(--border);
+
+      border-radius:24px;
+
+      padding:24px;
+    }
+
+    .modal-content h3{
+      margin-bottom:20px;
+      font-size:24px;
     }
 
     .modal-content input,
-    .modal-content select {
-      width: 100%;
-      margin-bottom: 10px;
-      padding: 8px;
-      border-radius: 5px;
-      border: none;
-      outline: none;
+    .modal-content select{
+      width:100%;
+
+      background:#0f172a;
+
+      border:1px solid var(--border);
+
+      color:white;
+
+      padding:14px;
+
+      border-radius:12px;
+
+      margin-bottom:14px;
+
+      outline:none;
     }
+
+    .modal-botoes{
+      display:flex;
+      gap:10px;
+      margin-top:10px;
+    }
+
+    .cancelar{
+      background:#1e293b;
+      color:white;
+    }
+
+    @media(max-width:900px){
+
+      .sidebar{
+        display:none;
+      }
+
+      .content{
+        padding:20px;
+      }
+
+      .eventos-grid{
+        grid-template-columns:1fr;
+      }
+
+      .topo{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:15px;
+      }
+
+    }
+
   </style>
 </head>
 
 <body>
 
+<div class="container">
 
-  <div class="header">
-    <div class="logo">Sabor <span>& Arte</span></div>
-  </div>
+  <!-- SIDEBAR -->
 
-  <div class="container">
+  <aside class="sidebar">
 
+    <div class="sidebar-top">
 
-    <div class="sidebar">
-      <div class="menu">
-        <a href="dashboard.html">Dashboard</a>
-        <a href="clientes.html">Clientes</a>
-        <a href="servicos.html">Serviços</a>
-        <a href="eventos.html">Eventos</a>
-        <a href="pedidos.html">Pedidos</a>
-        <a href="orcamentos.html">Orçamentos</a>
-      </div>
-    </div>
-
-
-    <div class="content">
-
-      <div class="topo">
-        <h2>Eventos</h2>
-        <button onclick="abrirModal()">+ Novo Evento</button>
+      <div class="logo">
+        Sabor<span>&Arte</span>
       </div>
 
-      <div id="listaEventos"></div>
-      <p class="empty" id="mensagem">Nenhum evento cadastrado</p>
+      <nav class="menu">
+
+        <a href="dashboard.html">
+          <i data-lucide="layout-dashboard"></i>
+          Dashboard
+        </a>
+
+        <a href="clientes.html">
+          <i data-lucide="users"></i>
+          Clientes
+        </a>
+
+        <a href="servicos.html">
+          <i data-lucide="utensils-crossed"></i>
+          Serviços
+        </a>
+
+        <a href="eventos.html" class="active">
+          <i data-lucide="calendar"></i>
+          Eventos
+        </a>
+
+        <a href="pedidos.html">
+          <i data-lucide="shopping-bag"></i>
+          Pedidos
+        </a>
+
+        <a href="orcamentos.html">
+          <i data-lucide="file-text"></i>
+          Orçamentos
+        </a>
+
+      </nav>
 
     </div>
-  </div>
 
+    <div class="sidebar-footer">
 
-  <div class="modal" id="modal">
-    <div class="modal-content">
-      <h3>Novo Evento</h3>
+      <a href="#">
+        <i data-lucide="panel-left-close"></i>
+        Recolher
+      </a>
 
-      <input type="text" id="cliente" placeholder="Cliente">
+      <a href="../public/login.html">
+        <i data-lucide="log-out"></i>
+        Sair
+      </a>
 
-      <select id="tipo">
-        <option value="">Tipo de Evento</option>
-        <option>Casamento</option>
-        <option>Aniversário</option>
-        <option>Corporativo</option>
-      </select>
-
-      <input type="date" id="data">
-      <input type="text" id="local" placeholder="Local">
-      <input type="number" id="convidados" placeholder="Nº Convidados">
-
-      <button onclick="salvarEvento()">Salvar</button>
-      <button onclick="fecharModal()">Cancelar</button>
     </div>
+
+  </aside>
+
+  <!-- CONTENT -->
+
+  <main class="content">
+
+    <div class="topo">
+
+      <div class="titulo">
+        <h1>Eventos</h1>
+        <p id="quantidadeEventos">0 eventos agendados</p>
+      </div>
+
+      <button class="btn" onclick="abrirModal()">
+        <i data-lucide="plus"></i>
+        Novo Evento
+      </button>
+
+    </div>
+
+    <div class="eventos-grid" id="listaEventos"></div>
+
+    <p class="empty" id="mensagem">
+      Nenhum evento cadastrado
+    </p>
+
+  </main>
+
+</div>
+
+<!-- MODAL -->
+
+<div class="modal" id="modal">
+
+  <div class="modal-content">
+
+    <h3>Novo Evento</h3>
+
+    <input type="text" id="cliente" placeholder="ID do Cliente">
+
+    <select id="tipo">
+      <option value="">Tipo de Evento</option>
+      <option>Casamento</option>
+      <option>Aniversário</option>
+      <option>Corporativo</option>
+      <option>Formatura</option>
+    </select>
+
+    <input type="date" id="data">
+
+    <input type="text" id="local" placeholder="Local">
+
+    <input type="number" id="convidados" placeholder="Número de convidados">
+
+    <div class="modal-botoes">
+
+      <button class="btn" onclick="salvarEvento()">
+        Salvar
+      </button>
+
+      <button class="btn cancelar" onclick="fecharModal()">
+        Cancelar
+      </button>
+
+    </div>
+
   </div>
 
-  <script>
-    let eventos = [];
+</div>
 
-    function abrirModal() {
-      document.getElementById("modal").style.display = "flex";
+<script>
+
+lucide.createIcons()
+
+// USUÁRIO
+const usuario = JSON.parse(localStorage.getItem("usuario"))
+
+if (!usuario || usuario.tipo !== "admin") {
+  window.location.href = "../public/login.html"
+}
+
+// EVENTOS
+let eventos = []
+
+// MODAL
+function abrirModal() {
+  document.getElementById("modal").style.display = "flex"
+}
+
+function fecharModal() {
+  document.getElementById("modal").style.display = "none"
+}
+
+// SALVAR EVENTO
+async function salvarEvento() {
+
+  const cliente_id = Number(document.getElementById("cliente").value)
+
+  const tipo = document.getElementById("tipo").value
+
+  const data = document.getElementById("data").value
+
+  const local = document.getElementById("local").value.trim()
+
+  const convidados =
+    Number(document.getElementById("convidados").value) || 0
+
+  if (!cliente_id || !tipo || !data || !local) {
+    alert("Preencha todos os campos")
+    return
+  }
+
+  try {
+
+    const resEvento = await fetch("http://localhost:3000/eventos", {
+
+      method:"POST",
+
+      headers:{
+        "Content-Type":"application/json"
+      },
+
+      body:JSON.stringify({
+        cliente_id,
+        tipo,
+        data,
+        local,
+        convidados,
+        admin_id:usuario.id
+      })
+
+    })
+
+    const dados = await resEvento.json()
+
+    if (!resEvento.ok) {
+      alert(dados.erro || "Erro ao criar evento")
+      return
     }
 
-    function fecharModal() {
-      document.getElementById("modal").style.display = "none";
+    fecharModal()
+
+    carregarEventos()
+
+  } catch(err) {
+
+    console.log(err)
+
+    alert("Erro no servidor")
+  }
+}
+
+// CARREGAR EVENTOS
+async function carregarEventos() {
+
+  try {
+
+    const res = await fetch(
+      `http://localhost:3000/eventos?admin_id=${usuario.id}`
+    )
+
+    eventos = await res.json()
+
+    if (!Array.isArray(eventos)) {
+      eventos = []
     }
 
-    function salvarEvento() {
-      const cliente = document.getElementById("cliente").value;
-      const tipo = document.getElementById("tipo").value;
-      const data = document.getElementById("data").value;
-      const local = document.getElementById("local").value;
-      const convidados = document.getElementById("convidados").value;
+    renderizarEventos()
 
-      if (!cliente || !tipo || !data || !local || !convidados) {
-        alert("Preencha todos os campos!");
-        return;
+  } catch(err) {
+
+    console.log(err)
+  }
+}
+
+// REMOVER EVENTO
+async function removerEvento(id) {
+
+  if (!confirm("Deseja remover este evento?")) return
+
+  try {
+
+    const res = await fetch(
+      `http://localhost:3000/eventos/${id}`,
+      {
+        method:"DELETE"
       }
+    )
 
-      const evento = { cliente, tipo, data, local, convidados };
-      eventos.push(evento);
+    if (res.ok) {
 
-      renderizarEventos();
-      fecharModal();
+      eventos = eventos.filter(e => e.id !== id)
+
+      renderizarEventos()
     }
 
-    function renderizarEventos() {
-      const lista = document.getElementById("listaEventos");
-      const mensagem = document.getElementById("mensagem");
+  } catch(err) {
 
-      lista.innerHTML = "";
+    console.log(err)
+  }
+}
 
-      if (eventos.length === 0) {
-        mensagem.style.display = "block";
-        return;
-      }
+// VER PEDIDOS
+function verPedidos(eventoId) {
 
-      mensagem.style.display = "none";
+  window.location.href =
+    `pedidos.html?evento_id=${eventoId}`
+}
 
-      eventos.forEach(e => {
-        const div = document.createElement("div");
-        div.className = "evento";
+// RENDER
+function renderizarEventos() {
 
-        div.innerHTML = `
-          <strong>${e.tipo}</strong><br>
-          Cliente: ${e.cliente}<br>
-          Data: ${e.data}<br>
-          Local: ${e.local}<br>
-          Convidados: ${e.convidados}
-        `;
+  const lista = document.getElementById("listaEventos")
 
-        lista.appendChild(div);
-      });
-    }
-  </script>
+  const mensagem = document.getElementById("mensagem")
+
+  const quantidade =
+    document.getElementById("quantidadeEventos")
+
+  lista.innerHTML = ""
+
+  quantidade.innerText =
+    `${eventos.length} eventos agendados`
+
+  if (eventos.length === 0) {
+
+    mensagem.style.display = "block"
+
+    return
+  }
+
+  mensagem.style.display = "none"
+
+  eventos.forEach(e => {
+
+    let status = (e.status || "Planejado").toLowerCase()
+
+    let classe = "planejado"
+
+    if (status.includes("confirm")) classe = "confirmado"
+    if (status.includes("pend")) classe = "pendente"
+
+    lista.innerHTML += `
+
+      <div class="evento">
+
+        <div class="evento-topo">
+
+          <div class="evento-info">
+
+            <div class="evento-icone">
+              <i data-lucide="calendar-days"></i>
+            </div>
+
+            <div>
+              <small>${e.tipo}</small>
+              <strong>${e.data}</strong>
+            </div>
+
+          </div>
+
+          <span class="status ${classe}">
+            ${e.status || "Planejado"}
+          </span>
+
+        </div>
+
+        <h3>${e.cliente || "Evento"}</h3>
+
+        <p>
+          <i data-lucide="users"></i>
+          ${e.convidados || 0} convidados
+        </p>
+
+        <p>
+          <i data-lucide="map-pin"></i>
+          ${e.local}
+        </p>
+
+        <div class="acoes">
+
+          <button
+            class="btn-secundario"
+            onclick="verPedidos(${e.id})">
+
+            Ver Pedidos
+
+          </button>
+
+          <button
+            class="btn-secundario btn-remover"
+            onclick="removerEvento(${e.id})">
+
+            Remover
+
+          </button>
+
+        </div>
+
+      </div>
+
+    `
+  })
+
+  lucide.createIcons()
+}
+
+// INIT
+carregarEventos()
+
+// AUTO UPDATE
+setInterval(carregarEventos, 4000)
+
+</script>
 
 </body>
-
 </html>

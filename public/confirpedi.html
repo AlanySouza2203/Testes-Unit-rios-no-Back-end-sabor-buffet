@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Confirmar Pedido</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f172a, #020617);
+      color: #e2e8f0;
+    }
+
+    /* HEADER PADRÃO Sabor & Arte */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+
+    .logo span {
+      color: #facc15;
+    }
+
+    /* LAYOUT */
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .resumo {
+      flex: 1;
+      padding: 40px;
+    }
+
+    h1 {
+      color: #facc15;
+      margin-bottom: 25px;
+    }
+
+    .box {
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(250, 204, 21, 0.2);
+    }
+
+    .item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #334155;
+    }
+
+    .total {
+      font-size: 22px;
+      margin-top: 20px;
+      color: #facc15;
+      font-weight: bold;
+    }
+
+    /* BOTÕES */
+    .botoes {
+      margin-top: 30px;
+      display: flex;
+      gap: 15px;
+    }
+
+    .btn {
+      padding: 12px 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .voltar {
+      background: #334155;
+      color: white;
+    }
+
+    .cancelar {
+      background: #b91c1c;
+      color: white;
+    }
+
+    .confirmar {
+      background: #facc15;
+      color: #000;
+    }
+
+    /* LATERAL */
+    .lateral {
+      width: 320px;
+      background: #0f172a;
+      border-left: 1px solid rgba(250, 204, 21, 0.3);
+      padding: 25px;
+    }
+
+    .status {
+      background: #1e293b;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 10px;
+      background: #facc15;
+      color: #000;
+      border-radius: 6px;
+      font-size: 12px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!--  HEADER PADRÃO -->
+  <div class="header">
+    <div class="logo">Sabor <span>& Arte</span></div>
+  </div>
+
+  <div class="container">
+
+    <!-- RESUMO -->
+    <div class="resumo">
+
+      <h1>Confirmar Pedido</h1>
+
+      <div class="box">
+        <h3>Cliente</h3>
+        <p id="cliente">Carregando...</p>
+      </div>
+
+      <div class="box">
+        <h3>Itens do Pedido</h3>
+        <div id="itens"></div>
+      </div>
+
+      <div class="total">
+        Total: R$ <span id="total">0</span>
+      </div>
+
+      <!-- BOTÕES -->
+      <div class="botoes">
+
+        <a href="cardapio.html" class="btn voltar">
+  Alterar Pedido
+</a>
+        <button class="btn cancelar" onclick="cancelarPedido()">
+          Cancelar
+        </button>
+
+        <button class="btn confirmar" onclick="confirmarPedido()">
+          Confirmar
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- LATERAL -->
+    <div class="lateral">
+
+      <h3>Status</h3>
+
+      <div class="status">
+        <p><b>Situação:</b></p>
+        <span class="badge" id="status">Pendente</span>
+      </div>
+
+      <div class="status">
+        <p>Revise tudo antes de confirmar o buffet.</p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+
+//  PEGAR PEDIDO
+let pedido = JSON.parse(localStorage.getItem("pedidoAtual"))
+
+if (!pedido) {
+  alert("Nenhum pedido encontrado!")
+  window.location.href = "index.html"
+}
+
+// PEGAR PACOTE
+let pacote = JSON.parse(localStorage.getItem("pacote"))
+
+if (!pacote) {
+  alert("Selecione um pacote primeiro!")
+  window.location.href = "pacotes.html"
+}
+
+let pacoteNome = pacote.nome
+let pacoteValor = Number(pacote.preco)
+
+// CLIENTE
+document.getElementById("cliente").innerText = pedido.cliente
+
+// 🔥 CRIAR BOX DO PACOTE
+const resumo = document.querySelector(".resumo")
+
+const pacoteBox = document.createElement("div")
+pacoteBox.className = "box"
+pacoteBox.innerHTML = `
+  <h3>Pacote Selecionado</h3>
+  <p>${pacoteNome}</p>
+  <p><strong>R$ ${pacoteValor.toFixed(2)}</strong></p>
+`
+
+resumo.insertBefore(pacoteBox, resumo.children[2])
+
+//  ITENS
+let container = document.getElementById("itens")
+let totalItens = 0
+
+pedido.itens.forEach(item => {
+  let subtotal = item.preco * item.qtd
+  totalItens += subtotal
+
+  container.innerHTML += `
+    <div class="item">
+      <span>${item.nome} (${item.qtd}x)</span>
+      <span>R$ ${subtotal.toFixed(2)}</span>
+    </div>
+  `
+})
+
+//  TOTAL FINAL
+let totalFinal = pacoteValor + totalItens
+document.getElementById("total").innerText = totalFinal.toFixed(2)
+
+//  CANCELAR
+function cancelarPedido() {
+  if (!confirm("Deseja cancelar o pedido?")) return
+
+  localStorage.removeItem("pedidoAtual")
+  localStorage.removeItem("pacote")
+
+  alert("Pedido cancelado com sucesso!")
+  window.location.replace("/index.html")
+}
+
+//  CONFIRMAR → SEM TRAVAR (MESMO COM ERRO NO SERVIDOR)
+async function confirmarPedido() {
+
+const usuario = JSON.parse(localStorage.getItem("usuario"))
+const eventoId = localStorage.getItem("eventoId")
+
+let pedidoFinal = {
+  cliente: pedido.cliente,
+  evento_id: eventoId,   //  ESSENCIAL
+  admin_id: usuario?.admin_id || 1, // ou pega do evento
+  itens: pedido.itens,
+  total: totalFinal,
+  status: "pendente"
+}
+
+  try {
+    const res = await fetch("http://localhost:3000/pedidos", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(pedidoFinal)
+    })
+
+    const data = await res.json()
+
+    if (res.ok) {
+      // backend respondeu certo
+      pedidoFinal.id = data.id || Date.now()
+    } else {
+      //  backend deu erro → continua mesmo assim
+      console.warn("Erro no backend, continuando fluxo")
+      pedidoFinal.id = Date.now()
+    }
+
+  } catch (err) {
+    //  servidor offline → NÃO trava mais
+    console.warn("Servidor offline, continuando fluxo")
+    pedidoFinal.id = Date.now()
+  }
+
+  //  SEMPRE SALVA PARA PAGAMENTO
+  localStorage.setItem("pedidoPagamento", JSON.stringify(pedidoFinal))
+
+  // limpa dados antigos
+  localStorage.removeItem("pedidoAtual")
+  localStorage.removeItem("pacote")
+
+  //  SEMPRE VAI PRO PAGAMENTO
+  window.location.href = "pagamento.html"
+}
+
+</script>
+
+</body>
+</html>

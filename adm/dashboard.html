@@ -1,262 +1,1003 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 
+
 <head>
-  <meta charset="UTF-8">
-  <title>Dashboard Funcionários</title>
-
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial;
-      background: linear-gradient(135deg, #0f172a, #020617);
-      color: #e2e8f0;
-    }
-
-    /* HEADER */
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 30px;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-
-    .logo {
-      font-size: 22px;
-      font-weight: bold;
-      letter-spacing: 2px;
-    }
-
-    .logo span {
-      color: #facc15;
-    }
-
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
-    .container {
-      display: flex;
-      height: calc(100vh - 70px);
-    }
-
-    .sidebar {
-      width: 240px;
-      background: #111827;
-      padding: 20px;
-    }
-
-    .menu a {
-      display: block;
-      padding: 12px;
-      margin: 8px 0;
-      color: #cbd5f5;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    .menu a.active,
-    .menu a:hover {
-      background: #facc15;
-      color: #000;
-    }
+<title>Dashboard - Sabor & Arte</title>
 
 
-    .content {
-      flex: 1;
-      padding: 30px;
-      overflow-y: auto;
-    }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 
-    .topo {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-    }
-
-    .card-resumo {
-      background: #1e293b;
-      padding: 20px;
-      border-radius: 15px;
-    }
-
-    .card-resumo.destaque {
-      background: #facc15;
-      color: #000;
-    }
-
-    .card-resumo p {
-      font-size: 26px;
-      font-weight: bold;
-    }
+<script src="https://unpkg.com/lucide@latest"></script>
 
 
-    .grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 20px;
-      margin-top: 20px;
-    }
 
-    .box {
-      background: #1e293b;
-      padding: 20px;
-      border-radius: 15px;
-    }
+<style>
 
 
-    .section {
-      display: none;
-    }
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Inter', sans-serif;
+}
 
-    .section.active {
-      display: block;
-    }
+
+:root{
 
 
-    .card {
-      background: #1e293b;
-      border-radius: 15px;
-      padding: 20px;
-      margin-bottom: 15px;
-    }
-  </style>
+  --bg:#020617;
+  --sidebar:#0f172a;
+  --card:#111827;
+
+
+  --text:#e2e8f0;
+  --muted:#94a3b8;
+
+
+  --yellow:#facc15;
+  --green:#22c55e;
+  --orange:#fb923c;
+  --blue:#3b82f6;
+  --red:#ef4444;
+
+
+  --border:rgba(255,255,255,0.06);
+
+
+  --radius:18px;
+}
+
+
+body{
+  background:var(--bg);
+  color:var(--text);
+}
+
+
+.container{
+  display:flex;
+  min-height:100vh;
+}
+
+
+.sidebar{
+
+
+  width:260px;
+  background:var(--sidebar);
+  border-right:1px solid var(--border);
+
+
+  padding:24px 18px;
+}
+
+
+.logo{
+  font-size:24px;
+  font-weight:700;
+  margin-bottom:40px;
+}
+
+
+.logo span{
+  color:var(--yellow);
+}
+
+
+.menu{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+
+.menu a{
+
+
+  display:flex;
+  align-items:center;
+  gap:12px;
+
+
+  text-decoration:none;
+
+
+  color:var(--muted);
+
+
+  padding:14px 16px;
+
+
+  border-radius:14px;
+
+
+  transition:0.2s;
+}
+
+
+.menu a:hover{
+  background:rgba(250,204,21,0.08);
+  color:white;
+}
+
+
+.menu a.active{
+  background:var(--yellow);
+  color:black;
+}
+
+
+.content{
+  flex:1;
+  padding:32px;
+}
+
+
+.topo{
+
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+
+  margin-bottom:30px;
+}
+
+
+.topo h1{
+  font-size:34px;
+  margin-bottom:8px;
+}
+
+
+.topo p{
+  color:var(--muted);
+}
+
+
+button{
+
+
+  background:var(--yellow);
+
+
+  border:none;
+
+
+  padding:12px 18px;
+
+
+  border-radius:12px;
+
+
+  cursor:pointer;
+
+
+  font-weight:600;
+
+
+  transition:0.2s;
+}
+
+
+button:hover{
+  transform:scale(1.03);
+}
+
+
+.cards{
+
+
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+
+
+  gap:20px;
+
+
+  margin-bottom:24px;
+}
+
+
+.card{
+
+
+  background:var(--card);
+
+
+  border:1px solid var(--border);
+
+
+  border-radius:var(--radius);
+
+
+  padding:24px;
+
+
+  transition:0.2s;
+}
+
+
+.card:hover{
+  transform:translateY(-3px);
+}
+
+
+.card-top{
+
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+
+  margin-bottom:18px;
+}
+
+
+.card small{
+  color:var(--muted);
+}
+
+
+.card h2{
+  font-size:32px;
+  margin-top:10px;
+}
+
+
+.icon{
+
+
+  width:46px;
+  height:46px;
+
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+
+  border-radius:12px;
+}
+
+
+.yellow{
+  background:rgba(250,204,21,0.12);
+  color:var(--yellow);
+}
+
+
+.blue{
+  background:rgba(59,130,246,0.12);
+  color:var(--blue);
+}
+
+
+.orange{
+  background:rgba(251,146,60,0.12);
+  color:var(--orange);
+}
+
+
+.green{
+  background:rgba(34,197,94,0.12);
+  color:var(--green);
+}
+
+
+.grid{
+
+
+  display:grid;
+  grid-template-columns:2fr 1fr;
+
+
+  gap:24px;
+}
+
+
+.box{
+
+
+  background:var(--card);
+
+
+  border:1px solid var(--border);
+
+
+  border-radius:var(--radius);
+
+
+  padding:24px;
+}
+
+
+.box h3{
+  margin-bottom:20px;
+}
+
+
+.evento{
+
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+
+  padding:16px 0;
+
+
+  border-bottom:1px solid var(--border);
+}
+
+
+.evento:last-child{
+  border:none;
+}
+
+
+.evento strong{
+  display:block;
+  margin-bottom:5px;
+}
+
+
+.evento small{
+  color:var(--muted);
+}
+
+
+.status{
+
+
+  padding:6px 12px;
+
+
+  border-radius:999px;
+
+
+  font-size:12px;
+  font-weight:600;
+}
+
+
+.confirmado{
+  background:rgba(34,197,94,0.15);
+  color:var(--green);
+}
+
+
+.preparo{
+  background:rgba(250,204,21,0.15);
+  color:var(--yellow);
+}
+
+
+.pendente{
+  background:rgba(251,146,60,0.15);
+  color:var(--orange);
+}
+
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+
+th{
+
+
+  text-align:left;
+
+
+  color:var(--muted);
+
+
+  font-weight:500;
+
+
+  padding-bottom:16px;
+}
+
+
+td{
+
+
+  padding:18px 0;
+
+
+  border-top:1px solid var(--border);
+}
+
+
+@media(max-width:1100px){
+
+
+  .cards{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+}
+
+
+@media(max-width:768px){
+
+
+  .sidebar{
+    display:none;
+  }
+
+
+  .cards{
+    grid-template-columns:1fr;
+  }
+
+
+  .content{
+    padding:20px;
+  }
+}
+
+
+</style>
 </head>
+
 
 <body>
 
 
-  <div class="header">
-    <div class="logo">Sabor<span>& Arte</span></div>
-    <div class="header-right">
+<div class="container">
 
+
+  <aside class="sidebar">
+
+
+    <div class="logo">
+      Sabor<span>&Arte</span>
     </div>
-  </div>
 
 
-  <div class="container">
+    <nav class="menu">
 
 
-    <div class="sidebar">
-      <div class="menu">
-        <a href="dashboard.html">Dashboard</a>
-        <a href="clientes.html">Clientes</a>
-        <a href="servicos.html">Serviços</a>
-        <a href="eventos.html">Eventos</a>
-        <a href="pedidos.html">Pedidos</a>
-        <a href="orcamentos.html">Orçamentos</a>
+      <a href="dashboard.html" class="active">
+        <i data-lucide="layout-dashboard"></i>
+        Dashboard
+      </a>
+
+
+      <a href="clientes.html">
+        <i data-lucide="users"></i>
+        Clientes
+      </a>
+
+
+      <a href="servicos.html">
+        <i data-lucide="utensils-crossed"></i>
+        Serviços
+      </a>
+
+
+      <a href="eventos.html">
+        <i data-lucide="calendar"></i>
+        Eventos
+      </a>
+
+
+      <a href="pedidos.html">
+        <i data-lucide="shopping-bag"></i>
+        Pedidos
+      </a>
+
+
+      <a href="orcamentos.html">
+        <i data-lucide="file-text"></i>
+        Orçamentos
+      </a>
+
+
+    </nav>
+
+
+  </aside>
+
+
+  <main class="content">
+
+
+    <div class="topo">
+
+
+      <div>
+        <h1>Dashboard</h1>
+        <p>Bem-vindo de volta 👋</p>
       </div>
+
+
+      <button onclick="window.location.href='eventos.html'">
+        Novo Evento
+      </button>
+
+
     </div>
 
 
-    <div class="content">
+    <!-- CARDS -->
+    <div class="cards">
 
 
-      <div id="dashboard" class="section active">
+      <div class="card">
 
-        <div class="topo">
-          <div>
-            <h2>Dashboard</h2>
-            <p>Bem-vindo</p>
+
+        <div class="card-top">
+
+
+          <div class="icon yellow">
+            <i data-lucide="users"></i>
           </div>
+
+
         </div>
 
-        <div class="cards">
-          <div class="card-resumo destaque">
-            <h3>Total de Clientes</h3>
-          </div>
 
-          <div class="card-resumo">
-            <h3>Eventos no Mês</h3>
-          </div>
+        <small>Total de Clientes</small>
 
-          <div class="card-resumo">
-            <h3>Pedidos Pendentes</h3>
-          </div>
 
-          <div class="card-resumo">
-            <h3>Receita Mensal</h3>
-          </div>
-        </div>
+        <h2 id="totalClientes">0</h2>
 
-        <div class="grid">
-          <div class="box">
-            <h3>Receita dos Últimos Meses</h3>
-          </div>
-
-          <div class="box">
-            <h3>Próximos Eventos</h3>
-          </div>
-        </div>
 
       </div>
 
 
+      <div class="card">
 
+
+        <div class="card-top">
+
+
+          <div class="icon blue">
+            <i data-lucide="calendar"></i>
+          </div>
+
+
+        </div>
+
+
+        <small>Eventos no mês</small>
+
+
+        <h2 id="totalEventos">0</h2>
+
+
+      </div>
+
+
+      <div class="card">
+
+
+        <div class="card-top">
+
+
+          <div class="icon orange">
+            <i data-lucide="shopping-bag"></i>
+          </div>
+
+
+        </div>
+
+
+        <small>Pedidos pendentes</small>
+
+
+        <h2 id="totalPedidos">0</h2>
+
+
+      </div>
+
+
+      <div class="card">
+
+
+        <div class="card-top">
+
+
+          <div class="icon green">
+            <i data-lucide="trending-up"></i>
+          </div>
+
+
+        </div>
+
+
+        <small>Receita total</small>
+
+
+        <h2 id="totalReceita">R$ 0</h2>
+
+
+      </div>
 
 
     </div>
-  </div>
-
-  <script>
 
 
+    <!-- GRID -->
+    <div class="grid">
+
+
+      
+
+      <!-- EVENTOS -->
+      <div class="box">
+
+
+        <h3>Próximos Eventos</h3>
+
+
+        <div id="listaEventos"></div>
+
+
+      </div>
+
+
+    </div>
+
+
+    <!-- PEDIDOS -->
+    <div class="box" style="margin-top:24px;">
+
+
+      <h3>Pedidos Recentes</h3>
+
+
+      <table>
+
+
+        <thead>
+
+
+          <tr>
+            <th>Pedido</th>
+            <th>Cliente</th>
+            <th>Status</th>
+          </tr>
+
+
+        </thead>
+
+
+        <tbody id="listaPedidos"></tbody>
+
+
+      </table>
+
+
+    </div>
+
+
+  </main>
+
+
+</div>
+
+
+<script>
+
+
+lucide.createIcons()
+
+
+const usuario = JSON.parse(localStorage.getItem("usuario"))
+
+
+// PROTEÇÃO
+if (!usuario || usuario.tipo !== "admin" || !usuario.id) {
+  window.location.href = "../public/login.html"
+}
+
+
+let pedidos = []
+let clientes = []
+let eventos = []
+
+
+/* =========================
+   PEDIDOS
+========================= */
+async function carregarPedidos() {
+
+
+  try {
+
+
+    let res = await fetch(`http://localhost:3000/pedidos?admin_id=${usuario.id}`)
+
+
+    pedidos = await res.json()
+
+
+    if (!Array.isArray(pedidos)) pedidos = []
+
+
+    ordenar()
+    atualizarDashboard()
+
+
+  } catch (err) {
+
+
+    console.log("Erro pedidos:", err)
+  }
+}
+
+
+/* =========================
+   CLIENTES
+========================= */
+async function carregarClientes() {
+
+
+  try {
+
+
+    let res = await fetch(`http://localhost:3000/clientes?admin_id=${usuario.id}`)
+
+
+    clientes = await res.json()
+
+
+    if (!Array.isArray(clientes)) clientes = []
+
+
+    atualizarDashboard()
+
+
+  } catch (err) {
+
+
+    console.log("Erro clientes:", err)
+  }
+}
+
+
+/* =========================
+   EVENTOS
+========================= */
+async function carregarEventos() {
+
+
+  try {
+
+
+    let res = await fetch(`http://localhost:3000/eventos?admin_id=${usuario.id}`)
+
+
+    eventos = await res.json()
+
+
+    if (!Array.isArray(eventos)) eventos = []
+
+
+    renderEventos()
+    atualizarDashboard()
+
+
+  } catch (err) {
+
+
+    console.log("Erro eventos:", err)
+  }
+}
+
+
+/* =========================
+   RENDER PEDIDOS
+========================= */
+function renderPedidos() {
+
+
+  let container = document.getElementById('listaPedidos')
+
+
+  container.innerHTML = ''
+
+
+  pedidos.slice(0, 5).forEach(p => {
+
+
+    let status = (p.status || "pendente").toLowerCase()
+
+
+    container.innerHTML += `
+
+
+      <tr>
+
+
+        <td>#${p.id}</td>
+
+
+        <td>${p.cliente || "Cliente"}</td>
+
+
+        <td>
+          <span class="status ${status}">
+            ${status}
+          </span>
+        </td>
+
+
+      </tr>
+
+
+    `
+  })
+}
+
+
+/* =========================
+   EVENTOS
+========================= */
+function renderEventos() {
+
+
+  let container = document.getElementById("listaEventos")
+
+
+  container.innerHTML = ""
+
+
+  eventos.slice(0, 4).forEach(e => {
+
+
+    container.innerHTML += `
+
+
+      <div class="evento">
+
+
+        <div>
+          <strong>${e.tipo || "Evento"}</strong>
+          <small>${e.convidados || 0} convidados</small>
+        </div>
+
+
+        <span class="status confirmado">
+          ${e.status || "Confirmado"}
+        </span>
+
+
+      </div>
+
+
+    `
+  })
+}
+
+
+/* =========================
+   ORDENAR
+========================= */
+function ordenar() {
+
+
+  pedidos.sort((a, b) => b.id - a.id)
+
+
+  renderPedidos()
+}
+
+
+/* =========================
+   RECEITA
+========================= */
+function calcularReceita() {
+
+
+  return pedidos.reduce((total, p) => {
+
+
+    return total + (Number(p.total) || 0)
+
+
+  }, 0)
+}
+
+
+/* =========================
+   DASHBOARD
+========================= */
+function atualizarDashboard() {
+
+
+  let receita = calcularReceita()
+
+
+  let totalClientes = clientes.length
+
+
+  let totalEventos = eventos.length
+
+
+  let pedidosPendentes = pedidos.filter(p => {
+
+
+    return (p.status || "").toLowerCase() === "pendente"
+
+
+  }).length
+
+
+  document.getElementById("totalReceita").innerText =
+    "R$ " + receita.toFixed(2)
+
+
+  document.getElementById("totalClientes").innerText =
+    totalClientes
+
+
+  document.getElementById("totalEventos").innerText =
+    totalEventos
+
+
+  document.getElementById("totalPedidos").innerText =
+    pedidosPendentes
+}
+
+
+/* =========================
+   INIT
+========================= */
+async function carregarTudo() {
+
+
+  await Promise.all([
+    carregarPedidos(),
+    carregarClientes(),
+    carregarEventos()
+  ])
+}
+
+
+carregarTudo()
+
+
+/* =========================
+   AUTO UPDATE
+========================= */
+setInterval(carregarPedidos, 3000)
+
+
+setInterval(() => {
+
+
+  carregarClientes()
+  carregarEventos()
+
+
+}, 6000)
 
 
 
-    let pedidos = []
 
-    async function carregarPedidos() {
-      let res = await fetch("http://localhost:3000/pedidos")
-      pedidos = await res.json()
-      ordenar()
-    }
+</script>
 
-    function renderPedidos() {
-      let container = document.getElementById('listaPedidos')
-      container.innerHTML = ''
-
-      pedidos.forEach(p => {
-        let div = document.createElement('div')
-        div.className = "card"
-
-        div.innerHTML = `
-<h3>Pedido #${p.id}</h3>
-<p>${p.cliente}</p>
-<p>Status: ${p.status}</p>
-`
-
-        container.appendChild(div)
-      })
-    }
-
-    function ordenar() {
-      pedidos.sort((a, b) => a.id - b.id)
-      renderPedidos()
-    }
-
-    carregarPedidos()
-    setInterval(carregarPedidos, 3000)
-
-  </script>
 
 </body>
-
 </html>
+

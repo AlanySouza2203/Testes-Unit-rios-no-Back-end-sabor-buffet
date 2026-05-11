@@ -3,306 +3,941 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Sabor & Arte - Serviços</title>
 
+  <!-- FONT -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- ICONES -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial;
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Inter',sans-serif;
     }
 
-    body {
-      background: linear-gradient(135deg, #0f172a, #020617);
-      color: #e2e8f0;
+    :root{
+
+      --bg:#020617;
+      --sidebar:#0f172a;
+      --card:#111827;
+
+      --text:#e2e8f0;
+      --muted:#94a3b8;
+
+      --yellow:#facc15;
+      --blue:#3b82f6;
+      --red:#ef4444;
+
+      --border:rgba(255,255,255,0.06);
+
+      --radius:18px;
+
+    }
+
+    body{
+      background:linear-gradient(135deg,#020617,#000814);
+      color:var(--text);
+      overflow:hidden;
+    }
+
+    /* LAYOUT */
+
+    .container{
+      display:flex;
+      min-height:100vh;
+    }
+
+    /* SIDEBAR */
+
+    .sidebar{
+      width:260px;
+      background:var(--sidebar);
+      border-right:1px solid var(--border);
+      padding:24px 18px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+
+    .logo{
+      font-size:28px;
+      font-weight:800;
+      margin-bottom:40px;
+      color:white;
+    }
+
+    .logo span{
+      color:var(--yellow);
+    }
+
+    .menu{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .menu a{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      text-decoration:none;
+      color:var(--muted);
+      padding:14px 16px;
+      border-radius:14px;
+      transition:0.2s;
+      font-size:15px;
+      font-weight:500;
+    }
+
+    .menu a svg{
+      width:19px;
+      height:19px;
+    }
+
+    .menu a:hover{
+      background:rgba(250,204,21,0.08);
+      color:white;
+    }
+
+    .menu a.active{
+      background:var(--yellow);
+      color:black;
+      font-weight:700;
+    }
+
+    .sidebar-footer{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      padding:10px 6px;
+    }
+
+    .sidebar-footer a{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      text-decoration:none;
+      color:#8b5cf6;
+      font-size:14px;
+      transition:0.2s;
+    }
+
+    .sidebar-footer a:hover{
+      color:#a855f7;
+    }
+
+    /* CONTENT */
+
+    .content{
+      flex:1;
+      padding:32px;
+      overflow-y:auto;
+    }
+
+    .topo{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:30px;
+    }
+
+    .titulo h1{
+      font-size:38px;
+      margin-bottom:6px;
+    }
+
+    .titulo p{
+      color:var(--muted);
+      font-size:15px;
+    }
+
+    .btn-novo{
+      background:var(--yellow);
+      border:none;
+      padding:14px 20px;
+      border-radius:14px;
+      cursor:pointer;
+      font-weight:700;
+      font-size:15px;
+      transition:0.2s;
+      color:black;
+    }
+
+    .btn-novo:hover{
+      transform:scale(1.03);
+    }
+
+    /* BUSCA */
+
+    .busca-box{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:22px;
+      margin-bottom:24px;
+    }
+
+    .busca-box input{
+      width:100%;
+      background:#020617;
+      border:1px solid rgba(255,255,255,0.06);
+      border-radius:14px;
+      padding:15px 18px;
+      color:white;
+      outline:none;
+      font-size:14px;
+    }
+
+    .busca-box input::placeholder{
+      color:#64748b;
+    }
+
+    /* GRID */
+
+    .lista-servicos{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
+      gap:20px;
+    }
+
+    /* CARD */
+
+    .servico-card{
+      background:linear-gradient(180deg,#111827,#0f172a);
+      border:1px solid var(--border);
+      border-radius:22px;
+      padding:22px;
+      transition:0.25s;
+    }
+
+    .servico-card:hover{
+      transform:translateY(-4px);
+      border-color:rgba(250,204,21,0.25);
+    }
+
+    .servico-topo{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      margin-bottom:18px;
+    }
+
+    .icone{
+      width:54px;
+      height:54px;
+      border-radius:16px;
+      background:rgba(250,204,21,0.12);
+      color:var(--yellow);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .icone svg{
+      width:26px;
+      height:26px;
+    }
+
+    .categoria{
+      background:rgba(59,130,246,0.12);
+      color:#60a5fa;
+      padding:7px 12px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:700;
+      text-transform:capitalize;
+    }
+
+    .servico-card h3{
+      font-size:24px;
+      margin-bottom:10px;
+      color:white;
+    }
+
+    .valor{
+      font-size:30px;
+      font-weight:700;
+      color:var(--yellow);
+      margin-bottom:18px;
+    }
+
+    .imagem-preview{
+      width:100%;
+      height:180px;
+      object-fit:cover;
+      border-radius:16px;
+      margin-bottom:18px;
+      border:1px solid rgba(255,255,255,0.05);
+    }
+
+    .acoes{
+      display:flex;
+      gap:10px;
+    }
+
+    .acoes button{
+      flex:1;
+      border:none;
+      padding:12px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:700;
+      transition:0.2s;
+    }
+
+    .acoes button:hover{
+      transform:scale(1.02);
+    }
+
+    .btn-editar{
+      background:rgba(59,130,246,0.15);
+      color:#60a5fa;
+    }
+
+    .btn-remover{
+      background:rgba(239,68,68,0.15);
+      color:#f87171;
+    }
+     /* ================= SIDEBAR PADRÃO EVENTOS ================= */
+
+
+    .sidebar{
+      width:260px;
+      background:var(--sidebar);
+      border-right:1px solid var(--border);
+      padding:24px 18px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
     }
 
 
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 30px;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
+    .sidebar-top{
+      display:flex;
+      flex-direction:column;
     }
 
 
-    .container {
-      display: flex;
-      height: calc(100vh - 60px);
+    .logo{
+      font-size:28px;
+      font-weight:800;
+      margin-bottom:40px;
+      color:white;
     }
 
 
-    .sidebar {
-      width: 230px;
-      min-width: 230px;
-      background: #111827;
-      padding: 20px;
-    }
-
-    .menu a {
-      display: block;
-      padding: 12px;
-      margin: 8px 0;
-      color: #cbd5f5;
-      border-radius: 8px;
-      text-decoration: none;
-      transition: 0.2s;
-    }
-
-    .menu a.active,
-    .menu a:hover {
-      background: #facc15;
-      color: #000;
+    .logo span{
+      color:var(--yellow);
     }
 
 
-    .content {
-      flex: 1;
-      padding: 20px;
-      overflow-y: auto;
-    }
-
-    .topo {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
+    .menu{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
     }
 
 
-    button {
-      background: #facc15;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
+    .menu a{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      text-decoration:none;
+      color:var(--muted);
+      padding:14px 16px;
+      border-radius:14px;
+      transition:0.2s;
+      font-size:15px;
+      font-weight:500;
     }
 
 
-    select,
-    input {
-      padding: 10px;
-      border-radius: 8px;
-      border: none;
-      outline: none;
-      margin-bottom: 10px;
-      width: 100%;
+    .menu a svg{
+      width:19px;
+      height:19px;
     }
 
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: #1e293b;
-      border-radius: 10px;
-      overflow: hidden;
+    .menu a:hover{
+      background:rgba(250,204,21,0.08);
+      color:white;
     }
 
-    th,
-    td {
-      padding: 12px;
-      text-align: left;
+
+    .menu a.active{
+      background:var(--yellow);
+      color:black;
+      font-weight:700;
     }
 
-    th {
-      background: #111827;
+
+    .sidebar-footer{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      padding-top:20px;
     }
 
-    tr {
-      border-bottom: 1px solid #334155;
+
+    .sidebar-footer a{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      text-decoration:none;
+      color:var(--muted);
+      padding:14px 16px;
+      border-radius:14px;
+      transition:0.2s;
+      font-size:15px;
+      font-weight:500;
     }
+
+
+    .sidebar-footer a:hover{
+      background:rgba(255,255,255,0.05);
+      color:white;
+    }
+
 
     /* MODAL */
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      display: none;
-      justify-content: center;
-      align-items: center;
+
+    .modal{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.7);
+      backdrop-filter:blur(6px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:999;
     }
 
-    .modal-content {
-      background: #1e293b;
-      padding: 20px;
-      border-radius: 10px;
-      width: 300px;
+    .modal-content{
+      width:420px;
+      background:#111827;
+      border:1px solid var(--border);
+      border-radius:24px;
+      padding:28px;
     }
+
+    .modal-content h3{
+      margin-bottom:22px;
+      font-size:26px;
+    }
+
+    .modal-content input,
+    .modal-content select{
+      width:100%;
+      background:#020617;
+      border:1px solid rgba(255,255,255,0.06);
+      border-radius:12px;
+      padding:14px;
+      margin-bottom:14px;
+      color:white;
+      outline:none;
+    }
+
+    .modal-buttons{
+      display:flex;
+      gap:12px;
+      margin-top:10px;
+    }
+
+    .btn-salvar{
+      flex:1;
+      background:var(--yellow);
+      color:black;
+      border:none;
+      padding:13px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:700;
+    }
+
+    .btn-cancelar{
+      flex:1;
+      background:rgba(255,255,255,0.06);
+      color:white;
+      border:none;
+      padding:13px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:700;
+    }
+
+    /* RESPONSIVO */
+
+    @media(max-width:900px){
+
+      .sidebar{
+        display:none;
+      }
+
+      .content{
+        padding:20px;
+      }
+
+      .lista-servicos{
+        grid-template-columns:1fr;
+      }
+
+      .topo{
+        flex-direction:column;
+        gap:16px;
+        align-items:flex-start;
+      }
+
+    }
+
   </style>
 </head>
 
 <body>
 
-  < <div class="header">
-    <div>Sabor & Arte</div>
+  <div class="container">
+
+   <!-- SIDEBAR PADRÃO EVENTOS -->
+  <aside class="sidebar">
+
+
+    <div class="sidebar-top">
+
+
+      <div class="logo">
+        Sabor<span>&Arte</span>
+      </div>
+
+
+      <nav class="menu">
+
+
+        <a href="dashboard.html">
+          <i data-lucide="layout-dashboard"></i>
+          Dashboard
+        </a>
+
+
+        <a href="clientes.html">
+          <i data-lucide="users"></i>
+          Clientes
+        </a>
+
+
+        <a href="servicos.html" class="active">
+          <i data-lucide="utensils-crossed"></i>
+          Serviços
+        </a>
+
+
+        <a href="eventos.html">
+          <i data-lucide="calendar"></i>
+          Eventos
+        </a>
+
+
+        <a href="pedidos.html">
+          <i data-lucide="shopping-bag"></i>
+          Pedidos
+        </a>
+
+
+        <a href="orcamentos.html">
+          <i data-lucide="file-text"></i>
+          Orçamentos
+        </a>
+
+
+      </nav>
+
+
     </div>
 
-    <div class="container">
+
+    <div class="sidebar-footer">
 
 
-      <div class="sidebar">
-        <div class="menu">
-        <a href="dashboard.html">Dashboard</a>
-        <a href="clientes.html">Clientes</a>
-        <a href="servicos.html">Serviços</a>
-        <a href="eventos.html">Eventos</a>
-        <a href="pedidos.html">Pedidos</a>
-        <a href="orcamentos.html">Orçamentos</a>
-      </div>
-      </div>
+      <a href="#">
+        <i data-lucide="panel-left-close"></i>
+        Recolher
+      </a>
 
-      <!-- CONTEÚDO -->
-      <div class="content">
 
-        <div class="topo">
-          <h2>Itens do Cardápio</h2>
-          <button onclick="abrirModal()">+ Novo Item</button>
+      <a href="../public/login.html">
+        <i data-lucide="log-out"></i>
+        Sair
+      </a>
+
+
+    </div>
+
+
+  </aside>
+
+
+    <!-- CONTENT -->
+    <main class="content">
+
+      <div class="topo">
+
+        <div class="titulo">
+          <h1>Serviços</h1>
+          <p id="totalItens">0 itens cadastrados</p>
         </div>
 
-        <table>
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Categoria</th>
-              <th>Valor</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody id="lista"></tbody>
-        </table>
+        <button class="btn-novo" onclick="abrirModal()">
+          + Novo Item
+        </button>
 
       </div>
-    </div>
 
+      <!-- BUSCA -->
+      <div class="busca-box">
 
-    <div class="modal" id="modal">
-      <div class="modal-content">
-        <h3>Novo Item</h3>
+        <input
+          type="text"
+          placeholder="Buscar item do cardápio..."
+          oninput="buscar(this.value)"
+        >
 
-        <input type="text" id="nome" placeholder="Nome">
-
-        <select id="tipo">
-          <option value="entrada">Entrada</option>
-          <option value="principal">Prato Principal</option>
-          <option value="sobremesa">Sobremesa</option>
-          <option value="bebida">Bebida</option>
-          <option value="cafe">Café da Manhã</option>
-        </select>
-
-        <input type="number" id="valor" placeholder="Valor">
-
-        <input type="file" id="imagem" accept="image/*">
-
-        <button onclick="salvar()">Salvar</button>
-        <button onclick="fecharModal()">Cancelar</button>
       </div>
+
+      <!-- LISTA -->
+      <div class="lista-servicos" id="lista"></div>
+
+    </main>
+
+  </div>
+
+  <!-- MODAL -->
+  <div class="modal" id="modal">
+
+    <div class="modal-content">
+
+      <h3 id="tituloModal">Novo Item</h3>
+
+      <input type="text" id="nome" placeholder="Nome do item">
+
+      <select id="tipo">
+        <option value="entrada">Entrada</option>
+        <option value="principal">Prato Principal</option>
+        <option value="sobremesa">Sobremesa</option>
+        <option value="bebida">Bebida</option>
+        <option value="cafe">Café da Manhã</option>
+      </select>
+
+      <input type="number" id="valor" placeholder="Valor">
+
+      <input type="text" id="imagem" placeholder="URL da imagem">
+
+      <div class="modal-buttons">
+
+        <button class="btn-salvar" onclick="salvar()">
+          Salvar
+        </button>
+
+        <button class="btn-cancelar" onclick="fecharModal()">
+          Cancelar
+        </button>
+
+      </div>
+
     </div>
 
-    <script>
-      let itens = JSON.parse(localStorage.getItem("cardapio")) || []
-      let editando = null
+  </div>
 
-      const modal = document.getElementById("modal")
+  <script>
 
-      function render() {
-        const tabela = document.getElementById("lista")
-        tabela.innerHTML = ""
+    lucide.createIcons();
 
-        itens.forEach((item, i) => {
-          tabela.innerHTML += `
-    <tr>
-      <td>${item.nome}</td>
-      <td>${item.categoria}</td>
-      <td>R$ ${item.valor}</td>
-      <td>
-        <button onclick="editar(${i})"></button>
-        <button onclick="remover(${i})"></button>
-      </td>
-    </tr>`
-        })
+    let itens = [];
+    let editando = null;
+
+    const modal = document.getElementById("modal");
+
+    // CARREGAR ITENS
+
+    async function carregarItens(){
+
+      try{
+
+        const res = await fetch("http://localhost:3000/itens");
+
+        itens = await res.json();
+
+        render();
+
+      }catch(err){
+
+        console.error("Erro ao carregar itens:", err);
+
       }
 
-      function abrirModal() {
-        modal.style.display = "flex"
+    }
+
+    // RENDER
+
+    function render(lista = itens){
+
+      const container = document.getElementById("lista");
+
+      container.innerHTML = "";
+
+      document.getElementById("totalItens").innerText =
+      `${lista.length} itens cadastrados`;
+
+      if(!lista.length){
+
+        container.innerHTML = `
+          <p style="
+            color:#94a3b8;
+            text-align:center;
+            padding:40px;
+          ">
+            Nenhum item cadastrado
+          </p>
+        `;
+
+        return;
+
       }
 
-      function fecharModal() {
-        modal.style.display = "none"
-        limpar()
+      lista.forEach((item)=>{
+
+        container.innerHTML += `
+
+          <div class="servico-card">
+
+            <div class="servico-topo">
+
+              <div class="icone">
+                <i data-lucide="utensils-crossed"></i>
+              </div>
+
+              <div class="categoria">
+                ${item.categoria}
+              </div>
+
+            </div>
+
+            ${
+              item.imagem
+              ? `<img src="${item.imagem}" class="imagem-preview">`
+              : ""
+            }
+
+            <h3>${item.nome}</h3>
+
+            <div class="valor">
+              R$ ${Number(item.valor).toFixed(2)}
+            </div>
+
+            <div class="acoes">
+
+              <button
+                class="btn-editar"
+                onclick="editar(${item.id})"
+              >
+                ✏️ Editar
+              </button>
+
+              <button
+                class="btn-remover"
+                onclick="remover(${item.id})"
+              >
+                🗑 Remover
+              </button>
+
+            </div>
+
+          </div>
+
+        `;
+
+      });
+
+      lucide.createIcons();
+
+    }
+
+    // BUSCAR
+
+    function buscar(texto){
+
+      const filtrados = itens.filter(item =>
+
+        item.nome
+        .toLowerCase()
+        .includes(texto.toLowerCase())
+
+      );
+
+      render(filtrados);
+
+    }
+
+    // ABRIR MODAL
+
+    function abrirModal(){
+
+      document.getElementById("tituloModal").innerText =
+      "Novo Item";
+
+      modal.style.display = "flex";
+
+    }
+
+    // FECHAR MODAL
+
+    function fecharModal(){
+
+      modal.style.display = "none";
+
+      limpar();
+
+    }
+
+    // LIMPAR
+
+    function limpar(){
+
+      document.getElementById("nome").value = "";
+      document.getElementById("tipo").value = "entrada";
+      document.getElementById("valor").value = "";
+      document.getElementById("imagem").value = "";
+
+      editando = null;
+
+    }
+
+    // SALVAR
+
+    async function salvar(){
+
+      const item = {
+
+        nome:document.getElementById("nome").value,
+
+        categoria:document.getElementById("tipo").value,
+
+        valor:document.getElementById("valor").value,
+
+        imagem:document.getElementById("imagem").value
+
+      };
+
+      if(!item.nome || !item.valor){
+
+        alert("Preencha todos os campos!");
+
+        return;
+
       }
 
-      function limpar() {
-        document.getElementById("nome").value = ""
-        document.getElementById("tipo").value = "entrada"
-        document.getElementById("valor").value = ""
-        document.getElementById("imagem").value = ""
-        editando = null
+      let url = "http://localhost:3000/itens";
+
+      let method = "POST";
+
+      if(editando !== null){
+
+        url = `http://localhost:3000/itens/${editando}`;
+
+        method = "PUT";
+
       }
 
-      function salvar() {
-        const file = document.getElementById("imagem").files[0]
+      try{
 
-        if (!file) {
-          alert("Selecione uma imagem!")
-          return
+        const res = await fetch(url,{
+
+          method,
+
+          headers:{
+            "Content-Type":"application/json"
+          },
+
+          body:JSON.stringify(item)
+
+        });
+
+        if(res.ok){
+
+          fecharModal();
+
+          carregarItens();
+
+        }else{
+
+          alert("Erro ao salvar item");
+
         }
 
-        const reader = new FileReader()
+      }catch(err){
 
-        reader.onload = function (e) {
+        console.error(err);
 
-          const item = {
-            nome: document.getElementById("nome").value,
-            categoria: document.getElementById("tipo").value,
-            valor: parseFloat(document.getElementById("valor").value).toFixed(2),
-            imagem: e.target.result
-          }
-
-          if (editando !== null) {
-            itens[editando] = item
-          } else {
-            itens.push(item)
-          }
-
-          localStorage.setItem("cardapio", JSON.stringify(itens))
-
-          fecharModal()
-          render()
-        }
-
-        reader.readAsDataURL(file)
       }
 
-      function editar(i) {
-        editando = i
-        const item = itens[i]
+    }
 
-        document.getElementById("nome").value = item.nome
-        document.getElementById("tipo").value = item.categoria
-        document.getElementById("valor").value = item.valor
+    // EDITAR
 
-        abrirModal()
+    function editar(id){
+
+      const item = itens.find(i => i.id === id);
+
+      document.getElementById("nome").value = item.nome;
+
+      document.getElementById("tipo").value = item.categoria;
+
+      document.getElementById("valor").value = item.valor;
+
+      document.getElementById("imagem").value =
+      item.imagem || "";
+
+      editando = id;
+
+      document.getElementById("tituloModal").innerText =
+      "Editar Item";
+
+      abrirModal();
+
+    }
+
+    // REMOVER
+
+    async function remover(id){
+
+      if(!confirm("Deseja remover este item?")) return;
+
+      try{
+
+        await fetch(`http://localhost:3000/itens/${id}`,{
+          method:"DELETE"
+        });
+
+        carregarItens();
+
+      }catch(err){
+
+        console.error("Erro ao remover:", err);
+
       }
 
-      function remover(i) {
-        itens.splice(i, 1)
-        localStorage.setItem("cardapio", JSON.stringify(itens))
-        render()
-      }
+    }
 
-      render()
-    </script>
+    // INIT
+
+    carregarItens();
+
+  </script>
 
 </body>
 
