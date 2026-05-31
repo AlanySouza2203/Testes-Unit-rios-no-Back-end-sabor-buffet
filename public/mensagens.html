@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minhas Mensagens - Sabor & Arte</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: #e0e0e0;
+        }
+
+        .header {
+            background: #0d0d0d;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(212, 167, 98, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .logo span { color: #d4a762; }
+
+        .menu {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+        .menu a {
+            color: #aaa;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+        .menu a:hover, .menu a.active {
+            background: rgba(212, 167, 98, 0.15);
+            color: #d4a762;
+        }
+
+        .badge {
+            background: #d4a762;
+            color: #000;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 11px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* Header da página */
+        .page-header {
+            margin-bottom: 25px;
+        }
+        .page-header h1 {
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .page-header p {
+            color: #888;
+            margin-top: 5px;
+        }
+
+        /* Lista de conversas */
+        .conversas-lista {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .conversa-card {
+            background: #111;
+            border-radius: 16px;
+            padding: 18px;
+            border: 1px solid #222;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .conversa-card:hover {
+            transform: translateX(5px);
+            border-color: #d4a762;
+        }
+        .conversa-card.nao-lida {
+            border-left: 4px solid #d4a762;
+            background: #161616;
+        }
+
+        .conversa-info {
+            flex: 1;
+        }
+        .conversa-titulo {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .conversa-ultima {
+            font-size: 13px;
+            color: #888;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .conversa-ultima i {
+            font-size: 12px;
+        }
+
+        .status-pedido {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        .status-confirmado { background: #22c55e20; color: #22c55e; }
+        .status-preparando { background: #3b82f620; color: #3b82f6; }
+        .status-entregue { background: #8b5cf620; color: #8b5cf6; }
+
+        .badge-nao-lida {
+            background: #d4a762;
+            color: #000;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 12px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .conversa-valor {
+            text-align: right;
+            font-weight: bold;
+            color: #d4a762;
+        }
+
+        /* Modal do chat */
+        .modal-chat {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .chat-container {
+            background: #1a1a1a;
+            border-radius: 20px;
+            width: 500px;
+            max-width: 95%;
+            height: 650px;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #d4a762;
+        }
+
+        .chat-header {
+            padding: 18px 20px;
+            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #111;
+            border-radius: 20px 20px 0 0;
+        }
+        .chat-header h3 {
+            color: #d4a762;
+            font-size: 18px;
+        }
+        .chat-header .pedido-info {
+            font-size: 12px;
+            color: #888;
+            margin-top: 3px;
+        }
+        .fechar-chat {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            word-wrap: break-word;
+        }
+        .message-admin {
+            background: #d4a762;
+            color: #000;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+        .message-client {
+            background: #2a2a2a;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+        .message-time {
+            font-size: 10px;
+            margin-top: 5px;
+            opacity: 0.7;
+        }
+
+        .chat-input {
+            padding: 15px;
+            border-top: 1px solid #333;
+            display: flex;
+            gap: 10px;
+            background: #111;
+            border-radius: 0 0 20px 20px;
+        }
+        .chat-input textarea {
+            flex: 1;
+            padding: 12px;
+            background: #222;
+            border: 1px solid #444;
+            border-radius: 12px;
+            color: white;
+            resize: none;
+            font-family: inherit;
+        }
+        .chat-input textarea:focus {
+            outline: none;
+            border-color: #d4a762;
+        }
+        .chat-input button {
+            background: #d4a762;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .chat-input button:hover {
+            background: #eab308;
+        }
+
+        .sem-conversas {
+            text-align: center;
+            padding: 60px;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .menu span {
+                display: none;
+            }
+            .conversa-card {
+                flex-direction: column;
+                text-align: center;
+                gap: 12px;
+            }
+            .conversa-valor {
+                text-align: center;
+            }
+            .conversa-ultima {
+                justify-content: center;
+            }
+            .message {
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="logo">Sabor & <span>Arte</span></div>
+    <nav class="menu">
+        <a href="dashboard-cliente.html">
+            <i class="fas fa-home"></i> <span>Início</span>
+        </a>
+        <a href="mensagens.html" class="active">
+            <i class="fas fa-envelope"></i> <span>Mensagens</span>
+            <span id="badgeMsg" class="badge" style="display:none;">0</span>
+        </a>
+        <a href="meu_pedido.html">
+             <i class="fas fa-file-invoice"></i> <span>Meu Pedido</span>
+        </a>
+        <a href="#" onclick="sair()">
+            <i class="fas fa-sign-out-alt"></i> <span>Sair</span>
+        </a>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="page-header">
+        <h1><i class="fas fa-envelope"></i> Minhas Mensagens</h1>
+        <p>Comunique-se com a equipe Sabor & Arte sobre seus pedidos</p>
+    </div>
+
+    <!-- Lista de conversas -->
+    <div id="conversasContainer" class="conversas-lista">
+        <div class="sem-conversas">
+            <i class="fas fa-spinner fa-pulse" style="font-size: 48px; margin-bottom: 15px;"></i>
+            <p>Carregando suas conversas...</p>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    let clienteId = localStorage.getItem("clienteId");
+    let usuario = JSON.parse(localStorage.getItem("usuario"));
+    let pedidos = [];
+    let conversaAtual = null;
+    let mensagensCache = {};
+
+    if (!clienteId || !usuario) {
+        window.location.href = "login.html";
+    }
+
+    // Buscar pedidos do cliente
+    async function carregarPedidos() {
+        try {
+            const response = await fetch(`http://localhost:3000/pedidos?cliente_id=${clienteId}`);
+            pedidos = await response.json();
+            
+            if (!Array.isArray(pedidos)) {
+                pedidos = [];
+            }
+            
+            renderizarConversas();
+            atualizarBadgeTotal();
+            
+        } catch (error) {
+            console.error("Erro ao carregar pedidos:", error);
+            document.getElementById("conversasContainer").innerHTML = `
+                <div class="sem-conversas">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 48px; margin-bottom: 15px;"></i>
+                    <p>Erro ao carregar conversas</p>
+                    <button onclick="carregarPedidos()" style="margin-top: 15px; background: #d4a762; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer;">Tentar novamente</button>
+                </div>
+            `;
+        }
+    }
+
+    // Renderizar lista de conversas
+    function renderizarConversas() {
+        const container = document.getElementById("conversasContainer");
+        
+        if (pedidos.length === 0) {
+            container.innerHTML = `
+                <div class="sem-conversas">
+                    <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 15px;"></i>
+                    <p> Você ainda não tem nenhum pedido</p>
+                    <p style="font-size: 14px;">Faça um pedido para começar a conversar com a equipe</p>
+                    <button onclick="window.location.href='cardapio.html'" style="margin-top: 20px; background: #d4a762; border: none; padding: 12px 24px; border-radius: 30px; cursor: pointer; font-weight: bold;">
+                        <i class="fas fa-utensils"></i> Fazer pedido
+                    </button>
+                </div>
+            `;
+            return;
+        }
+        
+        container.innerHTML = pedidos.map(pedido => {
+            const temNaoLida = verificarMensagemNaoLida(pedido.id);
+            return `
+                <div class="conversa-card ${temNaoLida ? 'nao-lida' : ''}" onclick="abrirChat(${pedido.id}, '${pedido.cliente}')">
+                    <div class="conversa-info">
+                        <div class="conversa-titulo">
+                            Pedido #${pedido.id}
+                            <span class="status-pedido status-${pedido.status || 'confirmado'}">
+                                ${getStatusTexto(pedido.status)}
+                            </span>
+                        </div>
+                        <div class="conversa-ultima">
+                            <span><i class="far fa-calendar-alt"></i> ${formatarData(pedido.created_at)}</span>
+                            <span><i class="fas fa-tag"></i> Evento #${pedido.evento_id || '-'}</span>
+                        </div>
+                    </div>
+                    <div class="conversa-valor">
+                        ${formatarMoeda(pedido.total)}
+                        ${temNaoLida ? `<div class="badge-nao-lida" style="margin-top: 8px;">●</div>` : ''}
+                    </div>
+                </div>
+            `;
+        }).join("");
+    }
+
+    // Verificar se há mensagem não lida para este pedido
+    function verificarMensagemNaoLida(pedidoId) {
+        const mensagens = mensagensCache[pedidoId] || [];
+        return mensagens.some(m => m.tipo === 'admin' && !m.lida);
+    }
+
+    // Abrir chat do pedido
+    async function abrirChat(pedidoId, clienteNome) {
+        const pedido = pedidos.find(p => p.id === pedidoId);
+        if (!pedido) return;
+        
+        conversaAtual = pedido;
+        
+        document.getElementById("chatTitulo").innerText = `Pedido #${pedidoId}`;
+        document.getElementById("chatInfo").innerHTML = `
+            ${clienteNome} • ${formatarMoeda(pedido.total)} • ${getStatusTexto(pedido.status)}
+        `;
+        
+        await carregarMensagens(pedidoId);
+        
+        document.getElementById("modalChat").style.display = "flex";
+    }
+
+    // Carregar mensagens do pedido
+    async function carregarMensagens(pedidoId) {
+        try {
+            const response = await fetch(`http://localhost:3000/mensagens?pedido_id=${pedidoId}`);
+            const mensagens = await response.json();
+            
+            mensagensCache[pedidoId] = mensagens;
+            
+            const container = document.getElementById("chatMessages");
+            
+            if (!mensagens || mensagens.length === 0) {
+                container.innerHTML = `
+                    <div class="message message-admin">
+                        <i class="fas fa-check-circle"></i> Olá! Seu pedido foi confirmado.
+                        <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                    </div>
+                    <div class="message message-admin">
+                         Em breve nossa equipe entrará em contato. Enquanto isso, pode nos enviar uma mensagem!
+                        <div class="message-time">Agora</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = mensagens.map(msg => `
+                <div class="message ${msg.tipo === 'admin' ? 'message-admin' : 'message-client'}">
+                    ${msg.mensagem}
+                    <div class="message-time">${formatarHora(msg.criado_em)}</div>
+                </div>
+            `).join("");
+            
+            // Marcar mensagens como lidas
+            await marcarComoLidas(pedidoId);
+            
+            // Scroll para o final
+            container.scrollTop = container.scrollHeight;
+            
+        }catch (error) {
+    console.error("Erro ao carregar mensagens:", error);
+    document.getElementById("chatMessages").innerHTML = "";
+}
+    }
+
+    // Marcar mensagens como lidas
+    async function marcarComoLidas(pedidoId) {
+        try {
+            await fetch(`http://localhost:3000/cliente/mensagens/marcar-lidas`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ pedido_id: pedidoId, cliente_id: clienteId })
+            });
+            renderizarConversas();
+            atualizarBadgeTotal();
+        } catch (error) {
+            console.error("Erro ao marcar como lida:", error);
+        }
+    }
+
+    // Enviar mensagem
+    async function enviarMensagem() {
+        const mensagem = document.getElementById("chatMensagem").value.trim();
+        if (!mensagem || !conversaAtual) return;
+        
+        try {
+            const response = await fetch("http://localhost:3000/cliente/enviar-mensagem", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    pedido_id: conversaAtual.id,
+                    cliente_id: clienteId,
+                    mensagem: mensagem,
+                    tipo: "cliente"
+                })
+            });
+            
+            if (response.ok) {
+                // Adicionar mensagem na tela
+                const container = document.getElementById("chatMessages");
+                container.innerHTML += `
+                    <div class="message message-client">
+                        ${mensagem.replace(/</g, "&lt;")}
+                        <div class="message-time">Agora mesmo</div>
+                    </div>
+                `;
+                
+                document.getElementById("chatMensagem").value = "";
+                container.scrollTop = container.scrollHeight;
+                
+                // Recarregar mensagens para garantir
+                await carregarMensagens(conversaAtual.id);
+            } else {
+                alert(" Erro ao enviar mensagem");
+            }
+        } catch (error) {
+            console.error("Erro:", error);
+            alert("Erro ao enviar mensagem");
+        }
+    }
+
+    // Atualizar badge de notificações
+    async function atualizarBadgeTotal() {
+        try {
+            const response = await fetch(`http://localhost:3000/cliente/mensagens/nao-lidas/count?cliente_id=${clienteId}`);
+            const data = await response.json();
+            
+            const badge = document.getElementById("badgeMsg");
+            if (data.total > 0) {
+                badge.innerText = data.total;
+                badge.style.display = "inline-flex";
+            } else {
+                badge.style.display = "none";
+            }
+        } catch (error) {
+            console.error("Erro ao atualizar badge:", error);
+        }
+    }
+
+    function fecharChat() {
+        document.getElementById("modalChat").style.display = "none";
+        conversaAtual = null;
+        renderizarConversas();
+        atualizarBadgeTotal();
+    }
+
+    function getStatusTexto(status) {
+        const statusMap = {
+            'confirmado': '✅ Confirmado',
+            'preparando': '🍽️ Em preparo',
+            'entregue': '🎉 Finalizado',
+            'pendente': '⏳ Pendente'
+        };
+        return statusMap[status] || '✅ Confirmado';
+    }
+
+    function formatarMoeda(valor) {
+        return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(valor || 0);
+    }
+
+    function formatarData(data) {
+        if (!data) return "—";
+        return new Date(data).toLocaleDateString("pt-BR");
+    }
+
+    function formatarHora(data) {
+        if (!data) return "";
+        return new Date(data).toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function sair() {
+        localStorage.clear();
+        window.location.href = "login.html";
+    }
+
+    // Inicializar
+    carregarPedidos();
+    setInterval(() => {
+        carregarPedidos();
+        atualizarBadgeTotal();
+    }, 15000);
+</script>
+</body>
+</html>

@@ -12,6 +12,9 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
 <script src="https://unpkg.com/lucide@latest"></script>
 
 <style>
@@ -453,16 +456,83 @@ body{
   color:white;
 }
 
-/* RESPONSIVO */
+/* =========================
+   MENU MOBILE
+========================= */
+
+.menu-mobile{
+
+  position:fixed;
+  top:20px;
+  left:20px;
+
+  width:55px;
+  height:55px;
+
+  border:none;
+  border-radius:14px;
+
+  background:var(--yellow);
+  color:#000;
+
+  font-size:30px;
+
+  display:none;
+
+  z-index:9999;
+
+  cursor:pointer;
+}
+
+/* =========================
+   RESPONSIVO
+========================= */
 
 @media(max-width:900px){
 
+  .menu-mobile{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
   .sidebar{
-    display:none;
+
+    position:fixed;
+
+    top:0;
+    left:-270px;
+
+    width:260px;
+    height:100vh;
+
+    background:var(--sidebar);
+
+    transition:0.3s;
+
+    z-index:9998;
+
+    overflow-y:auto;
+  }
+
+  .sidebar.ativo{
+    left:0 !important;
   }
 
   .content{
+    width:100%;
     padding:20px;
+    padding-top:90px;
+  }
+
+  .topo{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:18px;
+  }
+
+  .titulo h1{
+    font-size:32px;
   }
 
   .cliente{
@@ -475,6 +545,16 @@ body{
     width:100%;
     justify-content:space-between;
   }
+
+  .info small{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:8px;
+  }
+
+  .modal-content{
+    width:90%;
+  }
 }
 
 </style>
@@ -482,11 +562,14 @@ body{
 </head>
 
 <body>
+  <button class="menu-mobile" onclick="toggleMenu()">
+  <i class="bi bi-list"></i>
+</button>
 
 <div class="container">
 
   <!-- SIDEBAR -->
-  <aside class="sidebar">
+  <aside class="sidebar" id="sidebar">
 
     <div class="sidebar-top">
 
@@ -616,6 +699,14 @@ body{
 </div>
 
 <script>
+  function toggleMenu(){
+
+  const sidebar =
+    document.getElementById("sidebar");
+
+  sidebar.classList.toggle("ativo");
+
+}
 
 lucide.createIcons()
 
@@ -657,16 +748,12 @@ async function carregarClientes(){
 // RENDER
 function render(lista = clientes){
 
-  const container =
-    document.getElementById("listaClientes")
-
-  const total =
-    document.getElementById("totalClientes")
+  const container = document.getElementById("listaClientes")
+  const total = document.getElementById("totalClientes")
 
   container.innerHTML = ""
 
-  total.innerText =
-    `${lista.length} clientes cadastrados`
+  total.innerText = `${lista.length} clientes cadastrados`
 
   lista.forEach(c => {
 
@@ -706,24 +793,6 @@ function render(lista = clientes){
         </div>
 
         <div class="cliente-direita">
-
-          <div class="metricas">
-
-            <small>Eventos</small>
-
-            <strong>${c.eventos || 0}</strong>
-
-          </div>
-
-          <div class="metricas">
-
-            <small>Total gasto</small>
-
-            <strong>
-              R$ ${(c.total_gasto || 0).toFixed(2)}
-            </strong>
-
-          </div>
 
           <span class="status">
             Ativo
@@ -786,73 +855,103 @@ function limpar(){
 // SALVAR
 async function salvar(){
 
-  const cliente = {
-
-    nome:nome.value,
-
-    telefone:telefone.value,
-
-    email:email.value,
-
-    admin_id:usuario.id
-  }
+  let resposta
 
   try{
 
     if(editando !== null){
 
-      await fetch(
+      // EDITAR CLIENTE
+      const clienteAtualizado = {
+        nome: nome.value.trim(),
+        telefone: telefone.value.trim(),
+        email: email.value.trim()
+      }
+
+      if(!clienteAtualizado.nome || !clienteAtualizado.telefone || !clienteAtualizado.email){
+        return alert("Preencha todos os campos")
+      }
+
+      resposta = await fetch(
         `http://localhost:3000/clientes/${editando}`,
         {
           method:"PUT",
-
           headers:{
             "Content-Type":"application/json"
           },
-
-          body:JSON.stringify(cliente)
+          body: JSON.stringify(clienteAtualizado)
         }
       )
 
     }else{
 
-      await fetch(
+      // NOVO CLIENTE
+      const novoCliente = {
+        nome: nome.value.trim(),
+        telefone: telefone.value.trim(),
+        email: email.value.trim(),
+        admin_id: usuario.id
+      }
+
+      if(!novoCliente.nome || !novoCliente.telefone || !novoCliente.email){
+        return alert("Preencha todos os campos")
+      }
+
+      resposta = await fetch(
         "http://localhost:3000/clientes",
         {
           method:"POST",
-
           headers:{
             "Content-Type":"application/json"
           },
-
-          body:JSON.stringify(cliente)
+          body: JSON.stringify(novoCliente)
         }
       )
     }
 
-    fecharModal()
+    if(!resposta.ok){
 
-    carregarClientes()
+      const erroTexto = await resposta.text()
+      console.log("ERRO BACKEND:", erroTexto)
+
+      return alert("Erro ao salvar")
+    }
+
+    fecharModal()
+    await carregarClientes()
+
+   const eraEdicao = editando !== null
+
+fecharModal()
+await carregarClientes()
+
+alert(
+  eraEdicao
+    ? "Cliente atualizado!"
+    : "Cliente criado!"
+)
 
   }catch(err){
 
-    console.log(err)
+    console.log("ERRO REAL:", err)
+    alert("Erro no servidor")
   }
 }
-
 // EDITAR
 async function editar(id){
 
-  const res =
-    await fetch(`http://localhost:3000/clientes/${id}`)
+  const c = clientes.find(cliente => cliente.id == id)
 
-  const c = await res.json()
+  if(!c){
+    alert("Cliente não encontrado")
+    return
+  }
 
   editando = id
 
-  nome.value = c.nome
-  telefone.value = c.telefone
-  email.value = c.email
+  nome.value = c.nome || ""
+  telefone.value = c.telefone || ""
+  email.value = c.email || ""
 
   document.querySelector(
     ".modal-content h3"
@@ -864,10 +963,53 @@ async function editar(id){
 // REMOVER
 async function remover(id){
 
-  if(!confirm("Deseja remover este cliente?")) return
+  if(!confirm(
+    "Excluir cliente, pedidos e eventos?"
+  )) return
 
   try{
 
+    // APAGA EVENTOS DO CLIENTE
+    const eventos =
+      await fetch(
+        `http://localhost:3000/eventos?cliente_id=${id}`
+      )
+
+    const listaEventos =
+      await eventos.json()
+
+    for(const evento of listaEventos){
+
+      await fetch(
+        `http://localhost:3000/eventos/${evento.id}`,
+        {
+          method:"DELETE"
+        }
+      )
+    }
+
+
+    // APAGA PEDIDOS DO CLIENTE
+    const pedidos =
+      await fetch(
+        `http://localhost:3000/pedidos?cliente_id=${id}`
+      )
+
+    const listaPedidos =
+      await pedidos.json()
+
+    for(const pedido of listaPedidos){
+
+      await fetch(
+        `http://localhost:3000/pedidos/${pedido.id}`,
+        {
+          method:"DELETE"
+        }
+      )
+    }
+
+
+    // APAGA CLIENTE
     await fetch(
       `http://localhost:3000/clientes/${id}`,
       {
@@ -877,25 +1019,15 @@ async function remover(id){
 
     carregarClientes()
 
+    alert("Cliente removido")
+
   }catch(err){
 
     console.log(err)
+
+    alert("Erro ao excluir")
   }
 }
-
-// BUSCAR
-function buscar(texto){
-
-  const filtrados = clientes.filter(c =>
-
-    c.nome.toLowerCase()
-    .includes(texto.toLowerCase())
-
-  )
-
-  render(filtrados)
-}
-
 // INIT
 carregarClientes()
 

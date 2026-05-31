@@ -1,520 +1,1173 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cardápio </title>
+    <title>Cardápio - Sabor & Arte</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
-        body {
-            font-family: Arial;
-            background: #0f0f0f;
-            color: white;
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
         }
 
-
+        body {
+            background: #0d0d0d;
+            color: white;
+        }
 
         .container {
             display: flex;
+            min-height: 100vh;
         }
 
-
-
+        /* SIDEBAR */
         .sidebar {
-            width: 220px;
-            background: linear-gradient(180deg, #0c0c0c, #0f0f0f);
-            padding: 25px;
+            width: 240px;
+            background: #0a0a0a;
+            padding: 30px 20px;
             height: 100vh;
-            border-right: 2px solid #d4af37;
+            border-right: 1px solid rgba(212, 167, 98, 0.3);
             display: flex;
             flex-direction: column;
+            position: sticky;
+            top: 0;
         }
 
         .logo {
-            font-size: 26px;
+            font-size: 22px;
             margin-bottom: 40px;
             font-weight: bold;
             text-align: center;
+            color: #fff;
+            letter-spacing: 1px;
         }
 
         .logo span {
-            background: #d4af37;
-            padding: 5px 12px;
-            border-radius: 6px;
-            color: #1a1a1a;
-            margin-left: 5px;
+            color: #d4a762;
         }
-
-
 
         .sidebar a {
             display: flex;
             align-items: center;
             gap: 10px;
-            color: #fcf8f8;
+            color: #aaa;
             text-decoration: none;
-            margin: 10px 0;
-            padding: 12px;
+            margin: 6px 0;
+            padding: 13px 16px;
             border-radius: 10px;
-            transition: 0.3s;
-            font-size: 16px;
+            transition: 0.25s;
+            font-size: 15px;
         }
-
-
 
         .sidebar a:hover {
-            background: #f5f4f4;
-            color: #d4af37;
-            transform: translateX(5px);
+            background: rgba(212, 167, 98, 0.12);
+            color: #d4a762;
         }
 
-
-
-        .sidebar a:first-of-type {
-            background: #d4af37;
-            color: #1a1a1a;
-            font-weight: bold;
+        .sidebar a.ativo {
+            background: rgba(212, 167, 98, 0.18);
+            color: #d4a762;
+            font-weight: 600;
         }
 
-        .pedido-titulo {
-            color: #d4af37;
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #d4af37;
-            letter-spacing: 1px;
-        }
-
-
-        .menu {
+        /* ÁREA PRINCIPAL */
+        .main {
             flex: 1;
-            padding: 30px;
-            background:
-                linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-                url("https://i.pinimg.com/736x/e6/0a/09/e60a0998632c4fbc8d0ab8866985fb92.jpg");
-            background-size: cover;
-            background-position: center;
-        }
-
-
-
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 25px;
-            margin-top: 30px;
-        }
-
-        .card {
-            background: #1a1a1a;
-            border-radius: 18px;
-            padding: 20px;
-            text-align: center;
-            transition: 0.3s;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
-        }
-
-        .card img {
-            width: 120px;
-        }
-
-        .card h3 {
-            margin: 10px 0;
-        }
-
-        .card p {
-            color: #ff4d4d;
-            font-weight: bold;
-        }
-
-        .card button {
-            margin-top: 10px;
-            background: #ff4d4d;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
-            color: white;
-            cursor: pointer;
-        }
-
-
-        .cart {
-            width: 300px;
-            padding: 25px;
-            background: linear-gradient(180deg, #1c1c1c, #262626);
-            border-left: 3px solid #d4af37;
-            box-shadow: -6px 0 20px rgba(0, 0, 0, 0.6);
-        }
-
-        .cart::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at top, rgba(255, 255, 255, 0.05), transparent);
-            pointer-events: none;
-        }
-
-        .cart h2 {
-            margin-bottom: 20px;
-        }
-
-        .item {
             display: flex;
-            justify-content: space-between;
-            margin: 10px 0;
+            flex-direction: column;
         }
 
-        .total {
-            margin-top: 20px;
-            font-size: 18px;
+        /* TOPBAR */
+        .topbar {
+            padding: 24px 36px;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(8px);
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
-        .confirm {
-            margin-top: 20px;
-            width: 100%;
-            padding: 14px;
-            background: #ff4d4d;
-            border: none;
-            border-radius: 12px;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
+        .topbar h1 {
+            font-size: 26px;
+            font-weight: 700;
+            color: #fff;
         }
 
-        .remover {
-            background: none;
-            border: none;
-            color: red;
-            cursor: pointer;
+        .topbar p {
+            color: #888;
             font-size: 14px;
-            margin-left: 10px;
+            margin-top: 2px;
         }
 
+        /* FILTROS */
         .filtros {
             display: flex;
-            gap: 12px;
-            margin-top: 20px;
+            gap: 10px;
+            margin-top: 18px;
             flex-wrap: wrap;
         }
 
         .filtro {
-            border: none;
-            padding: 10px 18px;
-            border-radius: 25px;
-            background: #1f1f1f;
-            color: white;
+            border: 1px solid rgba(255,255,255,0.12);
+            padding: 8px 18px;
+            border-radius: 30px;
+            background: transparent;
+            color: #aaa;
             cursor: pointer;
-            transition: 0.3s;
-            font-size: 14px;
+            transition: 0.25s;
+            font-size: 13px;
         }
 
         .filtro:hover {
-            background: #d4af37;
-            color: #1a1a1a;
+            border-color: #d4a762;
+            color: #d4a762;
         }
 
         .filtro.ativo {
-            background: #d4af37;
-            color: #1a1a1a;
-            font-weight: bold;
+            background: #d4a762;
+            border-color: #d4a762;
+            color: #000;
+            font-weight: 700;
         }
+
+        /* CONTEÚDO DO MENU */
+        .menu-content {
+            flex: 1;
+            padding: 32px 36px;
+            overflow-y: auto;
+        }
+
+        /* CARDS GRID */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 24px;
+        }
+
+        /* CARD */
+        .card {
+            background: #181818;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.06);
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.5);
+            border-color: rgba(212, 167, 98, 0.3);
+        }
+
+        .card-img-wrapper {
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 0.4s;
+        }
+
+        .card:hover .card-img-wrapper img {
+            transform: scale(1.06);
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #d4a762;
+            color: #000;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-body {
+            padding: 18px 20px 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-categoria {
+            font-size: 11px;
+            color: #d4a762;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .card-nome {
+            font-size: 17px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .card-desc {
+            font-size: 13px;
+            color: #888;
+            line-height: 1.5;
+            flex: 1;
+            margin-bottom: 14px;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-preco {
+            font-size: 20px;
+            font-weight: 800;
+            color: #d4a762;
+        }
+
+        .card-preco span {
+            font-size: 13px;
+            font-weight: 400;
+            color: #777;
+        }
+
+        .btn-adicionar {
+            background: #d4a762;
+            color: #000;
+            border: none;
+            padding: 9px 18px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.25s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-adicionar:hover {
+            background: #d4a762;
+            transform: scale(1.04);
+        }
+
+        .btn-adicionar.adicionado {
+            background: #2d7a3a;
+            color: #fff;
+        }
+
+        /* CARRINHO */
+        .cart {
+            width: 320px;
+            background: #0f0f0f;
+            border-left: 1px solid rgba(212, 167, 98, 0.25);
+            padding: 28px 24px;
+            display: flex;
+            flex-direction: column;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .cart-titulo {
+            font-size: 18px;
+            font-weight: 700;
+            color: #d4a762;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .cart-subtitulo {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+        }
+
+        .cart-vazio {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #444;
+            font-size: 14px;
+            gap: 10px;
+        }
+
+        .cart-vazio i {
+            font-size: 36px;
+            color: #2a2a2a;
+        }
+
+        #lista {
+            flex: 1;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            gap: 8px;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-nome {
+            font-size: 14px;
+            color: #ddd;
+            font-weight: 600;
+        }
+
+        .cart-item-qtd {
+            font-size: 12px;
+            color: #777;
+            margin-top: 2px;
+        }
+
+        .cart-item-preco {
+            font-size: 14px;
+            font-weight: 700;
+            color: #d4a762;
+            white-space: nowrap;
+        }
+
+        .btn-remover {
+            background: none;
+            border: none;
+            color: #555;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 4px;
+            transition: 0.2s;
+        }
+
+        .btn-remover:hover {
+            color: #e55;
+        }
+
+        .cart-total {
+            padding-top: 16px;
+            border-top: 1px solid rgba(212, 167, 98, 0.3);
+            margin-top: 8px;
+        }
+
+        .cart-total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #888;
+        }
+
+        .cart-total-principal {
+            display: flex;
+            justify-content: space-between;
+            font-size: 20px;
+            font-weight: 800;
+            color: #fff;
+            margin: 12px 0 20px;
+        }
+
+        .cart-total-principal span:last-child {
+            color:#d4a762;
+        }
+
+        .btn-confirmar {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #d4a762, #c99700);
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.25s;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-confirmar:hover {
+            background: linear-gradient(135deg, #e8bf7a, #d4a762);
+            transform: translateY(-1px);
+        }
+
+        .btn-confirmar:disabled {
+            background: #2a2a2a;
+            color: #555;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* PORÇÃO TAG */
+        .porcao-info {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+        /* =========================
+   RESPONSIVIDADE
+========================= */
+
+/* TABLET */
+@media (max-width: 1024px) {
+
+    .container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 18px 20px;
+    }
+
+    .sidebar a {
+        margin: 0;
+        font-size: 14px;
+        padding: 10px 14px;
+    }
+
+    .main {
+        width: 100%;
+    }
+
+    .cart {
+        width: 100%;
+        height: auto;
+        position: relative;
+        border-left: none;
+        border-top: 1px solid rgba(212, 167, 98, 0.25);
+    }
+
+    .cards {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+}
+
+
+/* CELULAR */
+@media (max-width: 768px) {
+
+    .topbar {
+        padding: 20px;
+    }
+
+    .topbar h1 {
+        font-size: 22px;
+    }
+
+    .topbar p {
+        font-size: 13px;
+    }
+
+    .menu-content {
+        padding: 20px;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .card-img-wrapper {
+        height: 200px;
+    }
+
+    .card-footer {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .btn-adicionar {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .cart {
+        padding: 20px;
+    }
+
+    .filtros {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 5px;
+    }
+
+    .filtros::-webkit-scrollbar {
+        height: 4px;
+    }
+
+    .filtros::-webkit-scrollbar-thumb {
+        background: #d4a762;
+        border-radius: 10px;
+    }
+
+    .filtro {
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    .sidebar {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+    }
+
+    .logo {
+        margin-bottom: 10px;
+    }
+}
+
+
+/* CELULARES PEQUENOS */
+@media (max-width: 480px) {
+
+    .topbar {
+        padding: 16px;
+    }
+
+    .menu-content {
+        padding: 16px;
+    }
+
+    .card-body {
+        padding: 16px;
+    }
+
+    .card-nome {
+        font-size: 16px;
+    }
+
+    .card-preco {
+        font-size: 18px;
+    }
+
+    .btn-confirmar {
+        font-size: 14px;
+        padding: 12px;
+    }
+
+}
     </style>
 </head>
 
 <body>
 
-    <div class="container">
+<div class="container">
 
-        <!-- MENU LATERAL -->
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="logo">Sabor & <span>Arte</span></div>
 
-        <div class="sidebar">
+        <a href="index.html" class="ativo">
+            <i class="fa-solid fa-house"></i> Home
+        </a>
+        <a href="pacotes.html">
+            <i class="fa-solid fa-box-open"></i> Pacotes
+        </a>
+        <a href="#" onclick="sair()">
+            <i class="fa-solid fa-right-from-bracket"></i> Sair
+        </a>
+    </div>
 
-            <div class="logo">Sabor & <span>Arte</span></div>
-
-            <a href="index.html">Home</a>
-            <a href="Servicos.html">Serviços</a>
-            <a href="#">Sair</a>
-
-        </div>
-
-
-
-        <div class="menu">
-            <div class="menu" id="servicos" style="display:none;">
-
-                <h1>Serviços</h1>
-
-                <div id="lista-servicos"></div>
-
-            </div>
-
+    <!-- MAIN -->
+    <div class="main">
+        <div class="topbar">
             <h1>Cardápio</h1>
-            <div class="filtros">
+            <p>Selecione os pratos que farão parte do seu evento</p>
 
-                <button class="filtro ativo" data-categoria="todos">Todos</button>
-                <button class="filtro" data-categoria="entrada">Entradas</button>
-                <button class="filtro" data-categoria="principal">Pratos Principais</button>
-                <button class="filtro" data-categoria="sobremesa">Sobremesas</button>
-                <button class="filtro" data-categoria="bebida">Bebidas</button>
-                <button class="filtro" data-categoria="cafe">Café da Manhã</button>
+           <div class="filtros">
+    <button class="filtro ativo" data-categoria="todos">
+        Todos
+    </button>
 
-            </div>
+    <button class="filtro" data-categoria="entrada">
+        Entradas
+    </button>
 
+    <button class="filtro" data-categoria="principal">
+        Pratos Principais
+    </button>
 
-            <div class="cards">
+    <button class="filtro" data-categoria="cafe">
+        Café da manhã
+    </button>
 
-                <div class="card" data-categoria="principal">
-                    <img src="https://i.pinimg.com/736x/c9/c5/01/c9c5013a47c78dde12d22a8659cdb945.jpg">
-                    <h3>Hambúrguer</h3>
-                    <p>R$ 15,00</p>
-                    <button class="adicionar" data-nome="Hambúrguer" data-preco="15">Adicionar</button>
-                </div>
+    <button class="filtro" data-categoria="sobremesa">
+        Sobremesas
+    </button>
 
-                <div class="card" data-categoria="principal">
-                    <img src="https://i.pinimg.com/736x/93/50/c0/9350c0f6116de6745968b8d92d26ef4e.jpg">
-                    <h3>Pizza</h3>
-                    <p>R$ 30,00</p>
-                    <button class="adicionar" data-nome="Pizza" data-preco="30">Adicionar</button>
-                </div>
-
-                <div class="card" data-categoria="entrada">
-                    <img src="https://i.pinimg.com/736x/63/46/10/6346107216394b1136e3243f4bc84efa.jpg">
-                    <h3>Sushi</h3>
-                    <p>R$ 40,00</p>
-                    <button class="adicionar" data-nome="Sushi" data-preco="40">Adicionar</button>
-                </div>
-
-                <div class="card" data-categoria="sobremesa">
-                    <img src="https://i.pinimg.com/736x/fe/50/6b/fe506b764c144d32330995c945a0f364.jpg">
-                    <h3>Bolo Pedaço</h3>
-                    <p>R$ 12,00</p>
-                    <button class="adicionar" data-nome="Bolo" data-preco="12">Adicionar</button>
-                </div>
-
-                <div class="card" data-categoria="principal">
-                    <img src="https://i.pinimg.com/736x/96/4d/fb/964dfbd9d27f85e7b1fc155bccd04bac.jpg">
-                    <h3>Macarrão</h3>
-                    <p>R$ 28,00</p>
-                    <button class="adicionar" data-nome="Macarrão" data-preco="28">Adicionar</button>
-                </div>
-
-            </div>
-
+    <button class="filtro" data-categoria="bebida">
+        Bebidas
+    </button>
+</div>
         </div>
 
+        <div class="menu-content">
+            <div class="cards" id="cards-container"></div>
+        </div>
+    </div>
 
+    <!-- CARRINHO -->
+    <div class="cart">
+        <div class="cart-titulo">Seu Pedido</div>
+        <div class="cart-subtitulo" id="cart-subtitulo">0 itens selecionados</div>
 
-        <div class="cart">
-
-            <div class="pedido-titulo">Seu Pedido</div>
-
-            <div id="lista"></div>
-
-            <div class="total">
-                Total: R$ <span id="total">0</span>
+        <div id="lista">
+            <div class="cart-vazio" id="cart-vazio">
+                <i class="fa-solid fa-plate-wheat"></i>
+                <span>Nenhum item adicionado</span>
             </div>
+        </div>
 
+        <div class="cart-total" id="cart-total" style="display:none;">
+            <div class="cart-total-principal">
+                <span>Total</span>
+                <span>R$ <span id="total">0,00</span></span>
+            </div>
             <a href="confirpedi.html">
-                <button class="confirm" onclick="irPagamento()">Confirmar Pedido</button>
-
+                <button class="btn-confirmar" id="btn-confirmar">
+    <i class="fa-solid fa-check"></i>
+    Confirmar Pedido
+</button>
             </a>
-
-
-
         </div>
 
+        <button class="btn-confirmar" id="btn-confirmar-vazio" disabled style="margin-top:auto;">
+            Adicione itens ao pedido
+        </button>
+    </div>
 
-       <script>
+</div>
 
-let carrinho = []
-let cardapio = []
+<script>
 
-/* =========================
-   PROTEÇÃO: PRECISA TER EVENTO
-========================= */
-const eventoId = localStorage.getItem("eventoId")
+// ============================
+// VERIFICAR LOGIN
+// ============================
+
+function verificarLogin() {
+
+    const usuario = localStorage.getItem("usuario");
+    const clienteId = localStorage.getItem("clienteId");
+
+    if (!usuario || !clienteId) {
+
+        alert("Você precisa estar logado e cadastrado para continuar.");
+
+        window.location.href = "login.html";
+
+        return false;
+    }
+
+    return true;
+}
+const clienteId = localStorage.getItem("clienteId");
+const usuarioSalvo = localStorage.getItem("usuario");
+const eventoId = localStorage.getItem("eventoId");
+
+const usuario = usuarioSalvo
+    ? JSON.parse(usuarioSalvo)
+    : null;
 
 if (!eventoId) {
-  alert("Crie um evento primeiro!")
-  window.location.href = "evento.html"
+    alert("Crie um evento primeiro!");
+    window.location.href = "evento.html";
 }
 
-/* =========================
-   CARREGAR CARDÁPIO DO BACKEND
-========================= */
+
+
+// ============================
+// ESTADO
+// ============================
+
+let carrinho = [];
+let categoriaAtiva = "todos";
+let itensCardapio = [];
+
+const chaveCarrinho = `carrinho_${usuario.email}`;
+
+
+// ============================
+// CARREGAR CARDÁPIO DO BACKEND
+// ============================
+
 async function carregarCardapio(categoria = "todos") {
 
-  const res = await fetch(`http://localhost:3000/itens?categoria=${categoria}`)
-  const itens = await res.json()
+    try {
 
-  const container = document.querySelector(".cards")
-  container.innerHTML = ""
+        let url = "http://localhost:3000/itens";
 
-  itens.forEach(item => {
-    container.innerHTML += `
-      <div class="card">
-        <img src="${item.imagem || 'https://via.placeholder.com/120'}">
+        if(categoria !== "todos"){
+            url += `?categoria=${categoria}`;
+        }
 
-        <h3>${item.nome}</h3>
-        <p>R$ ${Number(item.valor).toFixed(2)}</p>
+        const resposta = await fetch(url);
 
-        <button onclick="adicionar('${item.nome}', ${item.valor})">
-          Adicionar
-        </button>
-      </div>
-    `
-  })
+        itensCardapio = await resposta.json();
+
+        renderCards();
+
+    } catch(erro){
+
+        console.log("Erro ao carregar cardápio", erro);
+
+        document.getElementById("cards-container").innerHTML=`
+        <h2>Erro ao carregar itens</h2>
+        `;
+    }
+
 }
 
-/* =========================
-    FILTROS
-========================= */
-document.querySelectorAll(".filtro").forEach(btn => {
-  btn.addEventListener("click", () => {
 
-    document.querySelectorAll(".filtro").forEach(b => b.classList.remove("ativo"))
-    btn.classList.add("ativo")
+// ============================
+// RENDER CARDS
+// ============================
 
-    let categoria = btn.dataset.categoria
-    carregarCardapio(categoria)
-  })
-})
+function renderCards(){
 
-/* =========================
-    ADICIONAR ITEM AO CARRINHO
-========================= */
-function adicionar(nome, preco) {
+const container=document.getElementById("cards-container");
 
-  let itemExistente = carrinho.find(i => i.nome === nome)
+container.innerHTML="";
 
-  if (itemExistente) {
-    itemExistente.qtd++
-  } else {
-    carrinho.push({
-      id: Date.now(),
-      nome,
-      preco,
-      qtd: 1
-    })
-  }
 
-  renderCarrinho()
-  salvarCarrinho()
+itensCardapio.forEach(item=>{
+
+const existe=carrinho.find(i=>i.nome===item.nome);
+
+container.innerHTML +=`
+
+<div class="card">
+
+<div class="card-img-wrapper">
+
+<img src="${item.imagem || 'https://via.placeholder.com/400'}">
+
+${item.destaque ? 
+'<span class="card-badge">Destaque</span>'
+:''}
+
+</div>
+
+
+<div class="card-body">
+
+<div class="card-categoria">
+${item.categoria}
+</div>
+
+<div class="card-nome">
+${item.nome}
+</div>
+
+<div class="card-desc">
+${item.descricao || ""}
+</div>
+
+
+<div class="porcao-info">
+${item.porcao || ""}
+</div>
+
+
+<div class="card-footer">
+
+<div class="card-preco">
+R$ ${Number(item.valor).toFixed(2).replace(".",",")}
+</div>
+
+
+<button
+class="btn-adicionar ${existe ? 'adicionado':''}"
+
+onclick="adicionar(
+'${item.nome}',
+${item.valor},
+'${item.porcao || ""}',
+'${item.imagem || ""}'
+)"
+
+>
+
+${existe
+?'<i class="fa-solid fa-check"></i> Adicionado'
+:'<i class="fa-solid fa-plus"></i> Adicionar'
 }
 
-/* =========================
-    CARRINHO
-========================= */
-function renderCarrinho() {
+</button>
 
-  let lista = document.getElementById("lista")
-  lista.innerHTML = ""
+</div>
+</div>
+</div>
+`;
 
-  let total = 0
+});
 
-  carrinho.forEach((item, index) => {
-
-    let subtotal = item.preco * item.qtd
-    total += subtotal
-
-    let div = document.createElement("div")
-    div.className = "item"
-
-    div.innerHTML = `
-      <span>${item.nome} (${item.qtd}x)</span>
-      <span>R$ ${subtotal}</span>
-      <button class="remover" onclick="remover(${index})">X</button>
-    `
-
-    lista.appendChild(div)
-  })
-
-  document.getElementById("total").innerText = total
-
-  salvarCarrinho()
 }
 
-function remover(index) {
-  carrinho.splice(index, 1)
-  renderCarrinho()
-  salvarCarrinho()
+
+// ============================
+// ADICIONAR AO CARRINHO
+// ============================
+
+function adicionar(nome, preco, porcao, imagem) {
+
+    const usuario = localStorage.getItem("usuario");
+    const clienteId = localStorage.getItem("clienteId");
+
+    if (!usuario || !clienteId) {
+
+        alert("Faça login para adicionar itens.");
+
+        window.location.href = "login.html";
+
+        return;
+    }
+
+    const itemExistente = carrinho.find(i => i.nome === nome);
+
+    if (itemExistente) {
+        itemExistente.qtd++;
+    } else {
+        carrinho.push({
+            id: Date.now(),
+            nome,
+            preco,
+            porcao,
+            imagem,
+            qtd: 1
+        });
+    }
+
+    salvarCarrinho();
+    renderCards();
+    renderCarrinho();
 }
 
-/* =========================
-   LOCALSTORAGE
-========================= */
-function salvarCarrinho() {
-  localStorage.setItem("carrinhoAtual", JSON.stringify(carrinho))
+
+// ============================
+// REMOVER
+// ============================
+
+function remover(index){
+
+carrinho.splice(index,1);
+
+salvarCarrinho();
+
+renderCarrinho();
+
+renderCards();
+
 }
 
-function carregarCarrinhoSalvo() {
-  let dados = localStorage.getItem("carrinhoAtual")
-  if (dados) {
-    carrinho = JSON.parse(dados)
-    renderCarrinho()
-  }
+
+// ============================
+// RENDER CARRINHO
+// ============================
+
+function renderCarrinho(){
+
+const lista=
+document.getElementById("lista");
+
+const totalElemento=
+document.getElementById("total");
+
+const subtitulo=
+document.getElementById("cart-subtitulo");
+
+const vazio=
+document.getElementById("btn-confirmar-vazio");
+
+const cartTotal=
+document.getElementById("cart-total");
+
+
+lista.innerHTML="";
+
+let total=0;
+
+let totalItens=0;
+
+
+if(carrinho.length===0){
+
+lista.innerHTML=`
+
+<div class="cart-vazio">
+
+<i class="fa-solid fa-plate-wheat"></i>
+
+<span>Nenhum item adicionado</span>
+
+</div>
+
+`;
+
+cartTotal.style.display="none";
+
+vazio.style.display="block";
+
+subtitulo.innerHTML=
+"0 itens selecionados";
+
+return;
+
 }
 
-function carregarPedidoExistente() {
 
-  let pedidoSalvo = localStorage.getItem("pedidoAtual")
+vazio.style.display="none";
 
-  if (pedidoSalvo) {
-    let pedido = JSON.parse(pedidoSalvo)
-    carrinho = pedido.itens || []
-    renderCarrinho()
-  }
+cartTotal.style.display="block";
+
+
+carrinho.forEach((item,index)=>{
+
+let subtotal=
+item.preco*item.qtd;
+
+total+=subtotal;
+
+totalItens+=item.qtd;
+
+
+lista.innerHTML+=`
+
+<div class="cart-item">
+
+<div class="cart-item-info">
+
+<div class="cart-item-nome">
+
+${item.nome}
+
+</div>
+
+<div class="cart-item-qtd">
+
+${item.qtd}x • ${item.porcao}
+
+</div>
+
+</div>
+
+
+<div class="cart-item-preco">
+
+R$ ${subtotal.toFixed(2).replace(".",",")}
+
+</div>
+
+
+<button
+class="btn-remover"
+onclick="remover(${index})"
+>
+
+<i class="fa-solid fa-xmark"></i>
+
+</button>
+
+</div>
+
+`;
+
+});
+
+
+subtitulo.innerHTML=
+`${totalItens} item(s) selecionado(s)`;
+
+
+totalElemento.innerHTML=
+total.toFixed(2).replace(".",",");
+
 }
 
-/* =========================
-   FINALIZAR PEDIDO
-========================= */
+
+// ============================
+// FILTROS
+// ============================
+
+document.querySelectorAll(".filtro")
+.forEach(btn=>{
+
+btn.addEventListener("click",()=>{
+
+document
+.querySelectorAll(".filtro")
+.forEach(b=>
+b.classList.remove("ativo")
+);
+
+btn.classList.add("ativo");
+
+categoriaAtiva=
+btn.dataset.categoria;
+
+carregarCardapio(categoriaAtiva);
+
+});
+
+});
+
+
+// ============================
+// SALVAR CARRINHO
+// ============================
+
+function salvarCarrinho(){
+
+localStorage.setItem(
+chaveCarrinho,
+JSON.stringify(carrinho)
+);
+
+}
+
+
+function carregarCarrinhoSalvo(){
+
+const dados=
+localStorage.getItem(chaveCarrinho);
+
+if(dados){
+
+carrinho=
+JSON.parse(dados);
+
+renderCarrinho();
+
+}
+
+}
+
+
+// ============================
+// CONFIRMAR PEDIDO
+// ============================
+
 function irPagamento() {
 
-  if (carrinho.length === 0) {
-    alert("Carrinho vazio!")
-    return
-  }
+    const usuario = localStorage.getItem("usuario");
+    const clienteId = localStorage.getItem("clienteId");
 
-  let total = carrinho.reduce((acc, item) => acc + (item.preco * item.qtd), 0)
+    if (!usuario || !clienteId) {
 
-  let pedido = {
-    cliente: "Cliente",
-    eventoId: eventoId, // AGORA VINCULADO AO EVENTO
-    itens: carrinho,
-    total: total,
-    status: "Pendente"
-  }
+        alert("Faça login para continuar.");
 
-  localStorage.setItem("pedidoAtual", JSON.stringify(pedido))
+        window.location.href = "login.html";
 
-  window.location.href = "pagamento.html"
+        return;
+    }
+
+    if (carrinho.length === 0) {
+
+        alert("Carrinho vazio!");
+
+        return;
+    }
+
+    let total = carrinho.reduce(
+        (acc, item) => acc + (item.preco * item.qtd),
+        0
+    );
+
+    let pedido = {
+
+        cliente: JSON.parse(usuario).nome,
+
+        eventoId,
+
+        itens: carrinho,
+
+        total,
+
+        status: "Pendente"
+
+    };
+
+    localStorage.setItem(
+        "pedidoAtual",
+        JSON.stringify(pedido)
+    );
+
+    window.location.href = "confirpedi.html";
 }
 
-/* =========================
-    INICIALIZAÇÃO
-========================= */
-carregarCardapio()
-carregarCarrinhoSalvo()
+// botão confirmar
+
+document.getElementById("btn-confirmar").addEventListener("click", (e) => {
+
+    e.preventDefault();
+
+    const usuario = localStorage.getItem("usuario");
+    const clienteId = localStorage.getItem("clienteId");
+
+    if (!usuario || !clienteId) {
+
+        alert("Faça login para continuar.");
+
+        window.location.href = "login.html";
+
+        return;
+    }
+
+    irPagamento();
+});
+
+// ============================
+// SAIR
+// ============================
+
+function sair(){
+
+localStorage.clear();
+
+window.location.href=
+"login.html";
+
+}
+
+
+// ============================
+// INICIALIZAÇÃO
+// ============================
+
+carregarCardapio();
+
+carregarCarrinhoSalvo();
 
 </script>
 
-
-
-
 </body>
-
 </html>

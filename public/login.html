@@ -18,20 +18,19 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  background:#ffffff; /* FUNDO BRANCO */
+  background:#ffffff; 
 }
 
 /* CONTAINER PRETO */
 .container{
-  width:100%;
-  max-width:480px;
-  padding:50px;
-  border-radius:20px;
-  background:#000; /* PRETO */
-  box-shadow:0 20px 60px rgba(0,0,0,0.2);
-  text-align:center;
+    width:100%;
+    max-width:480px;
+    padding:50px;
+    border-radius:20px;
+    background:#000;
+    box-shadow:0 20px 60px rgba(0,0,0,0.2);
+    text-align:center;
 }
-
 /* LOGO */
 .logo{
   font-size:22px;
@@ -218,7 +217,7 @@ async function logar() {
     if (data.usuario.tipo === "admin" || data.usuario.tipo === "funcionario") {
       window.location.href = "../adm/dashboard.html";
     } else if (data.usuario.tipo === "cliente") {
-      window.location.href = "pacotes.html";
+      window.location.href = "dashboard_cliente.html";
     } else {
       alert("Tipo de usuário inválido");
     }

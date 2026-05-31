@@ -10,6 +10,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
@@ -39,15 +42,62 @@
       --radius:18px;
     }
 
-    body{
-      background:var(--bg);
-      color:var(--text);
-    }
+  body{
+    background:var(--bg);
+    color:var(--text);
+    overflow:hidden; /* tira scroll do body */
+}
 
-    .container{
-      display:flex;
-      min-height:100vh;
-    }
+/* MUITO IMPORTANTE */
+.container{
+    display:flex;
+    height:100vh;
+}
+
+/* SIDEBAR fixa */
+.sidebar{
+    width:260px;
+    min-width:260px;
+    height:100vh;
+
+    background:var(--sidebar);
+    border-right:1px solid var(--border);
+
+    padding:24px 18px;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+}
+
+/* CONTENT AO LADO */
+.content{
+    flex:1;
+    height:100vh;
+
+    padding:30px;
+
+    overflow-y:auto;
+    overflow-x:hidden;
+}
+
+/* BARRA DE ROLAGEM */
+.content::-webkit-scrollbar{
+    width:10px;
+}
+
+.content::-webkit-scrollbar-track{
+    background:#0f172a;
+}
+
+.content::-webkit-scrollbar-thumb{
+    background:#facc15;
+    border-radius:30px;
+}
+
+.content::-webkit-scrollbar-thumb:hover{
+    background:#eab308;
+}
 
     /* SIDEBAR */
 
@@ -408,32 +458,102 @@
       color:white;
     }
 
-    @media(max-width:900px){
+    
+    /* =========================
+   MENU MOBILE
+========================= */
 
-      .sidebar{
-        display:none;
-      }
+.menu-mobile{
 
-      .content{
-        padding:20px;
-      }
+  position:fixed;
+  top:20px;
+  left:20px;
 
-      .eventos-grid{
-        grid-template-columns:1fr;
-      }
+  width:55px;
+  height:55px;
 
-      .topo{
-        flex-direction:column;
-        align-items:flex-start;
-        gap:15px;
-      }
+  border:none;
+  border-radius:14px;
 
-    }
+  background:var(--yellow);
+  color:#000;
+
+  font-size:30px;
+
+  display:none;
+
+  z-index:9999;
+
+  cursor:pointer;
+}
+
+/* =========================
+   RESPONSIVO
+========================= */
+
+@media(max-width:900px){
+
+  .menu-mobile{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .sidebar{
+
+    position:fixed;
+
+    top:0;
+    left:-270px;
+
+    width:260px;
+    height:100vh;
+
+    background:var(--sidebar);
+
+    transition:0.3s;
+
+    z-index:9998;
+
+    overflow-y:auto;
+  }
+
+  .sidebar.ativo{
+    left:0 !important;
+  }
+
+  .content{
+    width:100%;
+    padding:20px;
+    padding-top:90px;
+  }
+
+  .topo{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:18px;
+  }
+
+  .titulo h1{
+    font-size:32px;
+  }
+
+  .eventos-grid{
+    grid-template-columns:1fr;
+  }
+
+  .modal-content{
+    width:90%;
+  }
+}
 
   </style>
 </head>
 
 <body>
+  <button class="menu-mobile" onclick="toggleMenu()">
+  <i class="bi bi-list"></i>
+</button>
 
 <div class="container">
 
@@ -568,6 +688,18 @@
 </div>
 
 <script>
+  
+
+function toggleMenu(){
+
+  const sidebar =
+    document.querySelector(".sidebar");
+
+  sidebar.classList.toggle("ativo");
+
+}
+
+lucide.createIcons()
 
 lucide.createIcons()
 
@@ -802,6 +934,29 @@ function renderizarEventos() {
   })
 
   lucide.createIcons()
+}
+async function carregarEventos() {
+
+  try {
+
+    const res = await fetch(
+      `http://localhost:3000/eventos?admin_id=${usuario.id}`
+    )
+
+    eventos = await res.json()
+
+    console.log("EVENTOS RECEBIDOS:", eventos)
+
+    if (!Array.isArray(eventos)) {
+      eventos = []
+    }
+
+    renderizarEventos()
+
+  } catch(err) {
+
+    console.log(err)
+  }
 }
 
 // INIT

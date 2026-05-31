@@ -149,6 +149,136 @@ label{
   font-weight:bold;
   cursor:pointer;
 }
+/* =========================
+   RESPONSIVIDADE
+========================= */
+
+/* TABLET */
+@media (max-width: 1024px){
+
+  header{
+    padding:20px 5%;
+  }
+
+  .container{
+    margin:30px auto;
+  }
+
+  .card{
+    padding:35px;
+  }
+
+}
+
+
+/* CELULAR */
+@media (max-width: 768px){
+
+  header{
+    flex-direction:column;
+    gap:15px;
+    text-align:center;
+    padding:20px;
+  }
+
+  .logo{
+    font-size:24px;
+  }
+
+  .seguro{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
+  }
+
+  .container{
+    margin:20px auto;
+    padding:0 15px;
+  }
+
+  .card{
+    padding:25px 20px;
+    border-radius:16px;
+  }
+
+  .descricao{
+    font-size:16px;
+    line-height:1.5;
+  }
+
+  .tipos{
+    gap:10px;
+  }
+
+  .tipo{
+    flex:1 1 calc(50% - 10px);
+    text-align:center;
+    padding:14px 10px;
+    font-size:14px;
+  }
+
+  .input{
+    padding:14px;
+    font-size:14px;
+  }
+
+  .acoes{
+    flex-direction:column;
+    gap:15px;
+  }
+
+  .btn-voltar,
+  .btn-continuar{
+    width:100%;
+    padding:15px;
+    font-size:15px;
+  }
+
+}
+
+
+/* CELULARES PEQUENOS */
+@media (max-width: 480px){
+
+  header{
+    padding:18px 14px;
+  }
+
+  .logo{
+    font-size:22px;
+  }
+
+  .card{
+    padding:22px 16px;
+  }
+
+  .descricao{
+    font-size:15px;
+  }
+
+  label{
+    font-size:15px;
+  }
+
+  .tipo{
+    flex:1 1 100%;
+    font-size:13px;
+    border-radius:10px;
+  }
+
+  .input{
+    border-radius:10px;
+  }
+
+  .btn-voltar,
+  .btn-continuar{
+    border-radius:10px;
+    font-size:14px;
+  }
+
+}
 </style>
 </head>
 
@@ -192,12 +322,15 @@ label{
     <label>Local do evento</label>
     <input type="text" id="local" class="input" placeholder="Ex: Buffet, Salão, Casa, Fazenda...">
 
-    <!-- CONVIDADOS -->
-    <label class="range-label">
-      Número de convidados: <strong id="qtd">100</strong>
-    </label>
+    <!-- QUANTIDADE DE CONVIDADOS -->
+<label>Quantidade de convidados</label>
 
-    <input type="range" min="50" max="500" value="100" id="range" class="range">
+<input 
+type="number" 
+id="convidados" 
+class="input"
+placeholder="Ex: 150"
+min="1">
 
     <!-- AÇÕES -->
     <div class="acoes">
@@ -211,7 +344,7 @@ label{
 
 <script>
 
-//  proteção fluxo (PACOTE CORRETO)
+// proteção fluxo
 const pacoteSalvo = JSON.parse(localStorage.getItem("pacote"));
 
 if (!pacoteSalvo) {
@@ -227,68 +360,83 @@ if (!localStorage.getItem("clienteId")) {
 
 let tipoSelecionado = "Casamento";
 
+
 // seleção tipo
 document.querySelectorAll(".tipo").forEach(btn => {
-  btn.addEventListener("click", () => {
 
-    document.querySelectorAll(".tipo").forEach(b => b.classList.remove("active"));
+  btn.addEventListener("click", (e) => {
+
+    e.preventDefault();
+
+    document.querySelectorAll(".tipo")
+    .forEach(b => b.classList.remove("active"));
+
     btn.classList.add("active");
 
     tipoSelecionado = btn.innerText;
 
-    const campoOutro = document.getElementById("campoOutro");
+    const campoOutro =
+      document.getElementById("campoOutro");
 
-    if (tipoSelecionado === "Outro") {
-      campoOutro.style.display = "block";
-      document.getElementById("outroInput").focus();
-    } else {
-      campoOutro.style.display = "none";
-      document.getElementById("outroInput").value = "";
+    if(tipoSelecionado==="Outro"){
+
+      campoOutro.style.display="block";
+
+      document
+      .getElementById("outroInput")
+      .focus();
+
+    }else{
+
+      campoOutro.style.display="none";
+
+      document
+      .getElementById("outroInput")
+      .value="";
     }
+
   });
+
 });
 
-// convidados
-const range = document.getElementById("range");
-const qtd = document.getElementById("qtd");
+const convidados =
+Number(
+document.getElementById("convidados").value
+);
 
-range.addEventListener("input", () => {
-  qtd.innerText = range.value;
-});
 
-// ENVIAR EVENTO
-document.getElementById("continuar").addEventListener("click", async () => {
+// CONTINUAR
+document.getElementById("continuar").addEventListener("click", async (e) => {
+
+  e.preventDefault();
 
   const cliente_id = Number(localStorage.getItem("clienteId"));
   const data = document.getElementById("data").value;
   const local = document.getElementById("local").value.trim();
-  const convidados = Number(range.value);
+  const convidados = Number(document.getElementById("convidados").value) || 0; // ← ADICIONEI!
 
-  if (!cliente_id || cliente_id <= 0) {
+  if (!cliente_id) {
     return alert("Cliente inválido. Faça login novamente.");
   }
 
-  if (!pacoteSalvo.nome) {
-    alert("Selecione um pacote primeiro");
-    return window.location.href = "pacotes.html";
+  if (!data) {
+    return alert("Selecione a data");
   }
 
-  if (!data) return alert("Selecione a data do evento");
-
-  if (!local) return alert("Informe o local do evento");
+  if (!local) {
+    return alert("Informe o local");
+  }
 
   let tipoFinal = tipoSelecionado;
 
   if (tipoSelecionado === "Outro") {
     tipoFinal = document.getElementById("outroInput").value.trim();
-
     if (!tipoFinal) {
       return alert("Digite o tipo do evento");
     }
   }
 
   try {
-
     const resposta = await fetch("http://localhost:3000/eventos", {
       method: "POST",
       headers: {
@@ -299,36 +447,32 @@ document.getElementById("continuar").addEventListener("click", async () => {
         tipo: tipoFinal,
         data,
         local,
-        convidados,
-
-        //  PADRÃO CORRETO PARA ADM
-        pacote_nome: pacoteSalvo.nome,
-        pacote_preco: pacoteSalvo.preco
+        convidados,  // ← ADICIONADO!
+        admin_id: 1  // ← ADICIONADO (admin padrão)
       })
     });
 
     const dados = await resposta.json();
 
     if (!resposta.ok) {
-      console.log("Erro do servidor:", dados);
-      return alert(dados.erro || "Erro ao salvar evento");
+      console.log(dados);
+      return alert(dados.erro || "Erro ao salvar");
     }
 
-    //  SALVA EVENTO COMPLETO (IMPORTANTE PRO FLUXO)
     localStorage.setItem("eventoId", dados.id);
-
     localStorage.setItem("eventoAtual", JSON.stringify({
       id: dados.id,
-      pacote_nome: pacoteSalvo.nome,
-      pacote_preco: pacoteSalvo.preco
+      tipo: tipoFinal,
+      data,
+      local,
+      convidados
     }));
 
     alert("Evento criado com sucesso!");
-
     window.location.href = "cardapio.html";
 
   } catch (erro) {
-    console.error("Erro geral:", erro);
+    console.log(erro);
     alert("Erro ao conectar com o servidor");
   }
 

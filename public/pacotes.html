@@ -179,6 +179,146 @@ li{
 .btn:hover{
   transform:scale(1.05);
 }
+/* =========================
+   RESPONSIVIDADE
+========================= */
+
+/* TABLET */
+@media (max-width: 1024px){
+
+  header{
+    padding:20px 5%;
+  }
+
+  .container{
+    margin:30px auto;
+  }
+
+  .grid{
+    justify-content:center;
+  }
+
+  .card{
+    min-width:280px;
+  }
+
+}
+
+
+/* CELULAR */
+@media (max-width: 768px){
+
+  header{
+    flex-direction:column;
+    gap:15px;
+    text-align:center;
+    padding:20px;
+  }
+
+  .logo{
+    font-size:24px;
+  }
+
+  .seguro{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
+  }
+
+  .container{
+    padding:0 16px;
+    margin:25px auto;
+  }
+
+  .titulo{
+    text-align:center;
+    font-size:18px;
+    line-height:1.5;
+  }
+
+  .grid{
+    flex-direction:column;
+    gap:20px;
+  }
+
+  .card{
+    width:100%;
+    min-width:100%;
+    padding:25px 22px;
+  }
+
+  .card.active{
+    transform:none;
+  }
+
+  h3{
+    font-size:20px;
+  }
+
+  .preco{
+    font-size:28px;
+  }
+
+  li{
+    font-size:14px;
+    line-height:1.5;
+  }
+
+  .btn{
+    width:100%;
+    margin-top:30px;
+    float:none;
+    padding:16px;
+    font-size:16px;
+  }
+
+}
+
+
+/* CELULARES PEQUENOS */
+@media (max-width: 480px){
+
+  header{
+    padding:18px 14px;
+  }
+
+  .logo{
+    font-size:22px;
+  }
+
+  .titulo{
+    font-size:16px;
+  }
+
+  .card{
+    padding:22px 18px;
+    border-radius:16px;
+  }
+
+  h3{
+    font-size:18px;
+  }
+
+  .sub{
+    font-size:14px;
+  }
+
+  .preco{
+    font-size:24px;
+  }
+
+  li{
+    font-size:13px;
+  }
+
+  .btn{
+    border-radius:10px;
+    font-size:15px;
+  }
+
+}
 
 </style>
 </head>

@@ -1,0 +1,1078 @@
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Meu Pedido - Sabor & Arte</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+
+:root{
+    --gold:#d4a762;
+    --bg:#0a0a0a;
+    --card:#111;
+    --border:#222;
+    --text:#e0e0e0;
+    --muted:#888;
+    --green:#27ae60;
+    --blue:#3498db;
+    --orange:#f39c12;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:var(--bg);
+    color:var(--text);
+}
+
+/* HEADER */
+
+.header{
+    background:#0d0d0d;
+    padding:15px 5%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid rgba(212,167,98,.2);
+}
+
+.logo{
+    font-size:26px;
+    font-weight:bold;
+}
+
+.logo span{
+    color:var(--gold);
+}
+
+.menu{
+    display:flex;
+    gap:20px;
+    align-items:center;
+}
+
+.menu a{
+    color:#aaa;
+    text-decoration:none;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 14px;
+    border-radius:10px;
+    transition:.3s;
+}
+
+.menu a:hover,
+.menu a.active{
+    background:rgba(212,167,98,.15);
+    color:var(--gold);
+}
+
+.badge{
+    background:var(--gold);
+    color:#000;
+    width:20px;
+    height:20px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:11px;
+    font-weight:bold;
+}
+
+/* CONTAINER */
+
+.container{
+    max-width:1000px;
+    margin:40px auto;
+    padding:0 20px;
+}
+
+/* STATUS */
+
+.status-card{
+    background:linear-gradient(135deg,#1a1a1a,#111);
+    border:1px solid var(--gold);
+    border-radius:20px;
+    padding:30px;
+    margin-bottom:30px;
+    text-align:center;
+}
+
+.status-icon{
+    font-size:65px;
+    margin-bottom:15px;
+}
+
+.status-text{
+    font-size:28px;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.status-date{
+    color:var(--muted);
+}
+
+.status-confirmado{
+    color:var(--green);
+}
+
+.status-preparando{
+    color:var(--blue);
+}
+
+.status-entrega{
+    color:var(--orange);
+}
+
+.status-finalizado{
+    color:#2ecc71;
+}
+
+
+/* TIMELINE */
+
+.timeline{
+    display:flex;
+    justify-content:space-between;
+    margin:40px 0;
+    position:relative;
+}
+
+.timeline::before{
+    content:'';
+    position:absolute;
+    top:25px;
+    left:0;
+    right:0;
+    height:2px;
+    background:#333;
+    z-index:0;
+}
+
+.timeline-step{
+    flex:1;
+    text-align:center;
+    position:relative;
+    z-index:1;
+}
+
+.timeline-circle{
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    background:#222;
+    border:2px solid #444;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:0 auto 10px;
+}
+
+.timeline-label{
+    font-size:13px;
+    color:var(--muted);
+}
+
+.timeline-step.active .timeline-circle{
+    background:var(--gold);
+    border-color:var(--gold);
+    color:#000;
+}
+
+.timeline-step.completed .timeline-circle{
+    background:var(--green);
+    border-color:var(--green);
+    color:#fff;
+}
+
+/* CARDS */
+
+.card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:25px;
+    margin-bottom:25px;
+}
+
+.card h3{
+    color:var(--gold);
+    margin-bottom:20px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+/* INFO */
+
+.info-row{
+    display:flex;
+    justify-content:space-between;
+    padding:14px 0;
+    border-bottom:1px solid var(--border);
+}
+
+.info-row:last-child{
+    border-bottom:none;
+}
+
+.info-label{
+    color:var(--muted);
+}
+
+.info-value{
+    font-weight:bold;
+}
+
+/* ITENS */
+
+.item-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 0;
+    border-bottom:1px solid var(--border);
+}
+
+.item-info{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.item-qtd{
+    background:var(--gold);
+    color:#000;
+    padding:3px 10px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.total{
+    display:flex;
+    justify-content:space-between;
+    margin-top:20px;
+    padding-top:20px;
+    border-top:2px solid var(--gold);
+    font-size:22px;
+    font-weight:bold;
+}
+
+.total span:last-child{
+    color:var(--gold);
+}
+
+/* BUTTONS */
+
+.buttons{
+    display:flex;
+    gap:15px;
+    margin-top:25px;
+}
+
+.btn{
+    flex:1;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    font-weight:bold;
+    cursor:pointer;
+    text-decoration:none;
+    text-align:center;
+    transition:.3s;
+}
+
+.btn:hover{
+    transform:translateY(-3px);
+}
+
+.btn-primary{
+    background:var(--gold);
+    color:#000;
+}
+
+.btn-secondary{
+    background:#222;
+    color:#fff;
+    border:1px solid var(--gold);
+}
+
+.btn-whatsapp{
+    background:#25D366;
+    color:#fff;
+}
+
+/* RESPONSIVO */
+
+@media(max-width:768px){
+
+    .menu span{
+        display:none;
+    }
+
+    .timeline{
+        flex-direction:column;
+        gap:15px;
+    }
+
+    .timeline::before{
+        display:none;
+    }
+
+    .timeline-step{
+        display:flex;
+        align-items:center;
+        gap:15px;
+    }
+
+    .timeline-circle{
+        margin:0;
+    }
+
+    .buttons{
+        flex-direction:column;
+    }
+
+    .info-row{
+        flex-direction:column;
+        gap:6px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="logo">
+        Sabor & <span>Arte</span>
+    </div>
+
+    <nav class="menu">
+
+        <a href="dashboard_cliente.html">
+            <i class="fas fa-home"></i>
+            <span>Início</span>
+        </a>
+
+       <a href="mensagens.html">
+    <i class="fas fa-envelope"></i>
+    <span>Mensagens</span>
+    <span class="badge" id="badgeMsg" style="display:none;">
+        0
+    </span>
+</a>
+
+<a href="meu-pedido.html" class="active">
+
+        <a href="meu-pedido.html" class="active">
+            <i class="fas fa-file-invoice"></i>
+            <span>Meu Pedido</span>
+        </a>
+
+
+        </a>
+
+        <a href="index.html" onclick="sair()">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Sair</span>
+        </a>
+
+    </nav>
+
+</header>
+
+<div class="container">
+
+    <!-- STATUS -->
+
+    <div class="status-card">
+
+        <div class="status-icon status-confirmado" id="statusIcon">
+    <i class="fas fa-check-circle"></i>
+</div>
+
+        <div class="status-text" id="statusText">
+            Pedido Confirmado
+        </div>
+
+        <div class="status-date" id="statusDate">
+            Atualizado hoje
+        </div>
+
+    </div>
+
+    <!-- TIMELINE -->
+
+    <div class="timeline">
+
+        <div class="timeline-step completed" id="step1">
+            <div class="timeline-circle">
+                <i class="fas fa-check"></i>
+            </div>
+            <div class="timeline-label">Confirmado</div>
+        </div>
+
+        <div class="timeline-step active" id="step2">
+            <div class="timeline-circle">
+                <i class="fas fa-utensils"></i>
+            </div>
+            <div class="timeline-label">Preparando</div>
+        </div>
+
+        <div class="timeline-step" id="step3">
+            <div class="timeline-circle">
+                <i class="fas fa-truck"></i>
+            </div>
+            <div class="timeline-label">Entrega</div>
+        </div>
+
+        <div class="timeline-step" id="step4">
+            <div class="timeline-circle">
+                <i class="fas fa-star"></i>
+            </div>
+            <div class="timeline-label">Finalizado</div>
+        </div>
+
+    </div>
+
+    <!-- EVENTO -->
+
+    <div class="card">
+
+        <h3>
+            <i class="fas fa-calendar-alt"></i>
+            Informações do Evento
+        </h3>
+
+        <div class="info-row">
+            <span class="info-label">Tipo:</span>
+            <span class="info-value" id="eventoTipo">Casamento</span>
+        </div>
+
+        <div class="info-row">
+            <span class="info-label">Data:</span>
+            <span class="info-value" id="eventoData">20/12/2025</span>
+        </div>
+
+        <div class="info-row">
+            <span class="info-label">Local:</span>
+            <span class="info-value" id="eventoLocal">
+                Brasília - DF
+            </span>
+        </div>
+
+        <div class="info-row">
+            <span class="info-label">Convidados:</span>
+            <span class="info-value" id="eventoConvidados">
+                150
+            </span>
+        </div>
+
+    </div>
+
+    
+
+    <!-- PEDIDO -->
+
+    <!-- CARDÁPIO -->
+
+<div class="card">
+
+    <h3>
+        <i class="fas fa-utensils"></i>
+        Cardápio Selecionado
+    </h3>
+
+    <!-- ITENS DINÂMICOS -->
+    <div id="itensContainer"></div>
+
+</div>
+
+<!-- PACOTE -->
+
+<div class="card">
+
+    <h3>
+        <i class="fas fa-gift"></i>
+        Pacote Selecionado
+    </h3>
+
+    <div class="info-row">
+        <span class="info-label">Pacote:</span>
+
+        <span class="info-value" id="pacoteNome">
+            Carregando...
+        </span>
+    </div>
+
+    <div class="info-row">
+        <span class="info-label">Valor:</span>
+
+        <span class="info-value" id="pacoteValor">
+            R$ 0,00
+        </span>
+    </div>
+
+</div>
+
+<!-- RESUMO TOTAL -->
+
+<div class="card">
+
+    <h3>
+        <i class="fas fa-money-bill-wave"></i>
+        Resumo Total
+    </h3>
+
+    <div class="info-row">
+
+        <span class="info-label">
+            Total Cardápio:
+        </span>
+
+        <span class="info-value" id="subtotalCardapio">
+            R$ 0,00
+        </span>
+
+    </div>
+
+    <div class="info-row">
+
+        <span class="info-label">
+            Pacote:
+        </span>
+
+        <span class="info-value" id="subtotalPacote">
+            R$ 0,00
+        </span>
+
+    </div>
+
+    <div class="total">
+
+        <span>Total Final:</span>
+
+        <span id="totalPedido">
+            R$ 0,00
+        </span>
+
+    </div>
+
+</div>
+
+    <!-- BOTÕES -->
+
+    <div class="buttons">
+
+        <button class="btn btn-whatsapp" onclick="falarEquipe()">
+            <i class="fab fa-whatsapp"></i>
+            Falar com equipe
+        </button>
+
+        <button class="btn btn-secondary" onclick="baixarComprovante()">
+            <i class="fas fa-download"></i>
+            Baixar comprovante
+        </button>
+
+        <a href="cardapio.html" class="btn btn-primary">
+            <i class="fas fa-plus"></i>
+            Adicionar itens
+        </a>
+
+    </div>
+
+</div>
+
+<script>
+
+const usuario = JSON.parse(localStorage.getItem("usuario"));
+
+if (!usuario) {
+    window.location.href = "login.html";
+}
+
+/* =========================
+   WHATSAPP
+========================= */
+
+function falarEquipe() {
+
+    const numero = "5561999999999";
+
+    const mensagem = encodeURIComponent(
+        `Olá! Sou ${usuario.nome} e gostaria de informações sobre meu pedido.`
+    );
+
+    window.open(
+        `https://wa.me/${numero}?text=${mensagem}`,
+        "_blank"
+    );
+}
+
+/* =========================
+   LOGOUT
+========================= */
+
+function sair() {
+
+    localStorage.clear();
+
+    window.location.href = "login.html";
+}
+
+/* =========================
+   NOTIFICAÇÕES
+========================= */
+
+async function carregarNotificacoes() {
+
+    try {
+
+        const badge = document.getElementById("badgeMsg");
+
+        const total = Math.floor(Math.random() * 5);
+
+        if (total > 0) {
+
+            badge.innerText = total;
+            badge.style.display = "flex";
+
+        } else {
+
+            badge.style.display = "none";
+        }
+
+    } catch (erro) {
+
+        console.log(erro);
+    }
+}
+
+/* =========================
+   ATUALIZA STATUS
+========================= */
+
+function atualizarStatus(status) {
+
+    const statusText = document.getElementById("statusText");
+    const statusIcon = document.getElementById("statusIcon");
+
+    document.querySelectorAll(".timeline-step")
+        .forEach(step => {
+            step.classList.remove("active", "completed");
+        });
+
+    switch ((status || "").toLowerCase()) {
+
+        case "confirmado":
+
+            statusText.innerText = "Pedido Confirmado";
+
+            statusIcon.className =
+                "status-icon status-confirmado";
+
+            statusIcon.innerHTML =
+                '<i class="fas fa-check-circle"></i>';
+
+            document.getElementById("step1")
+                .classList.add("active");
+
+        break;
+
+        case "preparando":
+
+            statusText.innerText = "Em Preparo";
+
+            statusIcon.className =
+                "status-icon status-preparando";
+
+            statusIcon.innerHTML =
+                '<i class="fas fa-utensils"></i>';
+
+            document.getElementById("step1")
+                .classList.add("completed");
+
+            document.getElementById("step2")
+                .classList.add("active");
+
+        break;
+
+        case "pronto":
+
+            statusText.innerText = "Pedido Pronto";
+
+            statusIcon.className =
+                "status-icon status-entrega";
+
+            statusIcon.innerHTML =
+                '<i class="fas fa-truck"></i>';
+
+            document.getElementById("step1")
+                .classList.add("completed");
+
+            document.getElementById("step2")
+                .classList.add("completed");
+
+            document.getElementById("step3")
+                .classList.add("active");
+
+        break;
+
+        case "entregue":
+
+            statusText.innerText = "Pedido Finalizado";
+
+            statusIcon.className =
+                "status-icon status-finalizado";
+
+            statusIcon.innerHTML =
+                '<i class="fas fa-star"></i>';
+
+            document.getElementById("step1")
+                .classList.add("completed");
+
+            document.getElementById("step2")
+                .classList.add("completed");
+
+            document.getElementById("step3")
+                .classList.add("completed");
+
+            document.getElementById("step4")
+                .classList.add("active");
+
+        break;
+    }
+}
+
+/* =========================
+   CARREGA ITENS
+========================= */
+
+function carregarItensPedido(pedido) {
+
+    const itensContainer =
+        document.getElementById("itensContainer");
+
+    itensContainer.innerHTML = "";
+
+    let totalItens = 0;
+
+    if (
+        pedido &&
+        pedido.itens &&
+        pedido.itens.length > 0
+    ) {
+
+        pedido.itens.forEach(item => {
+
+            const qtd = Number(
+                item.qtd ||
+                item.quantidade ||
+                1
+            );
+
+            const preco = Number(
+                item.preco ||
+                item.valor ||
+                0
+            );
+
+            const subtotal = qtd * preco;
+
+            totalItens += subtotal;
+
+            itensContainer.innerHTML += `
+                <div class="item-row">
+
+                    <div class="item-info">
+                        <span class="item-qtd">
+                            ${qtd}x
+                        </span>
+
+                        <span>
+                            ${item.nome}
+                        </span>
+                    </div>
+
+                    <span>
+                        ${subtotal.toLocaleString("pt-BR",{
+                            style:"currency",
+                            currency:"BRL"
+                        })}
+                    </span>
+
+                </div>
+            `;
+        });
+
+    } else {
+
+        itensContainer.innerHTML = `
+            <p style="color:#888">
+                Nenhum item encontrado.
+            </p>
+        `;
+    }
+
+    return totalItens;
+}
+
+/* =========================
+   ATUALIZA TELA
+========================= */
+
+function atualizarTela(pedido) {
+
+    atualizarStatus(pedido.status);
+
+    document.getElementById("eventoTipo").innerText =
+        pedido.tipo || "-";
+
+    document.getElementById("eventoLocal").innerText =
+        pedido.local || "-";
+
+    document.getElementById("eventoConvidados").innerText =
+        pedido.convidados || "-";
+
+    if (pedido.data) {
+
+        document.getElementById("eventoData").innerText =
+            new Date(pedido.data)
+            .toLocaleDateString("pt-BR");
+    }
+
+    const totalItens =
+        carregarItensPedido(pedido);
+
+    const pacote =
+        JSON.parse(localStorage.getItem("pacote"));
+
+    let valorPacote = 0;
+
+    if (pacote) {
+
+        valorPacote = Number(
+            pacote.preco || 0
+        );
+
+        document.getElementById("pacoteNome")
+            .innerText = pacote.nome;
+
+        document.getElementById("pacoteValor")
+            .innerText =
+            valorPacote.toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL"
+            });
+
+    } else {
+
+        document.getElementById("pacoteNome")
+            .innerText = "Nenhum pacote";
+
+        document.getElementById("pacoteValor")
+            .innerText = "R$ 0,00";
+    }
+
+    document.getElementById("subtotalCardapio")
+        .innerText =
+        totalItens.toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL"
+        });
+
+    document.getElementById("subtotalPacote")
+        .innerText =
+        valorPacote.toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL"
+        });
+
+    const totalFinal =
+        totalItens + valorPacote;
+
+    document.getElementById("totalPedido")
+        .innerText =
+        totalFinal.toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL"
+        });
+}
+
+/* =========================
+   CARREGA PEDIDO
+========================= */
+
+async function carregarPedido() {
+
+    try {
+
+        const resposta = await fetch(
+            `http://localhost:3000/meu-pedido/${usuario.id}`
+        );
+
+        if (!resposta.ok) {
+            throw new Error(
+                "Erro ao carregar pedido"
+            );
+        }
+
+        const pedido = await resposta.json();
+
+        localStorage.setItem(
+            "pedidoAtual",
+            JSON.stringify(pedido)
+        );
+
+        atualizarTela(pedido);
+
+    } catch (erro) {
+
+        console.log(erro);
+
+        const pedidoLocal =
+            JSON.parse(
+                localStorage.getItem(
+                    "pedidoAtual"
+                )
+            );
+
+        if (pedidoLocal) {
+            atualizarTela(pedidoLocal);
+        }
+    }
+}
+
+/* =========================
+   COMPROVANTE
+========================= */
+
+function baixarComprovante() {
+
+    const pacote =
+        JSON.parse(localStorage.getItem("pacote"));
+
+    const pedido =
+        JSON.parse(localStorage.getItem("pedidoAtual"));
+
+    let valorPacote = Number(
+        pacote?.preco || 0
+    );
+
+    let totalItens = 0;
+
+    let texto = `
+=============================
+     SABOR & ARTE BUFFET
+=============================
+
+Cliente: ${usuario.nome}
+
+`;
+
+    texto += `
+PACOTE
+-----------------------------
+${pacote?.nome || "Nenhum"}
+${valorPacote.toLocaleString("pt-BR",{
+style:"currency",
+currency:"BRL"
+})}
+
+CARDÁPIO
+-----------------------------
+`;
+
+    pedido?.itens?.forEach(item => {
+
+        const subtotal =
+            Number(item.preco || 0) *
+            Number(item.qtd || 1);
+
+        totalItens += subtotal;
+
+        texto += `
+${item.nome}
+${item.qtd}x - ${subtotal.toLocaleString("pt-BR",{
+style:"currency",
+currency:"BRL"
+})}
+`;
+    });
+
+    const totalFinal =
+        totalItens + valorPacote;
+
+    texto += `
+
+-----------------------------
+Total Cardápio:
+${totalItens.toLocaleString("pt-BR",{
+style:"currency",
+currency:"BRL"
+})}
+
+Pacote:
+${valorPacote.toLocaleString("pt-BR",{
+style:"currency",
+currency:"BRL"
+})}
+
+TOTAL FINAL:
+${totalFinal.toLocaleString("pt-BR",{
+style:"currency",
+currency:"BRL"
+})}
+`;
+
+    const blob = new Blob(
+        [texto],
+        { type: "text/plain" }
+    );
+
+    const link =
+        document.createElement("a");
+
+    link.href =
+        URL.createObjectURL(blob);
+
+    link.download =
+        "comprovante-pedido.txt";
+
+    link.click();
+}
+
+/* =========================
+   INICIAR
+========================= */
+
+carregarPedido();
+carregarNotificacoes();
+
+setInterval(
+    carregarNotificacoes,
+    15000
+);
+</script>
+
+</body>
+</html>
+

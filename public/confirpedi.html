@@ -203,6 +203,16 @@
   </div>
 
   <script>
+    const usuarioSalvo = localStorage.getItem("usuario");
+const clienteId = localStorage.getItem("clienteId");
+
+if (!usuarioSalvo || !clienteId) {
+
+    alert("Você precisa estar logado e cadastrado para confirmar um pedido.");
+
+    window.location.href = "login.html";
+}
+
 
 //  PEGAR PEDIDO
 let pedido = JSON.parse(localStorage.getItem("pedidoAtual"))
@@ -226,7 +236,7 @@ let pacoteValor = Number(pacote.preco)
 // CLIENTE
 document.getElementById("cliente").innerText = pedido.cliente
 
-// 🔥 CRIAR BOX DO PACOTE
+// CRIAR BOX DO PACOTE
 const resumo = document.querySelector(".resumo")
 
 const pacoteBox = document.createElement("div")
@@ -234,7 +244,7 @@ pacoteBox.className = "box"
 pacoteBox.innerHTML = `
   <h3>Pacote Selecionado</h3>
   <p>${pacoteNome}</p>
-  <p><strong>R$ ${pacoteValor.toFixed(2)}</strong></p>
+ <p><strong>${formatarMoeda(pacoteValor)}</strong></p>
 `
 
 resumo.insertBefore(pacoteBox, resumo.children[2])
@@ -250,14 +260,21 @@ pedido.itens.forEach(item => {
   container.innerHTML += `
     <div class="item">
       <span>${item.nome} (${item.qtd}x)</span>
-      <span>R$ ${subtotal.toFixed(2)}</span>
+     <span>${formatarMoeda(subtotal)}</span>
     </div>
   `
 })
+function formatarMoeda(valor) {
+  return valor.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL"
+  });
+}
 
 //  TOTAL FINAL
 let totalFinal = pacoteValor + totalItens
-document.getElementById("total").innerText = totalFinal.toFixed(2)
+document.getElementById("total").innerText =
+  formatarMoeda(totalFinal).replace("R$", "").trim()
 
 //  CANCELAR
 function cancelarPedido() {
@@ -273,53 +290,53 @@ function cancelarPedido() {
 //  CONFIRMAR → SEM TRAVAR (MESMO COM ERRO NO SERVIDOR)
 async function confirmarPedido() {
 
-const usuario = JSON.parse(localStorage.getItem("usuario"))
-const eventoId = localStorage.getItem("eventoId")
+  const usuario = JSON.parse(localStorage.getItem("usuario"));
+  const eventoId = localStorage.getItem("eventoId");
 
-let pedidoFinal = {
-  cliente: pedido.cliente,
-  evento_id: eventoId,   //  ESSENCIAL
-  admin_id: usuario?.admin_id || 1, // ou pega do evento
-  itens: pedido.itens,
-  total: totalFinal,
-  status: "pendente"
-}
+  const pedidoFinal = {
+    cliente: pedido.cliente,
+    evento_id: Number(eventoId),
+    admin_id: 1,
+    itens: pedido.itens,
+    total: totalFinal,
+    status: "pendente"
+  };
 
   try {
+
     const res = await fetch("http://localhost:3000/pedidos", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(pedidoFinal)
-    })
+    });
 
-    const data = await res.json()
+    const data = await res.json();
 
-    if (res.ok) {
-      // backend respondeu certo
-      pedidoFinal.id = data.id || Date.now()
-    } else {
-      //  backend deu erro → continua mesmo assim
-      console.warn("Erro no backend, continuando fluxo")
-      pedidoFinal.id = Date.now()
+    if (!res.ok) {
+      alert(data.erro || "Erro ao salvar pedido");
+      return;
     }
 
-  } catch (err) {
-    //  servidor offline → NÃO trava mais
-    console.warn("Servidor offline, continuando fluxo")
-    pedidoFinal.id = Date.now()
+    alert("Pedido salvo com sucesso!");
+
+    localStorage.setItem(
+      "pedidoPagamento",
+      JSON.stringify({
+        ...pedidoFinal,
+        id: data.id
+      })
+    );
+
+    window.location.href = "pagamento.html";
+
+  } catch (erro) {
+
+    console.error(erro);
+
+    alert("Erro ao conectar com o servidor.");
   }
-
-  //  SEMPRE SALVA PARA PAGAMENTO
-  localStorage.setItem("pedidoPagamento", JSON.stringify(pedidoFinal))
-
-  // limpa dados antigos
-  localStorage.removeItem("pedidoAtual")
-  localStorage.removeItem("pacote")
-
-  //  SEMPRE VAI PRO PAGAMENTO
-  window.location.href = "pagamento.html"
 }
 
 </script>

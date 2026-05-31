@@ -10,6 +10,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <script src="https://unpkg.com/lucide@latest"></script>
 
 <style>
@@ -22,7 +24,6 @@
 }
 
 :root{
-
     --bg:#020617;
     --sidebar:#0f172a;
     --card:#111827;
@@ -37,33 +38,55 @@
     --red:#ef4444;
 
     --border:rgba(255,255,255,0.06);
-
     --radius:20px;
 }
 
 body{
     background:var(--bg);
     color:var(--text);
+    margin:0;
+    overflow:hidden;
 }
 
 .container{
     display:flex;
-    min-height:100vh;
+    height:100vh;
+    overflow:hidden;
 }
 
 /* SIDEBAR */
 
 .sidebar{
     width:260px;
+    min-width:260px;
+    height:100vh;
     background:var(--sidebar);
-
     border-right:1px solid var(--border);
-
     padding:24px 18px;
-
     display:flex;
     flex-direction:column;
     justify-content:space-between;
+    overflow-y:auto;
+}
+
+.content{
+    flex:1;
+    height:100vh;
+    padding:30px;
+    overflow-y:auto;
+}
+
+.content::-webkit-scrollbar{
+    width:8px;
+}
+
+.content::-webkit-scrollbar-track{
+    background:#0f172a;
+}
+
+.content::-webkit-scrollbar-thumb{
+    background:#facc15;
+    border-radius:20px;
 }
 
 .sidebar-top{
@@ -92,17 +115,11 @@ body{
     display:flex;
     align-items:center;
     gap:12px;
-
     text-decoration:none;
-
     color:var(--muted);
-
     padding:14px 16px;
-
     border-radius:14px;
-
     transition:0.2s;
-
     font-size:15px;
     font-weight:500;
 }
@@ -128,23 +145,18 @@ body{
     flex-direction:column;
     gap:12px;
     padding-top:20px;
+    border-top:1px solid rgba(255,255,255,0.05);
 }
 
 .sidebar-footer a{
     display:flex;
     align-items:center;
     gap:12px;
-
     text-decoration:none;
-
     color:var(--muted);
-
     padding:14px 16px;
-
     border-radius:14px;
-
     transition:0.2s;
-
     font-size:15px;
     font-weight:500;
 }
@@ -160,12 +172,6 @@ body{
 }
 
 /* CONTENT */
-
-.content{
-    flex:1;
-    padding:30px;
-    overflow-y:auto;
-}
 
 .topo{
     display:flex;
@@ -186,42 +192,36 @@ body{
 
 .btn{
     border:none;
-
     background:var(--yellow);
     color:black;
-
-    padding:14px 18px;
-
+    padding:14px 20px;
     border-radius:14px;
-
     cursor:pointer;
-
     font-weight:700;
-
+    font-size:14px;
     transition:0.2s;
+    display:flex;
+    align-items:center;
+    gap:8px;
 }
 
 .btn:hover{
     transform:scale(1.03);
 }
 
-/* CARDS */
+/* CARDS TOPO */
 
 .cards{
     display:grid;
     grid-template-columns:repeat(3,1fr);
     gap:20px;
-
     margin-bottom:30px;
 }
 
 .card{
     background:var(--card);
-
     border:1px solid var(--border);
-
     border-radius:24px;
-
     padding:24px;
 }
 
@@ -229,11 +229,39 @@ body{
     color:var(--muted);
     display:block;
     margin-bottom:10px;
+    font-size:13px;
 }
 
 .card h2{
-    font-size:32px;
+    font-size:30px;
+    font-weight:800;
     color:var(--yellow);
+}
+
+/* BUSCA */
+
+.busca-box{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:18px 22px;
+    margin-bottom:24px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.busca-box input{
+    flex:1;
+    background:transparent;
+    border:none;
+    color:white;
+    font-size:14px;
+    outline:none;
+}
+
+.busca-box input::placeholder{
+    color:var(--muted);
 }
 
 /* LISTA */
@@ -246,25 +274,21 @@ body{
 
 .orcamento{
     background:var(--card);
-
     border:1px solid var(--border);
-
     border-radius:22px;
-
     padding:22px;
-
     display:flex;
     justify-content:space-between;
     align-items:center;
-
     transition:0.2s;
 }
 
 .orcamento:hover{
-    transform:translateY(-4px);
+    transform:translateY(-3px);
+    border-color:rgba(250,204,21,0.2);
 }
 
-.info{
+.orc-esquerda{
     display:flex;
     flex-direction:column;
     gap:8px;
@@ -272,22 +296,33 @@ body{
 
 .codigo{
     color:var(--muted);
+    font-size:12px;
+    font-weight:600;
+    letter-spacing:0.5px;
+}
+
+.orc-esquerda h3{
+    font-size:18px;
+    font-weight:700;
+}
+
+.orc-esquerda p{
+    color:var(--muted);
     font-size:13px;
 }
 
-.info h3{
-    font-size:18px;
+.badges{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-top:4px;
 }
 
 .status{
-    padding:6px 12px;
-
+    padding:5px 12px;
     border-radius:999px;
-
     font-size:12px;
     font-weight:700;
-
-    width:fit-content;
 }
 
 .pendente{
@@ -305,19 +340,60 @@ body{
     color:var(--red);
 }
 
-.direita{
+.orc-direita{
     text-align:right;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:10px;
 }
 
-.direita small{
+.orc-direita small{
     color:var(--muted);
+    font-size:12px;
 }
 
 .valor{
     font-size:24px;
     font-weight:800;
     color:var(--yellow);
-    margin-top:6px;
+}
+
+.acoes{
+    display:flex;
+    gap:8px;
+}
+
+.btn-icon{
+    width:36px;
+    height:36px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:0.2s;
+}
+
+.btn-icon:hover{
+    transform:scale(1.08);
+}
+
+.btn-editar{
+    background:rgba(250,204,21,0.12);
+    color:var(--yellow);
+}
+
+.btn-remover{
+    background:rgba(239,68,68,0.12);
+    color:var(--red);
+}
+
+.vazio{
+    text-align:center;
+    padding:60px;
+    color:var(--muted);
 }
 
 /* MODAL */
@@ -325,101 +401,268 @@ body{
 .modal{
     position:fixed;
     inset:0;
-
-    background:rgba(0,0,0,0.7);
-
+    background:rgba(0,0,0,0.75);
+    backdrop-filter:blur(4px);
     display:none;
     justify-content:center;
     align-items:center;
+    z-index:1000;
 }
 
 .modal-content{
-    width:420px;
-
+    width:100%;
+    max-width:480px;
     background:var(--card);
-
+    border:1px solid var(--border);
     border-radius:24px;
-
     padding:28px;
+    max-height:90vh;
+    overflow-y:auto;
+}
+
+.modal-content::-webkit-scrollbar{
+    width:6px;
+}
+
+.modal-content::-webkit-scrollbar-thumb{
+    background:#facc15;
+    border-radius:10px;
 }
 
 .modal-content h2{
+    font-size:22px;
     margin-bottom:20px;
 }
 
-select,
-input{
-    width:100%;
-
-    padding:14px;
-
-    margin-bottom:12px;
-
-    border:none;
-
-    border-radius:12px;
-
-    background:#1e293b;
-    color:white;
+.campo{
+    margin-bottom:14px;
 }
 
-.item{
+.campo label{
+    display:block;
+    font-size:13px;
+    color:var(--muted);
+    margin-bottom:6px;
+    font-weight:600;
+}
+
+.campo select,
+.campo input{
+    width:100%;
+    padding:13px 14px;
+    background:#0f172a;
+    border:1px solid var(--border);
+    border-radius:12px;
+    color:white;
+    font-size:14px;
+    outline:none;
+    transition:0.2s;
+}
+
+.campo select:focus,
+.campo input:focus{
+    border-color:rgba(250,204,21,0.4);
+}
+
+.campo select option{
+    background:#0f172a;
+}
+
+.row-campos{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:10px;
+}
+
+.btn-add-item{
+    width:100%;
+    background:rgba(250,204,21,0.1);
+    border:1px dashed rgba(250,204,21,0.3);
+    color:var(--yellow);
+    padding:12px;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:600;
+    font-size:14px;
+    transition:0.2s;
+    margin-bottom:16px;
+}
+
+.btn-add-item:hover{
+    background:rgba(250,204,21,0.18);
+}
+
+.lista-itens{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin-bottom:16px;
+    min-height:0;
+}
+
+.item-linha{
     display:flex;
     justify-content:space-between;
-
-    background:#1e293b;
-
-    padding:10px;
-
+    align-items:center;
+    background:#0f172a;
+    padding:10px 14px;
     border-radius:10px;
-
-    margin-bottom:8px;
+    font-size:13px;
 }
 
-.total{
-    margin-top:15px;
-    margin-bottom:15px;
-
-    font-size:20px;
+.item-linha span{
+    color:var(--yellow);
     font-weight:700;
+}
 
+.item-linha button{
+    background:none;
+    border:none;
+    color:var(--red);
+    cursor:pointer;
+    font-size:16px;
+    padding:2px 6px;
+}
+
+.total-box{
+    background:#0f172a;
+    border-radius:14px;
+    padding:14px 18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+}
+
+.total-box span:first-child{
+    color:var(--muted);
+    font-size:14px;
+}
+
+.total-box span:last-child{
+    font-size:20px;
+    font-weight:800;
     color:var(--yellow);
 }
 
-.acoes-modal{
+.modal-botoes{
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:10px;
 }
 
-/* RESPONSIVO */
+.btn-cancelar{
+    background:#1e293b;
+    color:white;
+    border:none;
+    padding:13px;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:600;
+    transition:0.2s;
+}
+
+.btn-cancelar:hover{
+    background:#2d3e55;
+}
+
+/* MENU MOBILE */
+
+.menu-mobile{
+    position:fixed;
+    top:20px;
+    left:20px;
+    width:55px;
+    height:55px;
+    border:none;
+    border-radius:14px;
+    background:#facc15;
+    color:#000;
+    font-size:28px;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:99999;
+    cursor:pointer;
+    box-shadow:0 4px 20px rgba(0,0,0,0.3);
+}
 
 @media(max-width:900px){
 
+    body{ overflow-x:hidden; }
+
+    .menu-mobile{
+        display:flex;
+    }
+
     .sidebar{
-        display:none;
+        position:fixed;
+        top:0;
+        left:-270px;
+        width:260px;
+        height:100vh;
+        background:var(--sidebar);
+        transition:0.3s;
+        z-index:9998;
+        overflow-y:auto;
+    }
+
+    .sidebar.ativo{
+        left:0;
     }
 
     .content{
+        width:100%;
+        max-width:100%;
         padding:20px;
+        padding-top:90px;
     }
 
     .cards{
         grid-template-columns:1fr;
     }
 
+    .topo{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:16px;
+    }
+
+    .orcamento{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:14px;
+    }
+
+    .orc-direita{
+        width:100%;
+        flex-direction:row;
+        justify-content:space-between;
+        align-items:center;
+    }
+
+    .modal-content{
+        width:92%;
+        margin:0 auto;
+    }
 }
 
+@media(min-width:901px){
+    .menu-mobile{ display:none; }
+}
 </style>
 </head>
 
 <body>
 
+<button class="menu-mobile" onclick="toggleMenu()">
+    <i class="bi bi-list"></i>
+</button>
+
 <div class="container">
 
     <!-- SIDEBAR -->
-
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
 
         <div class="sidebar-top">
 
@@ -480,7 +723,6 @@ input{
     </aside>
 
     <!-- CONTENT -->
-
     <main class="content">
 
         <div class="topo">
@@ -491,13 +733,13 @@ input{
             </div>
 
             <button class="btn" onclick="abrirModal()">
-                + Novo Orçamento
+                <i data-lucide="plus"></i>
+                Novo Orçamento
             </button>
 
         </div>
 
-        <!-- CARDS -->
-
+        <!-- CARDS RESUMO -->
         <div class="cards">
 
             <div class="card">
@@ -517,54 +759,88 @@ input{
 
         </div>
 
-        <!-- LISTA -->
+        <!-- BUSCA -->
+        <div class="busca-box">
+            <i data-lucide="search" style="width:18px;height:18px;color:var(--muted);flex-shrink:0;"></i>
+            <input
+                type="text"
+                placeholder="Buscar por cliente, evento ou status..."
+                oninput="pesquisar(this.value)"
+            >
+        </div>
 
-        <div class="lista" id="listaOrcamentos"></div>
+        <!-- LISTA -->
+        <div class="lista" id="listaOrcamentos">
+            <div class="vazio">
+                <i data-lucide="file-text" style="width:48px;height:48px;margin-bottom:12px;"></i>
+                <p>Carregando orçamentos...</p>
+            </div>
+        </div>
 
     </main>
 
 </div>
 
-<!-- MODAL -->
-
+<!-- MODAL NOVO/EDITAR ORÇAMENTO -->
 <div class="modal" id="modal">
 
     <div class="modal-content">
 
-        <h2>Novo Orçamento</h2>
+        <h2 id="tituloModal">Novo Orçamento</h2>
 
-        <select id="evento"></select>
-
-        <select id="itemNome"></select>
-
-        <input type="number" id="quantidade" placeholder="Quantidade">
-
-        <button class="btn" onclick="adicionarItem()">
-            Adicionar Item
-        </button>
-
-        <div id="itens" style="margin-top:15px;"></div>
-
-        <div class="total">
-            Total: R$ <span id="total">0</span>
+        <!-- EVENTO -->
+        <div class="campo">
+            <label>Evento</label>
+            <select id="selectEvento">
+                <option value="">Carregando eventos...</option>
+            </select>
         </div>
 
-        <select id="status">
-            <option value="pendente">Pendente</option>
-            <option value="aprovado">Aprovado</option>
-            <option value="recusado">Recusado</option>
-        </select>
+        <!-- ADICIONAR ITEM -->
+        <div class="row-campos">
+            <div class="campo">
+                <label>Item do cardápio</label>
+                <select id="selectItem">
+                    <option value="">Selecione um item...</option>
+                </select>
+            </div>
+            <div class="campo">
+                <label>Quantidade</label>
+                <input type="number" id="inputQtd" placeholder="1" min="1" value="1">
+            </div>
+        </div>
 
-        <div class="acoes-modal">
+        <button class="btn-add-item" onclick="adicionarItem()">
+            + Adicionar item
+        </button>
 
+        <!-- ITENS ADICIONADOS -->
+        <div class="lista-itens" id="listaItens"></div>
+
+        <!-- TOTAL -->
+        <div class="total-box">
+            <span>Total do orçamento</span>
+            <span id="totalModal">R$ 0,00</span>
+        </div>
+
+        <!-- STATUS -->
+        <div class="campo">
+            <label>Status</label>
+            <select id="selectStatus">
+                <option value="pendente">Pendente</option>
+                <option value="aprovado">Aprovado</option>
+                <option value="recusado">Recusado</option>
+            </select>
+        </div>
+
+        <!-- BOTÕES -->
+        <div class="modal-botoes">
             <button class="btn" onclick="salvarOrcamento()">
                 Salvar
             </button>
-
-            <button class="btn" onclick="fecharModal()">
+            <button class="btn-cancelar" onclick="fecharModal()">
                 Cancelar
             </button>
-
         </div>
 
     </div>
@@ -573,438 +849,521 @@ input{
 
 <script>
 
-lucide.createIcons()
+function toggleMenu(){
+    document.getElementById("sidebar").classList.toggle("ativo");
+}
 
-let orcamentos = []
-let editandoId = null
+lucide.createIcons();
 
-/* =========================
-   CARREGAR ORÇAMENTOS
-========================= */
+/* =====================
+   ESTADO
+===================== */
+
+const usuario = JSON.parse(localStorage.getItem("usuario"));
+
+if (!usuario || usuario.tipo !== "admin") {
+    window.location.href = "../public/login.html";
+}
+
+let orcamentos = [];
+let eventos = [];
+let itensCardapio = [];
+let itensAdicionados = [];
+let editandoId = null;
+
+/* =====================
+   CARREGAR DADOS
+===================== */
 
 async function carregarOrcamentos() {
 
-    const lista =
-        document.getElementById("listaOrcamentos")
+    try {
 
-    lista.innerHTML = `
-        <div class="orcamento">
-            Carregando orçamentos...
-        </div>
-    `
+        const res = await fetch(
+            `http://localhost:3000/orcamentos?admin_id=${usuario.id}`
+        );
+
+        orcamentos = await res.json();
+
+        if (!Array.isArray(orcamentos)) orcamentos = [];
+
+        renderOrcamentos();
+
+    } catch (err) {
+
+        console.log("Erro ao carregar orçamentos:", err);
+
+        document.getElementById("listaOrcamentos").innerHTML = `
+            <div class="vazio">
+                <p>Erro ao carregar orçamentos. Verifique o servidor.</p>
+            </div>
+        `;
+    }
+}
+
+async function carregarEventos() {
 
     try {
 
-        const resposta =
-            await fetch("http://localhost:3000/orcamentos")
+        const res = await fetch(
+            `http://localhost:3000/eventos?admin_id=${usuario.id}`
+        );
 
-        orcamentos = await resposta.json()
+        eventos = await res.json();
 
-        renderOrcamentos()
+        console.log("ADMIN LOGADO:", usuario.id);
+        console.log("EVENTOS:", eventos);
 
-    } catch (erro) {
+        if (!Array.isArray(eventos)) eventos = [];
 
-        console.log("Erro ao carregar orçamentos", erro)
+        const sel = document.getElementById("selectEvento");
+        sel.innerHTML = `<option value="">Selecione um evento...</option>`;
 
-        lista.innerHTML = `
-            <div class="orcamento">
-                Erro ao carregar orçamentos
-            </div>
-        `
+        eventos.forEach(e => {
+            sel.innerHTML += `
+                <option value="${e.id}">
+                    #${e.id} — ${e.cliente || "Evento"} (${e.tipo || ""})
+                </option>
+            `;
+        });
+
+    } catch (err) {
+        console.log("Erro ao carregar eventos:", err);
+    }
+}
+async function carregarItens() {
+
+    try {
+
+        const res = await fetch("http://localhost:3000/itens");
+
+        itensCardapio = await res.json();
+
+        if (!Array.isArray(itensCardapio)) itensCardapio = [];
+
+        const sel = document.getElementById("selectItem");
+        sel.innerHTML = `<option value="">Selecione um item...</option>`;
+
+        itensCardapio.forEach(i => {
+            sel.innerHTML += `
+                <option value="${i.id}" data-valor="${i.valor}" data-nome="${i.nome}">
+                    ${i.nome} — ${formatarMoeda(i.valor)}
+                </option>
+            `;
+        });
+
+    } catch (err) {
+        console.log("Erro ao carregar itens:", err);
     }
 }
 
-/* =========================
-   RENDERIZAR
-========================= */
+/* =====================
+   RENDERIZAR LISTA
+===================== */
 
-function renderOrcamentos() {
+function renderOrcamentos(lista) {
 
-    const lista =
-        document.getElementById("listaOrcamentos")
+    const dados = lista !== undefined ? lista : orcamentos;
 
-    lista.innerHTML = ""
-
-    if (!orcamentos.length) {
-
-        lista.innerHTML = `
-            <div class="orcamento vazio">
-                Nenhum orçamento encontrado
-            </div>
-        `
-
-        atualizarCards(0, 0, 0)
-
-        return
-    }
-
-    let totalGeral = 0
-    let aguardando = 0
-    let aprovados = 0
-
-    orcamentos.forEach((o) => {
-
-        totalGeral += Number(o.valor_total || 0)
-
-        if (o.status === "pendente") aguardando++
-
-        if (o.status === "aprovado") aprovados++
-
-        lista.innerHTML += `
-
-        <div class="orcamento fade">
-
-            <div class="info">
-
-                <div class="topo">
-
-                    <span class="codigo">
-                        #ORC-${String(o.id).padStart(4, "0")}
-                    </span>
-
-                    <span class="data">
-                        ${formatarData(o.data)}
-                    </span>
-
-                </div>
-
-                <h3>
-                    ${o.cliente || "Cliente não informado"}
-                </h3>
-
-                <p class="tipo-evento">
-                    ${o.tipo || "Evento não informado"}
-                </p>
-
-                <div class="badges">
-
-                    <span class="status ${o.status}">
-                        ${iconeStatus(o.status)}
-                        ${o.status}
-                    </span>
-
-                    <span class="pagamento ${o.status_pagamento}">
-                        💳 ${o.status_pagamento}
-                    </span>
-
-                </div>
-
-            </div>
-
-            <div class="direita">
-
-                <small>Valor Total</small>
-
-                <div class="valor">
-                    ${formatarMoeda(o.valor_total)}
-                </div>
-
-                <div class="acoes">
-
-                    <button class="editar"
-                        onclick="editarOrcamento(${o.id})">
-
-                        <i data-lucide="pencil"></i>
-                    </button>
-
-                    <button class="remover"
-                        onclick="removerOrcamento(${o.id})">
-
-                        <i data-lucide="trash-2"></i>
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        `
-    })
-
-    atualizarCards(totalGeral, aguardando, aprovados)
-
-    lucide.createIcons()
-}
-
-/* =========================
-   ATUALIZAR CARDS
-========================= */
-
-function atualizarCards(totalGeral, aguardando, aprovados) {
-
-    document.getElementById("valorTotal").innerText =
-        formatarMoeda(totalGeral)
-
-    document.getElementById("aguardando").innerText =
-        aguardando
-
-    const taxa =
-        orcamentos.length
-            ? Math.round((aprovados / orcamentos.length) * 100)
-            : 0
-
-    document.getElementById("taxa").innerText =
-        `${taxa}%`
+    const container = document.getElementById("listaOrcamentos");
+    container.innerHTML = "";
 
     document.getElementById("qtdOrcamentos").innerText =
-        `${orcamentos.length} orçamentos encontrados`
+        `${dados.length} orçamento${dados.length !== 1 ? "s" : ""} encontrado${dados.length !== 1 ? "s" : ""}`;
+
+    if (!dados.length) {
+        container.innerHTML = `
+            <div class="vazio">
+                <p>Nenhum orçamento encontrado</p>
+            </div>
+        `;
+        atualizarCards(orcamentos);
+        return;
+    }
+
+    dados.forEach(o => {
+        container.innerHTML += `
+            <div class="orcamento">
+
+                <div class="orc-esquerda">
+
+                    <span class="codigo">#ORC-${String(o.id).padStart(4,"0")}</span>
+
+                    <h3>${o.cliente || "Cliente não informado"}</h3>
+
+                    <p>${o.tipo || "Evento não informado"} ${o.data ? "• " + formatarData(o.data) : ""}</p>
+
+                    <div class="badges">
+                        <span class="status ${o.status || "pendente"}">
+                            ${iconeStatus(o.status)} ${capitalize(o.status || "pendente")}
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="orc-direita">
+
+                    <small>Valor Total</small>
+
+                    <div class="valor">
+                        ${formatarMoeda(o.valor_total)}
+                    </div>
+
+                    <div class="acoes">
+
+                        <button class="btn-icon btn-editar" onclick="editarOrcamento(${o.id})" title="Editar">
+                            <i data-lucide="pencil" style="width:15px;height:15px;"></i>
+                        </button>
+
+                        <button class="btn-icon btn-remover" onclick="removerOrcamento(${o.id})" title="Remover">
+                            <i data-lucide="trash-2" style="width:15px;height:15px;"></i>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+        `;
+    });
+
+    atualizarCards(orcamentos);
+
+    lucide.createIcons();
 }
 
-/* =========================
+function atualizarCards(lista) {
+
+    let total = 0;
+    let aguardando = 0;
+    let aprovados = 0;
+
+    lista.forEach(o => {
+        total += Number(o.valor_total || 0);
+        if (o.status === "pendente") aguardando++;
+        if (o.status === "aprovado") aprovados++;
+    });
+
+    document.getElementById("valorTotal").innerText = formatarMoeda(total);
+    document.getElementById("aguardando").innerText = aguardando;
+
+    const taxa = lista.length
+        ? Math.round((aprovados / lista.length) * 100)
+        : 0;
+
+    document.getElementById("taxa").innerText = `${taxa}%`;
+}
+
+/* =====================
    MODAL
-========================= */
+===================== */
 
 function abrirModal() {
-
-    document.getElementById("modal").style.display = "flex"
+    limparModal();
+    document.getElementById("tituloModal").innerText = "Novo Orçamento";
+    document.getElementById("modal").style.display = "flex";
 }
 
 function fecharModal() {
-
-    document.getElementById("modal").style.display = "none"
-
-    limparFormulario()
+    document.getElementById("modal").style.display = "none";
+    limparModal();
 }
 
-function limparFormulario() {
+function limparModal() {
+    editandoId = null;
+    itensAdicionados = [];
 
-    editandoId = null
+    document.getElementById("selectEvento").value = "";
+    document.getElementById("selectItem").value = "";
+    document.getElementById("inputQtd").value = "1";
+    document.getElementById("selectStatus").value = "pendente";
 
-    document.getElementById("evento").value = ""
-    document.getElementById("itemNome").value = ""
-    document.getElementById("quantidade").value = ""
-    document.getElementById("status").value = "pendente"
-
-    document.getElementById("itens").innerHTML = ""
-
-    document.getElementById("total").innerText = "0"
+    renderItensModal();
 }
-/* =========================
-   CADASTRAR / EDITAR
-========================= */
 
-async function cadastrarOrcamento(event) {
+/* =====================
+   ITENS NO MODAL
+===================== */
 
-    event.preventDefault()
+function adicionarItem() {
 
-    const dados = {
+    const sel = document.getElementById("selectItem");
+    const qtd = parseInt(document.getElementById("inputQtd").value) || 1;
 
-        evento_id:
-            document.getElementById("evento_id").value,
+    const opcao = sel.options[sel.selectedIndex];
 
-        valor_total:
-            document.getElementById("valor_total").value,
-
-        status:
-            document.getElementById("status").value,
-
-        status_pagamento:
-            document.getElementById("status_pagamento").value
+    if (!opcao || !opcao.value) {
+        alert("Selecione um item do cardápio");
+        return;
     }
+
+    const id = Number(opcao.value);
+    const nome = opcao.getAttribute("data-nome");
+    const valor = Number(opcao.getAttribute("data-valor"));
+
+    const existente = itensAdicionados.find(i => i.item_servico_id === id);
+
+    if (existente) {
+        existente.quantidade += qtd;
+    } else {
+        itensAdicionados.push({
+            item_servico_id: id,
+            nome,
+            valor,
+            quantidade: qtd
+        });
+    }
+
+    document.getElementById("selectItem").value = "";
+    document.getElementById("inputQtd").value = "1";
+
+    renderItensModal();
+}
+
+function removerItemModal(index) {
+    itensAdicionados.splice(index, 1);
+    renderItensModal();
+}
+
+function renderItensModal() {
+
+    const container = document.getElementById("listaItens");
+    container.innerHTML = "";
+
+    let total = 0;
+
+    itensAdicionados.forEach((item, idx) => {
+
+        const subtotal = item.valor * item.quantidade;
+        total += subtotal;
+
+        container.innerHTML += `
+            <div class="item-linha">
+                <div>
+                    <strong>${item.nome}</strong>
+                    &nbsp;&nbsp;
+                    <small style="color:var(--muted)">${item.quantidade}x • ${formatarMoeda(item.valor)} cada</small>
+                </div>
+                <span>${formatarMoeda(subtotal)}</span>
+                <button onclick="removerItemModal(${idx})">
+                    <i class="bi bi-x"></i>
+                </button>
+            </div>
+        `;
+    });
+
+    document.getElementById("totalModal").innerText = formatarMoeda(total);
+}
+
+/* =====================
+   SALVAR ORÇAMENTO
+===================== */
+
+async function salvarOrcamento() {
+
+    const evento_id = document.getElementById("selectEvento").value;
+    const status = document.getElementById("selectStatus").value;
+
+    if (!evento_id) {
+        alert("Selecione um evento");
+        return;
+    }
+
+    if (itensAdicionados.length === 0) {
+        alert("Adicione pelo menos um item ao orçamento");
+        return;
+    }
+
+    const total = itensAdicionados.reduce(
+        (acc, i) => acc + (i.valor * i.quantidade), 0
+    );
+
+   const dados = {
+    evento_id: Number(evento_id),
+
+    itens: itensAdicionados.map(i => ({
+        item_servico_id: i.item_servico_id,
+        quantidade: i.quantidade,
+        valor: i.valor
+    })),
+
+    total,
+    status,
+    status_pagamento: "pendente"
+};
 
     try {
 
-        let url = "http://localhost:3000/orcamentos"
-        let metodo = "POST"
+        let url = "http://localhost:3000/orcamentos";
+        let metodo = "POST";
 
         if (editandoId) {
-
-            url += `/${editandoId}`
-            metodo = "PUT"
+            url += `/${editandoId}`;
+            metodo = "PUT";
         }
 
-        const resposta = await fetch(url, {
-
+        const res = await fetch(url, {
             method: metodo,
-
-            headers: {
-                "Content-Type": "application/json"
-            },
-
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(dados)
-        })
+        });
 
-        const resultado = await resposta.json()
+        const resultado = await res.json();
 
-        alert(resultado.mensagem || "Sucesso")
+        if (!res.ok) {
+            alert(resultado.erro || "Erro ao salvar orçamento");
+            return;
+        }
 
-        fecharModal()
+        fecharModal();
+        await carregarOrcamentos();
 
-        carregarOrcamentos()
+        alert(editandoId ? "Orçamento atualizado!" : "Orçamento criado!");
 
-    } catch (erro) {
-
-        console.log(erro)
-
-        alert("Erro ao salvar orçamento")
+    } catch (err) {
+        console.log("Erro:", err);
+        alert("Erro ao conectar com o servidor");
     }
 }
 
-/* =========================
-   EDITAR
-========================= */
+/* =====================
+   EDITAR ORÇAMENTO
+===================== */
 
-function editarOrcamento(id) {
+async function editarOrcamento(id) {
 
-    const o =
-        orcamentos.find(item => item.id === id)
+    const o = orcamentos.find(item => item.id === id);
 
-    if (!o) return
+    if (!o) return;
 
-    editandoId = id
+    editandoId = id;
 
-    document.getElementById("evento_id").value =
-        o.evento_id
+    document.getElementById("tituloModal").innerText =
+        "Editar Orçamento";
 
-    document.getElementById("valor_total").value =
-        o.valor_total
+    document.getElementById("selectEvento").value =
+        o.evento_id || "";
 
-    document.getElementById("status").value =
-        o.status
+    document.getElementById("selectStatus").value =
+        o.status || "pendente";
 
-    document.getElementById("status_pagamento").value =
-        o.status_pagamento
+    try {
 
-    abrirModal()
+        const res = await fetch(
+            `http://localhost:3000/orcamentos/${id}`
+        );
+
+        const itens = await res.json();
+
+        itensAdicionados = itens.map(i => ({
+            item_servico_id: i.item_servico_id,
+            nome: i.nome,
+            valor: Number(i.valor),
+            quantidade: i.quantidade
+        }));
+
+        renderItensModal();
+
+        document.getElementById("modal").style.display = "flex";
+
+    } catch (err) {
+
+        console.log(err);
+        alert("Erro ao carregar itens do orçamento");
+    }
 }
 
-/* =========================
-   REMOVER
-========================= */
+
+/* =====================
+   REMOVER ORÇAMENTO
+===================== */
 
 async function removerOrcamento(id) {
 
-    const confirmar =
-        confirm("Deseja remover este orçamento?")
-
-    if (!confirmar) return
+    if (!confirm("Deseja remover este orçamento?")) return;
 
     try {
 
-        await fetch(`http://localhost:3000/orcamentos/${id}`, {
+        const res = await fetch(`http://localhost:3000/orcamentos/${id}`, {
             method: "DELETE"
-        })
+        });
 
-        carregarOrcamentos()
+        if (res.ok) {
+            await carregarOrcamentos();
+        } else {
+            alert("Erro ao remover orçamento");
+        }
 
-    } catch (erro) {
-
-        console.log(erro)
-
-        alert("Erro ao remover orçamento")
+    } catch (err) {
+        console.log(err);
+        alert("Erro ao remover orçamento");
     }
 }
 
-/* =========================
+/* =====================
+   PESQUISA
+===================== */
+
+function pesquisar(termo) {
+
+    if (!termo.trim()) {
+        renderOrcamentos(orcamentos);
+        return;
+    }
+
+    const t = termo.toLowerCase();
+
+    const filtrados = orcamentos.filter(o =>
+        (o.cliente || "").toLowerCase().includes(t) ||
+        (o.tipo || "").toLowerCase().includes(t) ||
+        (o.status || "").toLowerCase().includes(t)
+    );
+
+    renderOrcamentos(filtrados);
+}
+
+/* =====================
    UTILITÁRIOS
-========================= */
+===================== */
 
 function formatarMoeda(valor) {
-
-    return Number(valor).toLocaleString("pt-BR", {
+    return Number(valor || 0).toLocaleString("pt-BR", {
         style: "currency",
         currency: "BRL"
-    })
+    });
 }
 
 function formatarData(data) {
-
-    if (!data) return "Sem data"
-
-    return new Date(data).toLocaleDateString("pt-BR")
+    if (!data) return "";
+    return new Date(data).toLocaleDateString("pt-BR");
 }
 
 function iconeStatus(status) {
-
-    if (status === "aprovado") return "✅"
-
-    if (status === "pendente") return "⏳"
-
-    if (status === "recusado") return "❌"
-
-    return ""
+    if (status === "aprovado") return "✅";
+    if (status === "pendente") return "⏳";
+    if (status === "recusado") return "❌";
+    return "";
 }
 
-/* =========================
-   PESQUISA
-========================= */
-
-function pesquisarOrcamentos() {
-
-    const termo =
-        document.getElementById("pesquisa").value.toLowerCase()
-
-    const filtrados =
-        orcamentos.filter(o =>
-
-            o.cliente?.toLowerCase().includes(termo) ||
-            o.tipo?.toLowerCase().includes(termo) ||
-            o.status?.toLowerCase().includes(termo)
-        )
-
-    renderListaFiltrada(filtrados)
+function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-function renderListaFiltrada(listaFiltrada) {
+/* =====================
+   INICIALIZAR
+===================== */
 
-    const lista =
-        document.getElementById("listaOrcamentos")
-
-    lista.innerHTML = ""
-
-    if (!listaFiltrada.length) {
-
-        lista.innerHTML = `
-            <div class="orcamento vazio">
-                Nenhum resultado encontrado
-            </div>
-        `
-
-        return
-    }
-
-    listaFiltrada.forEach((o) => {
-
-        lista.innerHTML += `
-
-        <div class="orcamento">
-
-            <div class="info">
-
-                <span class="codigo">
-                    #ORC-${String(o.id).padStart(4, "0")}
-                </span>
-
-                <h3>
-                    ${o.cliente}
-                </h3>
-
-                <p>
-                    ${o.tipo}
-                </p>
-
-            </div>
-
-            <div class="direita">
-
-                <div class="valor">
-                    ${formatarMoeda(o.valor_total)}
-                </div>
-
-            </div>
-
-        </div>
-
-        `
-    })
+async function init() {
+    await Promise.all([
+        carregarOrcamentos(),
+        carregarEventos(),
+        carregarItens()
+    ]);
+    lucide.createIcons();
 }
 
-/* =========================
-   INICIAR
-========================= */
+init();
 
-carregarOrcamentos()
 
 </script>
 

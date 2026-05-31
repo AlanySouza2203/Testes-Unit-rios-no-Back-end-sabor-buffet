@@ -50,7 +50,7 @@ text-transform:uppercase;
 }
 
 .logo span{
-color:#d4a762;
+color:#a87b09;
 }
 
 nav{
@@ -72,7 +72,7 @@ left:0;
 bottom:-5px;
 width:0%;
 height:2px;
-background:#d4a762;
+background:#a87b09;
 transition:0.3s;
 }
 
@@ -101,9 +101,6 @@ font-weight:800;
 line-height:1.2;
 }
 
-.hero-text h1 span{
-color:#d4a762;
-}
 
 .hero-text p{
 margin:20px 0;
@@ -112,7 +109,7 @@ font-size:18px;
 }
 
 .hero-text button{
-background:#d4a762;
+background:#a87b09;
 color:black;
 border:none;
 padding:14px 32px;
@@ -337,60 +334,7 @@ gap:12px;
 color:#d4a762;
 }
 
-/* CONTATO */
 
-.contato{
-padding:100px 10%;
-background:#f8f5ef;
-color:#222;
-}
-
-.contato h2{
-font-size:52px;
-margin:15px 0 25px;
-font-family:Georgia, serif;
-}
-
-.contato h2 span{
-color:#d4a762;
-font-style:italic;
-}
-
-.contato p{
-font-size:18px;
-color:#555;
-margin-bottom:40px;
-max-width:700px;
-line-height:1.8;
-}
-
-.contato-info{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:30px;
-}
-
-.info-item{
-display:flex;
-align-items:flex-start;
-gap:15px;
-}
-
-.info-item i{
-font-size:22px;
-color:#d4a762;
-margin-top:5px;
-}
-
-.info-item h4{
-font-size:20px;
-margin-bottom:8px;
-}
-
-.info-item span{
-color:#555;
-line-height:1.6;
-}
 
 /* FOOTER */
 
@@ -433,43 +377,337 @@ align-items:center;
 justify-content:center;
 border-radius:50%;
 font-size:20px;
-color:white;
+
+background:#fff;
+color:#000;
+
 text-decoration:none;
 transition:0.4s;
+border:1px solid #333;
 }
 
-.instagram{background:#e1306c;}
-.tiktok{background:#000;}
-.facebook{background:#1877f2;}
-
 .social:hover{
+background:#000;
+color:#fff;
 transform:translateY(-5px) scale(1.1);
 }
 
-/* RESPONSIVO */
 
-@media(max-width:900px){
+/* ===== TONS DOURADOS ===== */
 
+:root{
+--gold-1:#a87b09;
+--gold-2:#a87b09;
+--gold-3:#a87b09;
+--gold-4:#a87b09;
+--gold-5:#a87b09;
+}
+
+
+
+/* LOGO */
+
+.logo span{
+color:#FFD700;
+
+text-shadow:
+0 0 10px rgba(255,215,0,.5),
+0 0 25px rgba(255,215,0,.3);
+}
+
+/* HERO */
+
+.hero-text h1 span{
+color:#FFD700;
+
+text-shadow:
+0 0 15px rgba(255,215,0,.4);
+}
+/* HERO */
+
+.hero-text h1 span{
+color:#FFD700;
+
+text-shadow:
+0 0 15px rgba(255,215,0,.4);
+}
+
+/* A ARTE DOS SABORES */
+.variedades h2{
+font-size:48px;
+margin-bottom:50px;
+
+color:#FFD700;
+
+text-shadow:
+0 0 20px rgba(255,215,0,.4);
+}
+
+/* CARDS */
+
+.categoria{
+background:#131313;
+color:white;
+
+border:1px solid rgba(255,215,0,.15);
+}
+
+.categoria h3{
+color:var(--gold-2);
+}
+
+.categoria p{
+color:#ccc;
+}
+
+.categoria:hover{
+border-color:var(--gold-1);
+
+box-shadow:
+0 0 15px rgba(255,215,0,.4),
+0 0 40px rgba(255,215,0,.2);
+}
+
+/* DETALHES DOURADOS */
+
+.subtitulo,
+.sobre-texto h2 span,
+.contato h2 span,
+.info-item i,
+.beneficios i,
+.footer-logo{
+
+color:var(--gold-2);
+
+}
+
+/* BADGE */
+
+.badge-premium{
+
+background:
+linear-gradient(
+135deg,
+var(--gold-1),
+var(--gold-5)
+);
+
+}
+/* CONTATO */
+
+.contato{
+padding:100px 10%;
+background:#f1efea;
+color:#222;
+}
+
+.contato h2{
+font-size:52px;
+margin:15px 0 25px;
+font-family:Georgia, serif;
+color:#111;
+}
+
+.contato h2 span{
+color:#d4a762;
+font-style:italic;
+}
+
+.contato p{
+font-size:18px;
+color:#555;
+margin-bottom:50px;
+max-width:700px;
+line-height:1.8;
+}
+
+/* GRID DOS CARDS */
+
+.contato-info{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:30px;
+margin-top:40px;
+}
+
+/* CARD */
+
+.info-item{
+background:#faf8f3;
+border:1px solid rgba(212,167,98,0.5);
+border-radius:18px;
+padding:35px 30px;
+
+display:flex;
+align-items:flex-start;
+gap:18px;
+
+transition:0.4s;
+position:relative;
+overflow:hidden;
+
+box-shadow:
+0 10px 25px rgba(0,0,0,0.05);
+}
+
+/* EFEITO HOVER */
+
+.info-item:hover{
+transform:translateY(-8px);
+
+border-color:#d4a762;
+
+box-shadow:
+0 15px 35px rgba(212,167,98,0.2);
+}
+
+/* ÍCONES */
+
+.info-item i{
+font-size:30px;
+color:#d4a762;
+margin-top:3px;
+min-width:35px;
+}
+
+/* TÍTULOS */
+
+.info-item h4{
+font-size:22px;
+margin-bottom:10px;
+color:#111;
+font-weight:800;
+}
+
+/* TEXTOS */
+
+.info-item span{
+color:#666;
+line-height:1.7;
+font-size:16px;
+}
+
+/* LINHA DOURADA NO TOPO */
+
+.info-item::before{
+content:"";
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:4px;
+
+background:linear-gradient(
+90deg,
+#d4a762,
+#d4a762,
+#d4a762
+);
+}
+/* MENU MOBILE */
+
+.menu-mobile{
+
+display:none;
+
+position:fixed;
+
+top:20px;
+right:20px;
+
+width:55px;
+height:55px;
+
+border:none;
+border-radius:14px;
+
+background:#FFD700;
+color:#000;
+
+font-size:30px;
+
+cursor:pointer;
+
+z-index:9999;
+
+align-items:center;
+justify-content:center;
+
+box-shadow:
+0 10px 25px rgba(0,0,0,.4);
+}
+
+/* RESPONSIVIDADE */
+
+@media(max-width:768px){
+
+header{
+padding:20px 6%;
+}
+
+/* BOTÃO APARECE */
+.menu-mobile{
+display:flex;
+}
+
+/* MENU ESCONDIDO */
+nav{
+position:absolute;
+top:90px;
+right:20px;
+
+background:rgba(0,0,0,0.95);
+
+flex-direction:column;
+padding:20px;
+
+border-radius:12px;
+
+width:220px;
+
+display:none;
+
+box-shadow:
+0 10px 30px rgba(0,0,0,.5);
+
+border:1px solid rgba(255,215,0,.2);
+}
+
+/* MENU QUANDO ABRIR */
+nav.ativo{
+display:flex;
+}
+
+/* LINKS */
+nav a{
+padding:12px 0;
+font-size:16px;
+border-bottom:1px solid rgba(255,255,255,.1);
+}
+
+nav a:last-child{
+border-bottom:none;
+}
+
+/* HERO */
 .hero-text h1{
 font-size:42px;
 }
 
+.hero-text p{
+font-size:16px;
+}
+
+/* SOBRE */
 .sobre-texto h2,
 .contato h2{
-font-size:38px;
+font-size:34px;
 }
 
-.img-secundaria{
-position:relative;
-bottom:0;
-right:0;
-margin-top:20px;
-width:160px;
-height:160px;
-}
-
-nav{
-gap:15px;
+/* FOOTER */
+.footer-content{
+justify-content:center;
+gap:20px;
 }
 
 }
@@ -480,9 +718,16 @@ gap:15px;
 <body>
 
 <header>
+
 <div class="logo">Sabor & <span>Arte</span></div>
 
-<nav>
+<!-- BOTÃO MENU MOBILE -->
+<button class="menu-mobile" onclick="abrirMenu()">
+  <i class="bi bi-list"></i>
+</button>
+
+<nav id="menu">
+
   <a href="#sobre">
     <i class="bi bi-info-circle"></i> Sobre
   </a>
@@ -491,10 +736,12 @@ gap:15px;
     <i class="bi bi-telephone-fill"></i> Contato
   </a>
 
-  <a href="/public/login.html">
+  <a href="./login.html">
     <i class="bi bi-person"></i> Registrar-se
   </a>
+
 </nav>
+
 </header>
 
 <section class="hero">
@@ -502,7 +749,7 @@ gap:15px;
 <h1>O Verdadeiro <br><span>Sabor Premium</span></h1>
 <p>Mais que uma Refeição, uma Experiência</p>
 
-<a href="/public/cardapio.html">
+<a href="./cardapio.html">
 <button>Conheça nosso cardápio</button>
 </a>
 </div>
@@ -656,15 +903,15 @@ utilizando ingredientes frescos e selecionados.
 
 <div class="footer-social">
 
-<a href="#" class="social instagram">
+<a href="#" class="social">
 <i class="fa-brands fa-instagram"></i>
 </a>
 
-<a href="#" class="social tiktok">
-<i class="fa-brands fa-tiktok"></i>
+<a href="#" class="social">
+<i class="fa-brands fa-whatsapp"></i>
 </a>
 
-<a href="#" class="social facebook">
+<a href="#" class="social">
 <i class="fa-brands fa-facebook-f"></i>
 </a>
 
@@ -674,6 +921,17 @@ utilizando ingredientes frescos e selecionados.
 <p class="copy">© 2026 Sabor & Arte</p>
 
 </footer>
+<script>
+
+function abrirMenu(){
+
+const menu = document.getElementById("menu");
+
+menu.classList.toggle("ativo");
+
+}
+
+</script>
 
 </body>
 </html>
