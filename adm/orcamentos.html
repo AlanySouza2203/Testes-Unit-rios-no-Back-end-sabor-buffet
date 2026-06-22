@@ -732,10 +732,7 @@ body{
                 <p id="qtdOrcamentos">0 orçamentos encontrados</p>
             </div>
 
-            <button class="btn" onclick="abrirModal()">
-                <i data-lucide="plus"></i>
-                Novo Orçamento
-            </button>
+        
 
         </div>
 
@@ -781,62 +778,55 @@ body{
 
 </div>
 
-<!-- MODAL NOVO/EDITAR ORÇAMENTO -->
+<!-- MODAL EDITAR STATUS DO ORÇAMENTO -->
 <div class="modal" id="modal">
 
     <div class="modal-content">
 
-        <h2 id="tituloModal">Novo Orçamento</h2>
+        <h2 id="tituloModal">Editar Status do Orçamento</h2>
 
-        <!-- EVENTO -->
+        <!-- INFORMAÇÕES  -->
         <div class="campo">
-            <label>Evento</label>
-            <select id="selectEvento">
-                <option value="">Carregando eventos...</option>
-            </select>
+            <label>Cliente</label>
+            <input type="text" id="infoCliente" readonly style="background:var(--sidebar);cursor:not-allowed;">
         </div>
 
-        <!-- ADICIONAR ITEM -->
-        <div class="row-campos">
-            <div class="campo">
-                <label>Item do cardápio</label>
-                <select id="selectItem">
-                    <option value="">Selecione um item...</option>
-                </select>
-            </div>
-            <div class="campo">
-                <label>Quantidade</label>
-                <input type="number" id="inputQtd" placeholder="1" min="1" value="1">
-            </div>
+        <div class="campo">
+            <label>Tipo de Evento</label>
+            <input type="text" id="infoEvento" readonly style="background:var(--sidebar);cursor:not-allowed;">
         </div>
 
-        <button class="btn-add-item" onclick="adicionarItem()">
-            + Adicionar item
-        </button>
+        <div class="campo">
+            <label>Data do Evento</label>
+            <input type="text" id="infoData" readonly style="background:var(--sidebar);cursor:not-allowed;">
+        </div>
 
-        <!-- ITENS ADICIONADOS -->
-        <div class="lista-itens" id="listaItens"></div>
+        <!-- RESUMO DOS ITENS -->
+        <div class="campo">
+            <label>Itens</label>
+            <div id="infoItens" style="background:var(--sidebar);padding:14px;border-radius:10px;color:var(--muted);max-height:150px;overflow-y:auto;"></div>
+        </div>
 
         <!-- TOTAL -->
         <div class="total-box">
-            <span>Total do orçamento</span>
-            <span id="totalModal">R$ 0,00</span>
+            <span>Valor Total</span>
+            <span id="infoTotal" style="font-size:20px;color:var(--yellow);">R$ 0,00</span>
         </div>
 
         <!-- STATUS -->
         <div class="campo">
             <label>Status</label>
             <select id="selectStatus">
-                <option value="pendente">Pendente</option>
-                <option value="aprovado">Aprovado</option>
-                <option value="recusado">Recusado</option>
+                <option value="pendente">⏳ Pendente</option>
+                <option value="aprovado">✅ Aprovado</option>
+                <option value="recusado">❌ Recusado</option>
             </select>
         </div>
 
         <!-- BOTÕES -->
         <div class="modal-botoes">
-            <button class="btn" onclick="salvarOrcamento()">
-                Salvar
+            <button class="btn" onclick="salvarStatusOrcamento()">
+                Atualizar Status
             </button>
             <button class="btn-cancelar" onclick="fecharModal()">
                 Cancelar
@@ -879,11 +869,13 @@ async function carregarOrcamentos() {
 
     try {
 
-        const res = await fetch(
-            `http://localhost:3000/orcamentos?admin_id=${usuario.id}`
-        );
+        console.log("Carregando orçamentos...");
+
+        const res = await fetch("http://localhost:3000/orcamentos");
 
         orcamentos = await res.json();
+
+        console.log("Orçamentos carregados:", orcamentos);
 
         if (!Array.isArray(orcamentos)) orcamentos = [];
 
@@ -905,21 +897,28 @@ async function carregarEventos() {
 
     try {
 
+        console.log("Carregando eventos para admin_id:", usuario.id);
+
         const res = await fetch(
             `http://localhost:3000/eventos?admin_id=${usuario.id}`
         );
 
         eventos = await res.json();
 
-        console.log("ADMIN LOGADO:", usuario.id);
-        console.log("EVENTOS:", eventos);
+        console.log("Eventos carregados:", eventos);
 
         if (!Array.isArray(eventos)) eventos = [];
 
         const sel = document.getElementById("selectEvento");
         sel.innerHTML = `<option value="">Selecione um evento...</option>`;
 
+        if (eventos.length === 0) {
+            console.warn("Nenhum evento carregado para admin_id:", usuario.id);
+            sel.innerHTML += `<option value="" disabled>Nenhum evento disponível</option>`;
+        }
+
         eventos.forEach(e => {
+            console.log("Adicionando evento:", e.id, e.cliente, e.tipo);
             sel.innerHTML += `
                 <option value="${e.id}">
                     #${e.id} — ${e.cliente || "Evento"} (${e.tipo || ""})
@@ -928,7 +927,7 @@ async function carregarEventos() {
         });
 
     } catch (err) {
-        console.log("Erro ao carregar eventos:", err);
+        console.error("Erro ao carregar eventos:", err);
     }
 }
 async function carregarItens() {
@@ -965,6 +964,10 @@ function renderOrcamentos(lista) {
 
     const dados = lista !== undefined ? lista : orcamentos;
 
+    console.log("=== RENDERIZANDO ===");
+    console.log("Quantidade de orçamentos a renderizar:", dados.length);
+    console.log("Dados:", dados);
+
     const container = document.getElementById("listaOrcamentos");
     container.innerHTML = "";
 
@@ -982,6 +985,7 @@ function renderOrcamentos(lista) {
     }
 
     dados.forEach(o => {
+        console.log("Renderizando orçamento:", o.id, o.cliente);
         container.innerHTML += `
             <div class="orcamento">
 
@@ -1011,12 +1015,8 @@ function renderOrcamentos(lista) {
 
                     <div class="acoes">
 
-                        <button class="btn-icon btn-editar" onclick="editarOrcamento(${o.id})" title="Editar">
+                        <button class="btn-icon btn-editar" onclick="editarOrcamento(${o.id})" title="Editar Status">
                             <i data-lucide="pencil" style="width:15px;height:15px;"></i>
-                        </button>
-
-                        <button class="btn-icon btn-remover" onclick="removerOrcamento(${o.id})" title="Remover">
-                            <i data-lucide="trash-2" style="width:15px;height:15px;"></i>
                         </button>
 
                     </div>
@@ -1028,6 +1028,8 @@ function renderOrcamentos(lista) {
     });
 
     atualizarCards(orcamentos);
+
+    console.log("Renderização concluída!");
 
     lucide.createIcons();
 }
@@ -1058,246 +1060,150 @@ function atualizarCards(lista) {
    MODAL
 ===================== */
 
-function abrirModal() {
-    limparModal();
-    document.getElementById("tituloModal").innerText = "Novo Orçamento";
-    document.getElementById("modal").style.display = "flex";
-}
-
 function fecharModal() {
     document.getElementById("modal").style.display = "none";
-    limparModal();
-}
-
-function limparModal() {
-    editandoId = null;
-    itensAdicionados = [];
-
-    document.getElementById("selectEvento").value = "";
-    document.getElementById("selectItem").value = "";
-    document.getElementById("inputQtd").value = "1";
-    document.getElementById("selectStatus").value = "pendente";
-
-    renderItensModal();
 }
 
 /* =====================
-   ITENS NO MODAL
+   ITENS NO MODAL (DESCONTINUADO)
 ===================== */
 
+// As funções abaixo não são mais usadas
+// Os itens são agora apenas exibidos (read-only)
+
 function adicionarItem() {
-
-    const sel = document.getElementById("selectItem");
-    const qtd = parseInt(document.getElementById("inputQtd").value) || 1;
-
-    const opcao = sel.options[sel.selectedIndex];
-
-    if (!opcao || !opcao.value) {
-        alert("Selecione um item do cardápio");
-        return;
-    }
-
-    const id = Number(opcao.value);
-    const nome = opcao.getAttribute("data-nome");
-    const valor = Number(opcao.getAttribute("data-valor"));
-
-    const existente = itensAdicionados.find(i => i.item_servico_id === id);
-
-    if (existente) {
-        existente.quantidade += qtd;
-    } else {
-        itensAdicionados.push({
-            item_servico_id: id,
-            nome,
-            valor,
-            quantidade: qtd
-        });
-    }
-
-    document.getElementById("selectItem").value = "";
-    document.getElementById("inputQtd").value = "1";
-
-    renderItensModal();
+    // Função descontinuada - itens são criados automaticamente com o cliente
 }
 
 function removerItemModal(index) {
-    itensAdicionados.splice(index, 1);
-    renderItensModal();
+    // Função descontinuada - itens não podem ser removidos
 }
 
 function renderItensModal() {
-
-    const container = document.getElementById("listaItens");
-    container.innerHTML = "";
-
-    let total = 0;
-
-    itensAdicionados.forEach((item, idx) => {
-
-        const subtotal = item.valor * item.quantidade;
-        total += subtotal;
-
-        container.innerHTML += `
-            <div class="item-linha">
-                <div>
-                    <strong>${item.nome}</strong>
-                    &nbsp;&nbsp;
-                    <small style="color:var(--muted)">${item.quantidade}x • ${formatarMoeda(item.valor)} cada</small>
-                </div>
-                <span>${formatarMoeda(subtotal)}</span>
-                <button onclick="removerItemModal(${idx})">
-                    <i class="bi bi-x"></i>
-                </button>
-            </div>
-        `;
-    });
-
-    document.getElementById("totalModal").innerText = formatarMoeda(total);
+    // Função descontinuada - usar renderInfoItens() em seu lugar
 }
 
 /* =====================
-   SALVAR ORÇAMENTO
+   SALVAR STATUS DO ORÇAMENTO
 ===================== */
 
-async function salvarOrcamento() {
+async function salvarStatusOrcamento() {
 
-    const evento_id = document.getElementById("selectEvento").value;
     const status = document.getElementById("selectStatus").value;
 
-    if (!evento_id) {
-        alert("Selecione um evento");
+    console.log("=== ATUALIZANDO STATUS ===");
+    console.log("Orçamento ID:", editandoId);
+    console.log("Novo status:", status);
+
+    if (!editandoId) {
+        alert("Erro: orçamento não identificado");
         return;
     }
-
-    if (itensAdicionados.length === 0) {
-        alert("Adicione pelo menos um item ao orçamento");
-        return;
-    }
-
-    const total = itensAdicionados.reduce(
-        (acc, i) => acc + (i.valor * i.quantidade), 0
-    );
-
-   const dados = {
-    evento_id: Number(evento_id),
-
-    itens: itensAdicionados.map(i => ({
-        item_servico_id: i.item_servico_id,
-        quantidade: i.quantidade,
-        valor: i.valor
-    })),
-
-    total,
-    status,
-    status_pagamento: "pendente"
-};
 
     try {
-
-        let url = "http://localhost:3000/orcamentos";
-        let metodo = "POST";
-
-        if (editandoId) {
-            url += `/${editandoId}`;
-            metodo = "PUT";
-        }
-
-        const res = await fetch(url, {
-            method: metodo,
+        const res = await fetch(`http://localhost:3000/orcamentos/${editandoId}`, {
+            method: "PUT",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(dados)
+            body: JSON.stringify({ status: status }) // Enviamos apenas o status
         });
 
         const resultado = await res.json();
 
         if (!res.ok) {
-            alert(resultado.erro || "Erro ao salvar orçamento");
+            alert(resultado.erro || "Erro ao atualizar status");
             return;
         }
 
+        console.log("Status atualizado com sucesso!");
         fecharModal();
         await carregarOrcamentos();
-
-        alert(editandoId ? "Orçamento atualizado!" : "Orçamento criado!");
+        alert("Status atualizado!");
 
     } catch (err) {
-        console.log("Erro:", err);
-        alert("Erro ao conectar com o servidor");
+        console.error("ERRO:", err);
+        alert("Erro ao conectar com o servidor: " + err.message);
     }
 }
 
+
+
 /* =====================
-   EDITAR ORÇAMENTO
+   EDITAR STATUS ORÇAMENTO
 ===================== */
 
 async function editarOrcamento(id) {
-
+    console.log("=== EDITANDO ORÇAMENTO ID:", id);
+    
     const o = orcamentos.find(item => item.id === id);
+    if (!o) {
+        console.error("Orçamento não encontrado na lista:", id);
+        alert("Orçamento não encontrado");
+        return;
+    }
 
-    if (!o) return;
+    console.log("Orçamento encontrado:", o);
 
     editandoId = id;
-
-    document.getElementById("tituloModal").innerText =
-        "Editar Orçamento";
-
-    document.getElementById("selectEvento").value =
-        o.evento_id || "";
-
-    document.getElementById("selectStatus").value =
-        o.status || "pendente";
+    
+    // PREENCHER CAMPOS READ-ONLY
+    document.getElementById("infoCliente").value = o.cliente || "Cliente não informado";
+    document.getElementById("infoEvento").value = o.tipo || "Evento não informado";
+    document.getElementById("infoData").value = o.data ? new Date(o.data).toLocaleDateString("pt-BR") : "Data não informada";
+    document.getElementById("selectStatus").value = o.status || "pendente";
+    document.getElementById("infoTotal").innerText = formatarMoeda(o.valor_total || 0);
 
     try {
-
-        const res = await fetch(
-            `http://localhost:3000/orcamentos/${id}`
-        );
-
+        // Buscar itens do orçamento
+        console.log("Buscando itens do orçamento...");
+        const res = await fetch(`http://localhost:3000/orcamentos/${id}`);
+        
+        if (!res.ok) {
+            throw new Error(`Erro HTTP: ${res.status}`);
+        }
+        
         const itens = await res.json();
+        console.log("Itens recebidos:", itens);
 
-        itensAdicionados = itens.map(i => ({
-            item_servico_id: i.item_servico_id,
-            nome: i.nome,
-            valor: Number(i.valor),
-            quantidade: i.quantidade
-        }));
+        // Renderizar itens em modo read-only
+        const containerItens = document.getElementById("infoItens");
+        containerItens.innerHTML = "";
 
-        renderItensModal();
-
+        if (!itens || itens.length === 0) {
+            containerItens.innerHTML = `<p style="color:var(--muted);">Nenhum item neste orçamento</p>`;
+        } else {
+            itens.forEach((item, idx) => {
+                const subtotal = item.valor * item.quantidade;
+                containerItens.innerHTML += `
+                    <div style="margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border);">
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <div>
+                                <strong style="color:white;">${item.nome}</strong><br>
+                                <small>${item.quantidade}x • ${formatarMoeda(item.valor)} cada</small>
+                            </div>
+                            <strong style="color:var(--yellow);">${formatarMoeda(subtotal)}</strong>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        
+        // Abrir modal
         document.getElementById("modal").style.display = "flex";
+        console.log("Modal aberto");
 
     } catch (err) {
-
-        console.log(err);
-        alert("Erro ao carregar itens do orçamento");
+        console.error("ERRO:", err);
+        alert("Erro ao carregar itens do orçamento: " + err.message);
     }
 }
 
-
 /* =====================
-   REMOVER ORÇAMENTO
+   REMOVER ORÇAMENTO (DESATIVADO)
 ===================== */
 
 async function removerOrcamento(id) {
-
-    if (!confirm("Deseja remover este orçamento?")) return;
-
-    try {
-
-        const res = await fetch(`http://localhost:3000/orcamentos/${id}`, {
-            method: "DELETE"
-        });
-
-        if (res.ok) {
-            await carregarOrcamentos();
-        } else {
-            alert("Erro ao remover orçamento");
-        }
-
-    } catch (err) {
-        console.log(err);
-        alert("Erro ao remover orçamento");
-    }
+    // Orçamentos não devem ser removidos - foram criados com o cliente
+    alert("Orçamentos não podem ser removidos. Altere o status para 'Recusado' se necessário.");
 }
 
 /* =====================
@@ -1339,9 +1245,9 @@ function formatarData(data) {
 }
 
 function iconeStatus(status) {
-    if (status === "aprovado") return "✅";
-    if (status === "pendente") return "⏳";
-    if (status === "recusado") return "❌";
+    if (status === "aprovado") return "";
+    if (status === "pendente") return "";
+    if (status === "recusado") return "";
     return "";
 }
 
@@ -1354,11 +1260,7 @@ function capitalize(str) {
 ===================== */
 
 async function init() {
-    await Promise.all([
-        carregarOrcamentos(),
-        carregarEventos(),
-        carregarItens()
-    ]);
+    await carregarOrcamentos();
     lucide.createIcons();
 }
 

@@ -11,6 +11,148 @@
   --dourado:#d4a762;
   --cinza:#f3f4f6;
 }
+/* Estilos do pacote personalizado copiados do index.html */
+.novo-pacote {
+    width:300px;
+    background:#fff;
+    border:1px solid rgba(0,0,0,.1);
+    border-radius:18px;
+    padding:25px;
+    position:relative;
+}
+
+.novo-pacote.destaque{
+    border:2px solid var(--dourado);
+}
+
+.novo-pacote .tag{
+    position:absolute;
+    top:-12px;
+    left:50%;
+    transform:translateX(-50%);
+    background:var(--dourado);
+    color:#000;
+    font-size:11px;
+    padding:6px 14px;
+    border-radius:20px;
+    font-weight:bold;
+}
+
+.novo-pacote h3{
+    text-align:center;
+    font-size:28px;
+}
+
+.novo-pacote small{
+    display:block;
+    text-align:center;
+    color:#999;
+}
+
+.valor{
+    text-align:center;
+    font-size:38px;
+    color:var(--dourado);
+    font-weight:bold;
+    margin:15px 0;
+}
+
+.categoria-personalizada{
+    background:#f9fafb;
+    border-radius:12px;
+    margin-bottom:10px;
+    padding:16px;
+    min-height:58px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border:1px solid #eee;
+    transition:.3s;
+    cursor: pointer;
+}
+
+.categoria-personalizada:hover{
+    border-color:var(--dourado);
+}
+
+.total-box{
+    margin-top:18px;
+    padding:18px;
+    border-radius:14px;
+    border:1px solid rgba(212,167,98,.35);
+}
+
+.total-box h2{
+    font-size:40px;
+    color:var(--dourado);
+    margin:8px 0;
+}
+
+.total-box span{
+    color:var(--dourado);
+    font-weight:600;
+}
+.categoria-box{
+    margin-bottom:12px;
+}
+
+.seta{
+    transition:.3s;
+    color:var(--dourado);
+}
+
+.categoria-box.aberta .seta{
+    transform:rotate(180deg);
+}
+
+.opcoes-categoria{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .4s ease;
+    background:#f9fafb;
+    border-radius:12px;
+}
+
+.categoria-box.aberta .opcoes-categoria{
+    max-height:600px;
+    padding:10px;
+}
+
+.opcao-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px;
+    margin-bottom:8px;
+    border:1px solid #eee;
+    border-radius:10px;
+    background:#fff;
+}
+
+/* Botão do Pacote Personalizado */
+.btn-personalizado {
+    width: 100%;
+    margin-top: 20px;
+    border: none;
+    background: var(--dourado);
+    color: #000;
+    padding: 14px;
+    border-radius: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.btn-personalizado:hover {
+    transform: translateY(-2px);
+}
+
+/* Estilo do botão personalizado quando selecionado */
+.btn-personalizado.selecionado {
+    background: #22c55e; /* Verde */
+    color: #fff;
+}
+
 
 /* RESET */
 *{
@@ -388,6 +530,134 @@ li{
       </ul>
     </div>
 
+    <!-- PACOTE PERSONALIZADO -->
+    <div class="novo-pacote destaque">
+      <div class="tag">Monte seu Pacote</div>
+      <h3>Personalizado</h3>
+      <small>Crie seu pacote sob medida</small>
+
+      <div class="categorias-personalizadas">
+        <!-- GASTRONOMIA -->
+        <div class="categoria-box">
+          <div class="categoria-personalizada" onclick="toggleCategoria(this)">
+
+            <div>
+              <i class="bi bi-fork-knife"></i> Gastronomia
+              <span>(0 selecionados)</span>
+            </div>
+            <i class="bi bi-chevron-down seta"></i>
+          </div>
+          <div class="opcoes-categoria">
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Coquetel Básico (3 opções)</label><span>R$ 800</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Coquetel Premium (6 opções)</label><span>R$ 1500</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Coquetel Gourmet (10 opções)</label><span>R$ 2500</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Jantar 3 Etapas</label><span>R$ 1200</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Jantar 4 Etapas</label><span>R$ 1800</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Jantar 5 Etapas Harmonizado</label><span>R$ 2800</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Bolo Personalizado Simples</label><span>R$ 400</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Bolo Decorado Personalizado</label><span>R$ 700</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Bolo Cenográfico Exclusivo</label><span>R$ 1200</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Mesa de Sobremesas</label><span>R$ 900</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Mesa de Doces Finos</label><span>R$ 1400</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Bar Básico (Água, Suco, Refrigerante)</label><span>R$ 600</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Bar de Drinks (2 Bartenders)</label><span>R$ 1800</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Bar Aberto Premium</label><span>R$ 3000</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Seleção de Vinhos Nacionais</label><span>R$ 1000</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Carta de Vinhos Importados</label><span>R$ 2000</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Champanhe para Brinde</label><span>R$ 800</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Café da Manhã Gourmet</label><span>R$ 1200</span></div>
+          </div>
+        </div>
+
+        <!-- EQUIPE -->
+        <div class="categoria-box">
+          <div class="categoria-personalizada" onclick="toggleCategoria(this)">
+
+            <div>
+              <i class="bi bi-people"></i> Equipe
+              <span>(0 selecionados)</span>
+            </div>
+            <i class="bi bi-chevron-down seta"></i>
+          </div>
+          <div class="opcoes-categoria">
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Garçons (1 para cada 20 convidados)</label><span>R$ 8/pessoa</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Garçons (1 para cada 15 convidados)</label><span>R$ 12/pessoa</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Garçons Premium (1 para cada 10 convidados)</label><span>R$ 18/pessoa</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Chef de Cozinha</label><span>R$ 1200</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Chef Executivo</label><span>R$ 2000</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Chef Exclusivo no Local</label><span>R$ 3500</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Coordenador de Evento</label><span>R$ 800</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Maitre de Salão</label><span>R$ 600</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> 2 Bartenders</label><span>R$ 1400</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> 4 Bartenders</label><span>R$ 2600</span></div>
+          </div>
+        </div>
+
+        <!-- ESTRUTURA -->
+        <div class="categoria-box">
+          <div class="categoria-personalizada" onclick="toggleCategoria(this)">
+
+            <div>
+              <i class="bi bi-easel"></i> Estrutura
+              <span>(0 selecionados)</span>
+            </div>
+            <i class="bi bi-chevron-down seta"></i>
+          </div>
+          <div class="opcoes-categoria">
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Louça e Talheres Premium</label><span>R$ 500</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Louça, Talheres e Cristais</label><span>R$ 900</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Louça e Cristais Finos</label><span>R$ 1400</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Toalhas de Mesa Brancas</label><span>R$ 300</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Toalhas Elegantes</label><span>R$ 600</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Toalhas e Capas de Cadeiras</label><span>R$ 1100</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Arranjos de Flores na Entrada</label><span>R$ 400</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Decoração Floral todas as Mesas</label><span>R$ 1000</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Decoração Floral Luxuosa Completa</label><span>R$ 2000</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Iluminação Básica</label><span>R$ 400</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Iluminação Cênica</label><span>R$ 900</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Iluminação Personalizada</label><span>R$ 1600</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> DJ e Pista de Dança (4h)</label><span>R$ 1200</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> DJ e Pista de Dança (6h)</label><span>R$ 1600</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> DJ e Pista de Dança (8h)</label><span>R$ 2000</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Painel de Fotos Exclusivo</label><span>R$ 600</span></div>
+            <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Cabine de Fotos</label><span>R$ 1000</span></div>
+          </div>
+        </div>
+        <!-- EXTRAS -->
+<div class="categoria-box">
+
+    <div class="categoria-personalizada" onclick="toggleCategoria(this)">
+
+        <div>
+             Extras
+            <span>(0 selecionados)</span>
+        </div>
+        <i class="bi bi-chevron-down seta"></i>
+    </div>
+
+    <div class="opcoes-categoria">
+
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Fotos e Vídeo Profissionais</label><span>R$ 2500</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Serviço de Valet Parking</label><span>R$ 800</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Consultoria de Decoração</label><span>R$ 400</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Assistência 24h até o Evento</label><span>R$ 300</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizado()"> Montagem e Desmontagem Completa</label><span>R$ 600</span></div>
+
+    </div>
+
+      </div>
+
+      <div class="total-box" id="total-box-personalizado">
+        <small>Total Estimado</small>
+        <h2>R$ 0,00</h2>
+        <p>Itens: 0</p>
+      </div>
+
+      <button id="btn-selecionar-personalizado" class="btn-personalizado" onclick="selecionarPersonalizado()">
+          Selecionar Personalizado
+      </button>
+    </div>
+
   </div>
 </div>
 
@@ -397,11 +667,74 @@ li{
 
 <script>
 
+function toggleCategoria(elemento){
+    const box = elemento.parentElement;
+    box.classList.toggle("aberta");
+}
+
+function calcularTotalPersonalizado() {
+    let valorTotal = 0;
+    let itensTotal = 0;
+    const pacotePersonalizadoCard = document.querySelector('.novo-pacote.destaque');
+
+    // Itera sobre cada categoria de personalização
+    document.querySelectorAll('.categorias-personalizadas .categoria-box').forEach(categoriaBox => {
+        let itensCategoria = 0;
+        const checkboxes = categoriaBox.querySelectorAll('.opcoes-categoria input[type="checkbox"]:checked');
+        
+        // Conta itens e soma valores para a categoria atual
+        checkboxes.forEach(checkbox => {
+            itensCategoria++;
+            const item = checkbox.closest('.opcao-item');
+            const precoSpan = item.querySelector('span');
+            const precoTexto = precoSpan.innerText;
+
+            // Extrai apenas o número do texto do preço
+            const preco = parseFloat(precoTexto.replace('R$', '').replace('/pessoa', '').replace('.', '').replace(',', '.').trim());
+
+            if (!isNaN(preco)) {
+                valorTotal += preco;
+            }
+        });
+
+        // Atualiza o contador de itens da categoria
+        const contadorSpan = categoriaBox.querySelector('.categoria-personalizada span');
+        contadorSpan.innerText = `(${itensCategoria} selecionados)`;
+
+        itensTotal += itensCategoria;
+    });
+
+    // Atualiza o box de total
+    const totalBox = document.getElementById('total-box-personalizado');
+    const h2Total = totalBox.querySelector('h2');
+    const pItens = totalBox.querySelector('p');
+
+    h2Total.innerText = valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    pItens.innerText = `Itens: ${itensTotal}`;
+
+    // Atualiza o valor do pacote personalizado para o botão "Continuar"
+    if (pacotePersonalizadoCard && pacotePersonalizadoCard.classList.contains('active')) {
+        pacoteSelecionado = {
+            nome: 'Personalizado',
+            preco: valorTotal
+        };
+    }
+    return valorTotal;
+}
+
+// Garante que o cálculo seja feito ao carregar a página, caso haja itens pré-selecionados (não há, mas é uma boa prática)
+document.addEventListener('DOMContentLoaded', calcularTotalPersonalizado);
+
 let pacoteSelecionado = null;
 
 function selecionar(nome, preco, el) {
+  // Remove a classe 'active' de todos os pacotes (padrão e personalizado)
+  document.querySelectorAll(".card, .novo-pacote").forEach(c => c.classList.remove("active"));
 
-  document.querySelectorAll(".card").forEach(c => c.classList.remove("active"));
+  // Reseta o botão do pacote personalizado
+  const botaoPersonalizado = document.getElementById('btn-selecionar-personalizado');
+  botaoPersonalizado.innerHTML = 'Selecionar Personalizado';
+  botaoPersonalizado.classList.remove('selecionado');
 
   el.classList.add("active");
 
@@ -409,6 +742,29 @@ function selecionar(nome, preco, el) {
     nome: nome,
     preco: Number(preco) // garante número
   };
+}
+
+function selecionarPersonalizado() {
+    const precoCalculado = calcularTotalPersonalizado();
+    const elementoCard = document.querySelector('.novo-pacote.destaque');
+    const botaoPersonalizado = document.getElementById('btn-selecionar-personalizado');
+
+    // Remove a classe 'active' de todos os outros pacotes
+    document.querySelectorAll(".card, .novo-pacote").forEach(c => c.classList.remove("active"));
+
+    // Adiciona a classe 'active' ao card personalizado
+    elementoCard.classList.add('active');
+
+    // Altera o texto e a aparência do botão
+    botaoPersonalizado.innerHTML = '<i class="bi bi-check-circle-fill"></i> Selecionado';
+    botaoPersonalizado.classList.add('selecionado');
+
+
+    // Define o pacote selecionado com o valor calculado
+    pacoteSelecionado = {
+        nome: 'Personalizado',
+        preco: precoCalculado
+    };
 }
 
 function continuar() {

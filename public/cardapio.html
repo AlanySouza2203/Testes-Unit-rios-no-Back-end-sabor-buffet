@@ -698,13 +698,6 @@ const usuario = usuarioSalvo
     ? JSON.parse(usuarioSalvo)
     : null;
 
-if (!eventoId) {
-    alert("Crie um evento primeiro!");
-    window.location.href = "evento.html";
-}
-
-
-
 // ============================
 // ESTADO
 // ============================
@@ -713,7 +706,7 @@ let carrinho = [];
 let categoriaAtiva = "todos";
 let itensCardapio = [];
 
-const chaveCarrinho = `carrinho_${usuario.email}`;
+const chaveCarrinho = usuario ? `carrinho_${usuario.email}` : "carrinho_visitante";
 
 
 // ============================
@@ -809,6 +802,7 @@ R$ ${Number(item.valor).toFixed(2).replace(".",",")}
 class="btn-adicionar ${existe ? 'adicionado':''}"
 
 onclick="adicionar(
+${item.id},
 '${item.nome}',
 ${item.valor},
 '${item.porcao || ""}',
@@ -838,17 +832,21 @@ ${existe
 // ADICIONAR AO CARRINHO
 // ============================
 
-function adicionar(nome, preco, porcao, imagem) {
+function adicionar(id, nome, preco, porcao, imagem) {
 
-    const usuario = localStorage.getItem("usuario");
-    const clienteId = localStorage.getItem("clienteId");
+    const usuarioLogado = localStorage.getItem("usuario");
+    const idCliente = localStorage.getItem("clienteId");
 
-    if (!usuario || !clienteId) {
-
-        alert("Faça login para adicionar itens.");
-
+    if (!usuarioLogado || !idCliente) {
+        alert("Você precisa estar logado para acessar o cardápio. Por favor, faça login ou cadastre-se.");
         window.location.href = "login.html";
+        return;
+    }
 
+    const idEvento = localStorage.getItem("eventoId");
+    if (!idEvento) {
+        alert("Antes de escolher seu cardápio, você precisa criar seu evento!");
+        window.location.href = "evento.html";
         return;
     }
 
@@ -858,7 +856,7 @@ function adicionar(nome, preco, porcao, imagem) {
         itemExistente.qtd++;
     } else {
         carrinho.push({
-            id: Date.now(),
+            id: id,
             nome,
             preco,
             porcao,

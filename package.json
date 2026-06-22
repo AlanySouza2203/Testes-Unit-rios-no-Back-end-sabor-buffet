@@ -16,7 +16,6 @@
     "express": "^5.2.1",
     "mysql2": "^3.22.0"
   },
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AlanySouza2203/buffet.git"

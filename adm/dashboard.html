@@ -371,24 +371,10 @@ button:hover{
   font-weight:600;
 }
 
-
-.confirmado{
-  background:rgba(34,197,94,0.15);
-  color:var(--green);
-}
-
-
-.preparo{
-  background:rgba(250,204,21,0.15);
-  color:var(--yellow);
-}
-
-
-.pendente{
-  background:rgba(251,146,60,0.15);
-  color:var(--orange);
-}
-
+.aprovado, .confirmado, .entregue, .finalizado { background: rgba(34, 197, 94, 0.15); color: var(--green); }
+.preparando, .preparo { background: rgba(59, 130, 246, 0.15); color: var(--blue); }
+.pendente { background: rgba(251, 146, 60, 0.15); color: var(--orange); }
+.cancelado, .recusado { background: rgba(239, 68, 68, 0.15); color: var(--red); }
 
 table{
   width:100%;
@@ -611,7 +597,7 @@ td{
 
       <div>
         <h1>Dashboard</h1>
-        <p>Bem-vindo de volta 👋</p>
+        <p>Bem-vindo de volta </p>
       </div>
 
 
@@ -744,39 +730,15 @@ td{
     </div>
 
 
+    
     <!-- PEDIDOS -->
     <div class="box" style="margin-top:24px;">
-
-
       <h3>Pedidos Recentes</h3>
-
-
-      <table>
-
-
-        <thead>
-
-
-          <tr>
-            <th>Pedido</th>
-            <th>Cliente</th>
-            <th>Status</th>
-          </tr>
-
-
-        </thead>
-
-
-        <tbody id="listaPedidos"></tbody>
-
-
-      </table>
-
-
+      <div id="listaPedidos"></div>
     </div>
 
-
   </main>
+
 
 
 </div>
@@ -906,45 +868,33 @@ async function carregarEventos() {
    RENDER PEDIDOS
 ========================= */
 function renderPedidos() {
-
-
   let container = document.getElementById('listaPedidos')
-
-
   container.innerHTML = ''
-
-
   pedidos.slice(0, 5).forEach(p => {
-
-
-    let status = (p.status || "pendente").toLowerCase()
-
+    const statusClass = (p.status || "pendente").toLowerCase();
+    const idFormatado = `#ORC-${String(p.id).padStart(4, '0')}`;
+    const dataEvento = p.evento_data ? new Date(p.evento_data).toLocaleDateString('pt-BR') : 'Data a definir';
 
     container.innerHTML += `
+      <div style="padding: 16px 0; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 4px;">
+        <div style="color: var(--yellow); font-weight: bold; font-size: 13px;">${idFormatado}</div>
+        
+        <div style="font-size: 19px; font-weight: 700; color: #fff; margin-top: 2px;">
+            ${p.cliente || "Cliente"}
+        </div>
+        
+        <div style="color: var(--muted); font-size: 14px; margin-bottom: 8px;">
+          ${p.evento_tipo || "Evento"} • ${dataEvento}
+        </div>
 
-
-      <tr>
-
-
-        <td>#${p.id}</td>
-
-
-        <td>${p.cliente || "Cliente"}</td>
-
-
-        <td>
-          <span class="status ${status}">
-            ${status}
-          </span>
-        </td>
-
-
-      </tr>
-
-
-    `
-  })
+        <div>
+          <span class="status ${statusClass}">${p.status || "Pendente"}</span>
+        </div>
+      </div>
+    `;
+  });
 }
+
 
 
 /* =========================
@@ -1087,4 +1037,3 @@ setInterval(() => {
 
 </body>
 </html>
-

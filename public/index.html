@@ -84,8 +84,8 @@ width:100%;
 
 .hero{
 height:100vh;
-background:linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)),
-url("https://i.pinimg.com/736x/31/c4/a3/31c4a32c2b0ccbc6ec5394e70f5ba804.jpg");
+
+background:linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url("../img/Buffet_Eventos.png");
 background-position:center;
 background-size:cover;
 display:flex;
@@ -123,6 +123,640 @@ transition:0.3s;
 .hero-text button:hover{
 background:#fff;
 transform:scale(1.05);
+}
+.hero-botoes{
+display:flex;
+justify-content:center;
+gap:20px;
+margin-top:30px;
+flex-wrap:wrap;
+}
+
+.btn-criar{
+background:#d4a762;
+color:#000;
+border:none;
+padding:16px 35px;
+border-radius:40px;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.btn-eventos{
+background:transparent;
+color:#fff;
+border:1px solid #fff;
+padding:16px 35px;
+border-radius:40px;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+}
+/* COMO FUNCIONA */
+
+.como-funciona{
+padding:100px 10%;
+background:#0d0d0d;
+text-align:center;
+}
+
+.como-funciona .subtitulo{
+background:transparent;
+padding:0;
+margin-bottom:15px;
+letter-spacing:4px;
+}
+
+.como-funciona h2{
+font-size:60px;
+font-family:Georgia, serif;
+margin-bottom:25px;
+}
+
+.como-funciona h2 span{
+color:#d4a762;
+}
+
+.como-funciona p{
+max-width:700px;
+margin:0 auto 70px;
+font-size:22px;
+color:#aaa;
+line-height:1.7;
+}
+
+.passos-container{
+display:flex;
+justify-content:center;
+gap:40px;
+flex-wrap:wrap;
+}
+
+.passo{
+width:250px;
+text-align:center;
+position:relative;
+}
+
+.numero{
+width:50px;
+height:50px;
+
+background:#d4a762;
+color:#000;
+
+border-radius:50%;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+font-weight:bold;
+
+position:absolute;
+top:-15px;
+right:20px;
+}
+
+.icone-passo{
+width:90px;
+height:90px;
+
+margin:0 auto 30px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+font-size:35px;
+
+border-radius:20px;
+
+border:1px solid rgba(212,167,98,.3);
+
+background:#1a1712;
+
+color:#d4a762;
+}
+
+.passo h3{
+font-size:34px;
+margin-bottom:15px;
+font-family:Georgia, serif;
+}
+
+.passo p{
+font-size:18px;
+line-height:1.7;
+color:#aaa;
+}
+.btn-comecar{
+margin-top:60px;
+display:flex;
+justify-content:center;
+}
+
+.btn-comecar button{
+
+background:#d4a762;
+
+color:#000;
+
+border:none;
+
+padding:18px 40px;
+
+border-radius:50px;
+
+font-size:18px;
+
+font-weight:bold;
+
+cursor:pointer;
+
+display:flex;
+
+align-items:center;
+
+gap:12px;
+
+transition:.3s;
+}
+
+.btn-comecar button:hover{
+
+transform:translateY(-3px);
+
+background:#e4b96d;
+
+box-shadow:0 10px 25px rgba(212,167,98,.3);
+
+}
+
+@media(max-width:768px){
+
+.como-funciona h2{
+font-size:40px;
+}
+
+.como-funciona p{
+font-size:18px;
+}
+
+.passo{
+width:100%;
+max-width:350px;
+}
+
+}
+/* PACOTES */
+
+.pacotes{
+    padding:120px 5%;
+    background:#101822;
+}
+
+.pacotes-topo{
+    text-align:center;
+    margin-bottom:60px;
+}
+
+.pacotes-topo span{
+    color:#d4a762;
+    letter-spacing:3px;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.pacotes-topo h2{
+    font-size:55px;
+    margin:20px 0;
+}
+
+.pacotes-topo h2 span{
+    color:#d4a762;
+}
+
+.pacotes-topo p{
+    color:#bbb;
+}
+
+.pacotes-grid{
+    display:flex;
+    justify-content:center;
+    gap:25px;
+    flex-wrap:wrap;
+}
+
+.novo-pacote{
+    width:300px;
+    background:#0b1522;
+    border:1px solid rgba(212,167,98,.3);
+    border-radius:18px;
+    padding:25px;
+    position:relative;
+}
+
+.destaque{
+    border:2px solid #d4a762;
+}
+
+.tag{
+    position:absolute;
+    top:-12px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#d4a762;
+    color:#000;
+    font-size:11px;
+    padding:6px 14px;
+    border-radius:20px;
+    font-weight:bold;
+}
+
+.novo-pacote h3{
+    text-align:center;
+    font-size:28px;
+}
+
+.novo-pacote small{
+    display:block;
+    text-align:center;
+    color:#999;
+}
+
+.valor{
+    text-align:center;
+    font-size:38px;
+    color:#d4a762;
+    font-weight:bold;
+    margin:15px 0;
+}
+
+.duracao{
+    text-align:center;
+    background:#111;
+    border-radius:20px;
+    padding:8px;
+    margin-bottom:20px;
+}
+
+.lista-scroll{
+    max-height:320px;
+    overflow-y:auto;
+    padding-right:10px;
+}
+
+.lista-scroll h4{
+    color:#d4a762;
+    margin:20px 0 10px;
+}
+
+.lista-scroll ul{
+    padding-left:20px;
+}
+
+.lista-scroll li{
+    margin-bottom:8px;
+    color:#ddd;
+}
+
+.novo-pacote button{
+    width:100%;
+    margin-top:20px;
+    border:none;
+    background:#d4a762;
+    color:#000;
+    padding:14px;
+    border-radius:30px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.novo-pacote button:hover{
+    transform:translateY(-2px);
+}
+
+.lista-scroll::-webkit-scrollbar{
+    width:6px;
+}
+
+.lista-scroll::-webkit-scrollbar-thumb{
+    background:#d4a762;
+    border-radius:10px;
+}
+.personalizado{
+    width:300px;
+    padding:18px;
+}
+.personalizado h3{
+    margin-bottom:5px;
+}
+
+.controle-convidados{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px;
+}
+
+.controle-convidados h2{
+    font-size:38px;
+    color:#d4a762;
+    margin-top:8px;
+}
+.controle-convidados button{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    border:none;
+    background:#1f2937;
+    color:#fff;
+}
+
+.categoria-personalizada{
+    background:#0a0f17;
+    border-radius:12px;
+    margin-bottom:10px;
+    padding:16px;
+    min-height:58px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    border:1px solid rgba(255,255,255,.04);
+
+    transition:.3s;
+}
+
+.categoria-personalizada:hover{
+    border-color:#d4a762;
+}
+
+.total-box{
+    margin-top:18px;
+    padding:18px;
+    border-radius:14px;
+
+    border:1px solid rgba(212,167,98,.35);
+}
+
+.total-box h2{
+    font-size:40px;
+    color:#d4a762;
+    margin:8px 0;
+}
+
+.total-box span{
+    color:#d4a762;
+    font-weight:600;
+}
+.categoria-box{
+    margin-bottom:12px;
+}
+
+.seta{
+    transition:.3s;
+    color:#d4a762;
+}
+
+.categoria-box.aberta .seta{
+    transform:rotate(180deg);
+}
+
+.opcoes-categoria{
+
+    max-height:0;
+    overflow:hidden;
+
+    transition:max-height .4s ease;
+
+    background:#111827;
+    border-radius:12px;
+}
+
+.categoria-box.aberta .opcoes-categoria{
+    max-height:600px;
+    padding:10px;
+}
+
+.opcao-item{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:12px;
+    margin-bottom:8px;
+
+    border:1px solid rgba(255,255,255,.05);
+    border-radius:10px;
+
+    background:#0f172a;
+}
+
+.opcao-item label{
+    display:flex;
+    gap:10px;
+    cursor:pointer;
+    color:white;
+}
+
+.opcao-item span{
+    color:#d4a762;
+    font-weight:bold;
+}
+/* CARDS */
+
+.pacotes-container{
+
+display:flex;
+
+justify-content:center;
+
+gap:30px;
+
+flex-wrap:wrap;
+}
+
+.card-pacote{
+
+width:360px;
+
+padding:35px;
+
+border-radius:20px;
+
+background:#050505;
+
+border:1px solid rgba(212,167,98,.15);
+
+position:relative;
+
+transition:.3s;
+
+text-align:left;
+}
+
+.card-pacote:hover{
+
+transform:translateY(-10px);
+
+border-color:#d4a762;
+
+box-shadow:0 0 30px rgba(212,167,98,.2);
+}
+
+/* CARD DESTAQUE */
+
+.card-premium{
+
+border:1px solid #d4a762;
+
+box-shadow:0 0 25px rgba(212,167,98,.15);
+}
+
+/* SELOS */
+
+.selo{
+
+position:absolute;
+
+top:-15px;
+
+right:30px;
+
+background:#d4a762;
+
+color:#000;
+
+padding:10px 18px;
+
+border-radius:30px;
+
+font-size:14px;
+
+font-weight:bold;
+}
+
+/* TEXTOS */
+
+.card-pacote h3{
+
+font-size:40px;
+
+font-family:Georgia,serif;
+
+text-align:center;
+}
+
+.convidados{
+
+text-align:center;
+
+color:#888;
+
+margin:10px 0 25px;
+}
+
+.preco{
+
+text-align:center;
+
+font-size:55px;
+
+font-weight:bold;
+
+color:#d4a762;
+
+margin-bottom:40px;
+}
+
+.lista-beneficios{
+
+list-style:none;
+
+margin-bottom:50px;
+}
+
+.lista-beneficios li{
+
+display:flex;
+
+align-items:center;
+
+gap:12px;
+
+margin-bottom:18px;
+
+font-size:18px;
+}
+
+.lista-beneficios i{
+color:#d4a762;
+}
+
+/* BOTÃO */
+
+.btn-pacote{
+
+width:100%;
+
+padding:18px;
+
+border-radius:50px;
+
+cursor:pointer;
+
+font-size:18px;
+
+font-weight:bold;
+
+transition:.3s;
+}
+
+.btn-outline{
+
+background:transparent;
+
+color:#d4a762;
+
+border:1px solid rgba(212,167,98,.4);
+}
+
+.btn-fill{
+
+background:#d4a762;
+
+color:#000;
+
+border:none;
+}
+
+.btn-outline:hover,
+.btn-fill:hover{
+
+transform:translateY(-3px);
+}
+
+/* RESPONSIVO */
+
+@media(max-width:768px){
+
+.pacotes h2{
+font-size:40px;
+}
+
+.pacotes .descricao{
+font-size:18px;
+}
+
+.card-pacote{
+width:100%;
+}
+
 }
 
 /* VARIEDADES */
@@ -188,7 +822,7 @@ padding:0 15px 20px;
 
 .cozinha{
 padding:100px 10%;
-background:#111;
+background:#131313;
 text-align:center;
 }
 
@@ -232,8 +866,8 @@ transform:scale(1.1);
 
 .sobre{
 padding:100px 10%;
-background:#f8f5ef;
-color:#222;
+background:#101822;
+color:white;
 }
 
 .sobre-container{
@@ -314,6 +948,7 @@ font-style:italic;
 font-size:18px;
 line-height:1.8;
 color:#555;
+color:#bbb;
 margin-bottom:20px;
 }
 
@@ -339,7 +974,7 @@ color:#d4a762;
 /* FOOTER */
 
 .footer{
-background:black;
+background:#000000;
 padding:25px 10%;
 text-align:center;
 }
@@ -497,15 +1132,14 @@ var(--gold-5)
 
 .contato{
 padding:100px 10%;
-background:#f1efea;
-color:#222;
+color:white;
 }
 
 .contato h2{
 font-size:52px;
 margin:15px 0 25px;
 font-family:Georgia, serif;
-color:#111;
+color:#faf4f4;
 }
 
 .contato h2 span{
@@ -533,7 +1167,7 @@ margin-top:40px;
 /* CARD */
 
 .info-item{
-background:#faf8f3;
+background:#141414;
 border:1px solid rgba(212,167,98,0.5);
 border-radius:18px;
 padding:35px 30px;
@@ -575,7 +1209,7 @@ min-width:35px;
 .info-item h4{
 font-size:22px;
 margin-bottom:10px;
-color:#111;
+color:#f7f2f2;
 font-weight:800;
 }
 
@@ -636,7 +1270,89 @@ justify-content:center;
 box-shadow:
 0 10px 25px rgba(0,0,0,.4);
 }
+/* CTA */
+.cta{
+  background:#050505;
+  padding:120px 10%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  border-top:1px solid rgba(255,255,255,.05);
+}
 
+.cta-content{
+  max-width:700px;
+  width:100%;
+  position:relative;
+}
+
+.cta-content::before{
+  content:"";
+  position:absolute;
+  width:400px;
+  height:400px;
+  background:rgba(212,167,98,.08);
+  filter:blur(120px);
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  z-index:-1;
+}
+
+.cta-content h2{
+  font-size:64px;
+  font-family:Georgia, serif;
+  line-height:1.2;
+  margin-bottom:20px;
+  color:#fff;
+}
+
+.cta-content h2 span{
+  color:#d4a762;
+}
+
+.cta-content p{
+  color:#aaa;
+  font-size:20px;
+  line-height:1.8;
+  max-width:600px;
+  margin:0 auto 40px;
+}
+
+.cta-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:18px 45px;
+  border-radius:50px;
+  background:#d4a762;
+  color:#000;
+  text-decoration:none;
+  font-weight:bold;
+  font-size:18px;
+  transition:.3s;
+}
+
+.cta-btn:hover{
+  transform:translateY(-5px);
+}
+.cta{
+  padding:90px 25px;
+}
+
+.cta-content h2{
+  font-size:42px;
+}
+
+.cta-content p{
+  font-size:16px;
+}
+
+.cta-btn{
+  padding:16px 32px;
+  font-size:16px;
+}
 /* RESPONSIVIDADE */
 
 @media(max-width:768px){
@@ -712,6 +1428,7 @@ gap:20px;
 
 }
 
+
 </style>
 </head>
 
@@ -745,14 +1462,437 @@ gap:20px;
 </header>
 
 <section class="hero">
-<div class="hero-text">
-<h1>O Verdadeiro <br><span>Sabor Premium</span></h1>
-<p>Mais que uma Refeição, uma Experiência</p>
 
-<a href="./cardapio.html">
-<button>Conheça nosso cardápio</button>
-</a>
+<div class="hero-text">
+
+<h1>O Verdadeiro <br><span>Sabor Premium</span></h1>
+
+<p>
+  Buffet completo para criar momentos especiais e memórias inesquecíveis.
+</p>
+
+<div class="hero-botoes">
+
+<button class="btn-criar" onclick="acessarlogin()">
+Criar Meu Evento <i class="bi bi-arrow-right"></i>
+</button>
+
+<button class="btn-eventos" onclick="verPacotes()">
+Ver Nossos Pacotes
+</button>
+
 </div>
+
+</div>
+
+</section>
+
+<section class="como-funciona">
+
+<span class="subtitulo">
+
+COMO FUNCIONA
+
+</span>
+
+<h2>
+
+Seu Evento em 4 <span>Passos</span>
+
+</h2>
+
+<p class="descricao">
+
+De forma simples e prática, você cria e personaliza todo o seu evento buffet.
+
+</p>
+
+<div class="passos-container">
+
+<div class="passo">
+
+<div class="numero">01</div>
+
+<div class="icone-passo">
+
+<i class="bi bi-stars"></i>
+
+</div>
+
+<h3>Escolha seu Pacote</h3>
+
+<p>
+
+Selecione entre Essencial, Premium ou Luxo conforme seu evento.
+
+</p>
+
+</div>
+
+<div class="passo">
+
+<div class="numero">02</div>
+
+<div class="icone-passo">
+
+<i class="bi bi-calendar-heart"></i>
+
+</div>
+
+<h3>Configure o Evento</h3>
+
+<p>
+
+Defina tipo, data, local e número de convidados.
+
+</p>
+
+</div>
+
+<div class="passo">
+
+<div class="numero">03</div>
+
+<div class="icone-passo">
+
+<i class="bi bi-cup-hot"></i>
+
+</div>
+
+<h3>Monte o Cardápio</h3>
+
+<p>
+
+Escolha entradas, pratos principais, sobremesas e bebidas.
+
+</p>
+
+</div>
+
+<div class="passo">
+
+<div class="numero">04</div>
+
+<div class="icone-passo">
+
+<i class="bi bi-balloon"></i>
+
+</div>
+
+<h3>Celebre!</h3>
+
+<p>
+
+Confirmamos, preparamos tudo e você só precisa aproveitar.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="btn-comecar">
+
+<button onclick="acessarCardapio()">
+
+Conheça as opcoes do cardapio
+
+<i class="bi bi-arrow-right"></i>
+
+</button>
+
+</div>
+
+</section>
+<section class="pacotes" id="pacotes">
+
+<div class="pacotes-topo">
+    <span>NOSSOS PACOTES</span>
+    <h2>Escolha o Pacote Ideal</h2>
+    <p>
+        Cada pacote pensado para diferentes tamanhos e estilos de celebração.
+    </p>
+</div>
+
+<div class="pacotes-grid">
+
+    <!-- ESSENCIAL -->
+    <div class="novo-pacote">
+        <h3>Essencial</h3>
+        <small>50–80 convidados</small>
+
+        <div class="valor">R$ 4.800</div>
+
+        <div class="lista-scroll">
+
+       <h4></i> Gastronomia</h4>
+
+            <ul>
+                <li>Coquetel de boas-vindas</li>
+                <li>Jantar servido em 3 etapas</li>
+                <li>Bolo personalizado</li>
+                <li>Água, sucos e refrigerantes</li>
+            </ul>
+
+            <h4> Equipe</h4>
+
+            <ul>
+                <li>1 Garçom para cada 20 convidados</li>
+                <li>Chef de cozinha</li>
+                <li>Supervisor do buffet</li>
+            </ul>
+
+            <h4></i> Estrutura</h4>
+
+            <ul>
+                <li>Mesas e cadeiras</li>
+                <li>Louças e talheres</li>
+                <li>Toalhas básicas</li>
+            </ul>
+
+        </div>
+
+        <button>Selecionar Essencial</button>
+    </div>
+
+    <!-- PREMIUM -->
+    <div class="novo-pacote destaque">
+
+        <div class="tag">MAIS POPULAR</div>
+
+        <h3>Premium</h3>
+        <small>80–150 convidados</small>
+
+        <div class="valor">R$ 8.500</div>
+
+        <div class="lista-scroll">
+
+            <h4>Gastronomia</h4>
+
+            <ul>
+                <li>Coquetel premium</li>
+                <li>Jantar sofisticado</li>
+                <li>Bolo decorado personalizado</li>
+                <li>Mesa de sobremesas</li>
+                <li>Bar de drinks</li>
+            </ul>
+
+            <h4> Equipe</h4>
+
+            <ul>
+                <li>1 Garçom para cada 15 convidados</li>
+                <li>Chef executivo</li>
+                <li>Coordenador do evento</li>
+            </ul>
+
+            <h4> Estrutura</h4>
+
+            <ul>
+                <li>Decoração temática</li>
+                <li>Iluminação decorativa</li>
+                <li>Mobiliário premium</li>
+            </ul>
+
+        </div>
+
+        <button>Selecionar Premium</button>
+
+    </div>
+
+    <!-- LUXO -->
+   <div class="novo-pacote destaque">
+    
+      <div class="tag">Exclusivo</div>
+        <h3>Luxo</h3>
+        <small>150–300 convidados</small>
+
+        <div class="valor">R$ 14.900</div>
+
+      
+
+        <div class="lista-scroll">
+
+            <h4>Gastronomia</h4>
+
+            <ul>
+                <li>Menu degustação exclusivo</li>
+                <li>Chef no local</li>
+                <li>Vinhos selecionados</li>
+                <li>Champanhe premium</li>
+            </ul>
+
+            <h4> Equipe</h4>
+
+            <ul>
+                <li>Equipe completa</li>
+                <li>Maitre exclusivo</li>
+                <li>Coordenador dedicado</li>
+            </ul>
+
+            <h4> Estrutura</h4>
+
+            <ul>
+                <li>Decoração luxo</li>
+                <li>Pista iluminada</li>
+                <li>Área lounge</li>
+            </ul>
+
+        </div>
+
+        <button>Selecionar Luxo</button>
+
+    </div>
+    <div id="pacote-personalizado-index" class="novo-pacote destaque">
+
+        <div class="tag">Monte seu Pacote</div>
+
+    <h3>Personalizado</h3>
+
+    <small>Crie seu pacote sob medida</small>
+
+   <div class="categorias-personalizadas">
+
+    <!-- GASTRONOMIA -->
+<div class="categoria-box">
+
+    <div class="categoria-personalizada" onclick="toggleCategoria(this)">
+        <div>
+           
+            
+            <i class="bi bi-fork-knife">Gastronomia</i>
+            <span>(0 selecionados)</span>
+        </div>
+        <i class="bi bi-chevron-down seta"></i>
+    </div>
+
+    <div class="opcoes-categoria">
+
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Coquetel Básico (3 opções)</label><span>R$ 800</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Coquetel Premium (6 opções)</label><span>R$ 1500</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Coquetel Gourmet (10 opções)</label><span>R$ 2500</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Jantar 3 Etapas</label><span>R$ 1200</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Jantar 4 Etapas</label><span>R$ 1800</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Jantar 5 Etapas Harmonizado</label><span>R$ 2800</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Bolo Personalizado Simples</label><span>R$ 400</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Bolo Decorado Personalizado</label><span>R$ 700</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Bolo Cenográfico Exclusivo</label><span>R$ 1200</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Mesa de Sobremesas</label><span>R$ 900</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Mesa de Doces Finos</label><span>R$ 1400</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Bar Básico (Água, Suco, Refrigerante)</label><span>R$ 600</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Bar de Drinks (2 Bartenders)</label><span>R$ 1800</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Bar Aberto Premium</label><span>R$ 3000</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Seleção de Vinhos Nacionais</label><span>R$ 1000</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Carta de Vinhos Importados</label><span>R$ 2000</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Champanhe para Brinde</label><span>R$ 800</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Café da Manhã Gourmet</label><span>R$ 1200</span></div>
+
+    </div>
+
+</div>
+
+<!-- EQUIPE -->
+<div class="categoria-box">
+
+    <div class="categoria-personalizada" onclick="toggleCategoria(this)">
+        <div>
+            Equipe
+            <span>(0 selecionados)</span>
+        </div>
+        <i class="bi bi-chevron-down seta"></i>
+    </div>
+
+    <div class="opcoes-categoria">
+
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Garçons (1 para cada 20 convidados)</label><span>R$ 8/pessoa</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Garçons (1 para cada 15 convidados)</label><span>R$ 12/pessoa</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Garçons Premium (1 para cada 10 convidados)</label><span>R$ 18/pessoa</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Chef de Cozinha</label><span>R$ 1200</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Chef Executivo</label><span>R$ 2000</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Chef Exclusivo no Local</label><span>R$ 3500</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Coordenador de Evento</label><span>R$ 800</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Maitre de Salão</label><span>R$ 600</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> 2 Bartenders</label><span>R$ 1400</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> 4 Bartenders</label><span>R$ 2600</span></div>
+
+    </div>
+
+</div>
+
+<!-- ESTRUTURA -->
+<div class="categoria-box">
+
+    <div class="categoria-personalizada" onclick="toggleCategoria(this)">
+        <div>
+             Estrutura
+            <span>(0 selecionados)</span>
+        </div>
+        <i class="bi bi-chevron-down seta"></i>
+    </div>
+
+    <div class="opcoes-categoria">
+
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Louça e Talheres Premium</label><span>R$ 500</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Louça, Talheres e Cristais</label><span>R$ 900</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Louça e Cristais Finos</label><span>R$ 1400</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Toalhas de Mesa Brancas</label><span>R$ 300</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Toalhas Elegantes</label><span>R$ 600</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Toalhas e Capas de Cadeiras</label><span>R$ 1100</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Arranjos de Flores na Entrada</label><span>R$ 400</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Decoração Floral todas as Mesas</label><span>R$ 1000</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Decoração Floral Luxuosa Completa</label><span>R$ 2000</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Iluminação Básica</label><span>R$ 400</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Iluminação Cênica</label><span>R$ 900</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Iluminação Personalizada</label><span>R$ 1600</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> DJ e Pista de Dança (4h)</label><span>R$ 1200</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> DJ e Pista de Dança (6h)</label><span>R$ 1600</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> DJ e Pista de Dança (8h)</label><span>R$ 2000</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Painel de Fotos Exclusivo</label><span>R$ 600</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Cabine de Fotos</label><span>R$ 1000</span></div>
+
+    </div>
+
+</div>
+
+<!-- EXTRAS -->
+<div class="categoria-box">
+
+    <div class="categoria-personalizada" onclick="toggleCategoria(this)">
+        <div>
+             Extras
+            <span>(0 selecionados)</span>
+        </div>
+        <i class="bi bi-chevron-down seta"></i>
+    </div>
+
+    <div class="opcoes-categoria">
+
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Fotos e Vídeo Profissionais</label><span>R$ 2500</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Serviço de Valet Parking</label><span>R$ 800</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Consultoria de Decoração</label><span>R$ 400</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Assistência 24h até o Evento</label><span>R$ 300</span></div>
+        <div class="opcao-item"><label><input type="checkbox" onchange="calcularTotalPersonalizadoIndex()"> Montagem e Desmontagem Completa</label><span>R$ 600</span></div>
+
+    </div>
+
+</div>
+
+    <div id="total-box-index" class="total-box">
+
+        <small>Total Estimado</small>
+
+        <h2>R$ 0,00</h2>
+
+        <p>Itens: 0</p>
+
+    <button>
+        Solicitar Orçamento Personalizado
+    </button>
+
+</div>
+
+</div>
+</div>
+
 </section>
 
 <section class="variedades">
@@ -792,6 +1932,7 @@ gap:20px;
 
 </div>
 </section>
+
 
 <section class="cozinha">
 <h2>Nossa Cozinha</h2>
@@ -894,6 +2035,23 @@ utilizando ingredientes frescos e selecionados.
 
 </div>
 </section>
+<section class="cta">
+  <div class="cta-content">
+    <h2>
+      Pronto para criar seu <span>evento?</span>
+    </h2>
+
+    <p>
+      Comece agora mesmo. Escolha seu pacote,
+      configure o evento e monte o cardápio
+      dos seus sonhos.
+    </p>
+
+    <a href="#" class="cta-btn">
+      Criar Meu Evento →
+    </a>
+  </div>
+</section>
 
 <footer class="footer">
 
@@ -922,6 +2080,71 @@ utilizando ingredientes frescos e selecionados.
 
 </footer>
 <script>
+  function toggleCategoria(elemento){
+
+    const box = elemento.parentElement;
+
+    box.classList.toggle("aberta");
+
+}
+
+function calcularTotalPersonalizadoIndex() {
+    let valorTotal = 0;
+    let itensTotal = 0;
+    const containerPersonalizado = document.getElementById('pacote-personalizado-index');
+
+    // Itera sobre cada categoria de personalização dentro do container específico
+    containerPersonalizado.querySelectorAll('.categorias-personalizadas .categoria-box').forEach(categoriaBox => {
+        let itensCategoria = 0;
+        const checkboxes = categoriaBox.querySelectorAll('.opcoes-categoria input[type="checkbox"]:checked');
+        
+        // Conta itens e soma valores para a categoria atual
+        checkboxes.forEach(checkbox => {
+            itensCategoria++;
+            const item = checkbox.closest('.opcao-item');
+            const precoSpan = item.querySelector('span');
+            const precoTexto = precoSpan.innerText;
+
+            // Extrai apenas o número do texto do preço
+            const preco = parseFloat(precoTexto.replace('R$', '').replace('/pessoa', '').replace('.', '').replace(',', '.').trim());
+
+            if (!isNaN(preco)) {
+                valorTotal += preco;
+            }
+        });
+
+        // Atualiza o contador de itens da categoria
+        const contadorSpan = categoriaBox.querySelector('.categoria-personalizada span');
+        if (contadorSpan) {
+            contadorSpan.innerText = `(${itensCategoria} selecionados)`;
+        }
+
+        itensTotal += itensCategoria;
+    });
+
+    // Atualiza o box de total
+    const totalBox = document.getElementById('total-box-index');
+    if (totalBox) {
+        const h2Total = totalBox.querySelector('h2');
+        const pItens = totalBox.querySelector('p');
+
+        h2Total.innerText = valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        pItens.innerText = `Itens: ${itensTotal}`;
+    }
+}
+
+function verPacotes() {
+    window.location.href = "#pacotes";
+}
+
+function acessarlogin() {
+    alert("Antes de criar o evento, vamos nos cadastrar!");
+    window.location.href = "cadastro.html";
+}
+
+function acessarCardapio() {
+    window.location.href = "./cardapio.html";
+}
 
 function abrirMenu(){
 
@@ -930,6 +2153,9 @@ const menu = document.getElementById("menu");
 menu.classList.toggle("ativo");
 
 }
+
+// Garante que o cálculo seja feito ao carregar a página
+document.addEventListener('DOMContentLoaded', calcularTotalPersonalizadoIndex);
 
 </script>
 

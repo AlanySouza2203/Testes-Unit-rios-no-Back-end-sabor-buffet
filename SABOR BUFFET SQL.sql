@@ -10,6 +10,13 @@ USE buffet_db;
 -- USUÁRIOS
 -- =========================================
 
+<<<<<<< HEAD
+=======
+-- =========================================
+-- USUÁRIOS
+-- =========================================
+
+>>>>>>> d94f4e9 (Atualiza layout da página inicial)
 CREATE TABLE usuario (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
@@ -295,9 +302,31 @@ CREATE TABLE pagamento (
 );
 
 -- =========================================
+<<<<<<< HEAD
 -- USUÁRIOS
 -- =========================================
 
+=======
+-- MENSAGENS / NOTIFICAÇÕES
+-- =========================================
+
+CREATE TABLE mensagens (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    pedido_id INT,
+    cliente_id INT NOT NULL,
+    mensagem TEXT NOT NULL,
+    tipo ENUM('admin', 'cliente') NOT NULL,
+    lida BOOLEAN DEFAULT FALSE,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (pedido_id) REFERENCES pedidos(id) ON DELETE CASCADE,
+    FOREIGN KEY (cliente_id) REFERENCES cliente(id) ON DELETE CASCADE
+);
+
+-- =========================================
+-- USUÁRIOS
+-- =========================================
+
+>>>>>>> d94f4e9 (Atualiza layout da página inicial)
 INSERT INTO usuario (nome, email, senha, tipo)
 VALUES
 ('Admin Master', 'admin@email.com', '123', 'admin'),
@@ -381,14 +410,42 @@ VALUES
     'https://i.pinimg.com/736x/fe/50/6b/fe506b764c144d32330995c945a0f364.jpg'
 ),
 (
+<<<<<<< HEAD
+=======
+    'Pacote Festa Infantil Premium',
+    'servico',
+    'pacote',
+    4500.00,
+    'https://via.placeholder.com/120'
+);
+
+-- =========================================
+-- INSERIR NOVO ITEM/SERVIÇO
+-- =========================================
+
+INSERT INTO item_servico (
+    nome,
+    tipo,
+    categoria,
+    valor,
+    imagem
+)
+VALUES (
+>>>>>>> d94f4e9 (Atualiza layout da página inicial)
     'Macarrão',
     'comida',
     'principal',
     28.00,
     'https://i.pinimg.com/736x/96/4d/fb/964dfbd9d27f85e7b1fc155bccd04bac.jpg'
 );
+<<<<<<< HEAD
 -- =========================================
 -- EVENTOS/ ITEN
+=======
+
+-- =========================================
+-- RELACIONAR ITEM AO EVENTO
+>>>>>>> d94f4e9 (Atualiza layout da página inicial)
 -- =========================================
 
 INSERT INTO evento_item (
@@ -397,11 +454,19 @@ INSERT INTO evento_item (
     quantidade
 )
 VALUES
+<<<<<<< HEAD
 (1, 1, 150),
 (1, 2, 150),
 (2, 4, 100),
 (2, 5, 100),
 (3, 3, 200);
+=======
+(1, 1, 150), -- Casamento: Hambúrguer
+(1, 2, 150), -- Casamento: Pizza
+(2, 4, 100), -- Aniversário: Bolo Pedaço
+(2, 6, 100), -- Aniversário: Macarrão
+(3, 3, 200); -- Formatura: Sushi
+>>>>>>> d94f4e9 (Atualiza layout da página inicial)
 -- =========================================
 -- ORÇAMENTOS
 -- =========================================
@@ -443,6 +508,12 @@ VALUES
 (3, 1, 100, 15.00);
 
 -- =========================================
+<<<<<<< HEAD
+=======
+-- PEDIDOS (DADOS CORRIGIDOS COM VALOR E QUANTIDADE)
+-- =========================================
+-- =========================================
+>>>>>>> d94f4e9 (Atualiza layout da página inicial)
 -- PEDIDOS
 -- =========================================
 
@@ -463,7 +534,11 @@ VALUES
     JSON_ARRAY(
         JSON_OBJECT('nome','Hambúrguer','qtd',150),
         JSON_OBJECT('nome','Pizza','qtd',150)
+<<<<<<< HEAD
     ),
+=======
+    ), -- OLD: Missing 'valor'
+>>>>>>> d94f4e9 (Atualiza layout da página inicial)
     6750.00,
     'Pendente'
 ),
@@ -475,7 +550,11 @@ VALUES
     JSON_ARRAY(
         JSON_OBJECT('nome','Bolo Pedaço','qtd',100),
         JSON_OBJECT('nome','Macarrão','qtd',100)
+<<<<<<< HEAD
     ),
+=======
+    ), -- OLD: Missing 'valor'
+>>>>>>> d94f4e9 (Atualiza layout da página inicial)
     4000.00,
     'Pendente'
 ),
@@ -527,4 +606,7 @@ SELECT
 FROM cliente c
 JOIN pedidos p ON c.id = p.cliente_id
 WHERE c.id = 1;
+<<<<<<< HEAD
 
+=======
+>>>>>>> d94f4e9 (Atualiza layout da página inicial)

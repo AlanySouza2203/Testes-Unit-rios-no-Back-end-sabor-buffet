@@ -150,6 +150,8 @@
         .status-confirmado { background: #22c55e20; color: #22c55e; }
         .status-preparando { background: #3b82f620; color: #3b82f6; }
         .status-entregue { background: #8b5cf620; color: #8b5cf6; }
+        .status-pendente { background: #fb923c20; color: #fb923c; }
+        .status-cancelado, .status-recusado { background: #ef444420; color: #ef4444; }
 
         .badge-nao-lida {
             background: #d4a762;
@@ -321,7 +323,7 @@
 <header class="header">
     <div class="logo">Sabor & <span>Arte</span></div>
     <nav class="menu">
-        <a href="dashboard-cliente.html">
+        <a href="dashboard_cliente.html">
             <i class="fas fa-home"></i> <span>Início</span>
         </a>
         <a href="mensagens.html" class="active">
@@ -331,7 +333,7 @@
         <a href="meu_pedido.html">
              <i class="fas fa-file-invoice"></i> <span>Meu Pedido</span>
         </a>
-        <a href="#" onclick="sair()">
+        <a href="index.html" onclick="sair()">
             <i class="fas fa-sign-out-alt"></i> <span>Sair</span>
         </a>
     </nav>
@@ -415,10 +417,14 @@
                     <div class="conversa-info">
                         <div class="conversa-titulo">
                             Pedido #${pedido.id}
-                            <span class="status-pedido status-${pedido.status || 'confirmado'}">
+                            <span class="status-pedido status-${(pedido.status || 'pendente').toLowerCase()}">
                                 ${getStatusTexto(pedido.status)}
                             </span>
                         </div>
+                        ${(pedido.status && pedido.status.toLowerCase() === 'cancelado') ? 
+                            `<div style="color:#ff4444; font-size: 11px; margin-top: 5px; font-weight: 600;">
+                                <i class="fas fa-info-circle"></i> Será feito seu reembolso em 24h, dúvidas entre em contato.
+                            </div>` : ''}
                         <div class="conversa-ultima">
                             <span><i class="far fa-calendar-alt"></i> ${formatarData(pedido.created_at)}</span>
                             <span><i class="fas fa-tag"></i> Evento #${pedido.evento_id || '-'}</span>
@@ -581,13 +587,19 @@
     }
 
     function getStatusTexto(status) {
+        if (!status) return '⏳ Pendente';
+        const s = status.toLowerCase();
         const statusMap = {
             'confirmado': '✅ Confirmado',
-            'preparando': '🍽️ Em preparo',
+            'aprovado': '✅ Aprovado',
+            'preparando': '🍽️ Em Preparo',
             'entregue': '🎉 Finalizado',
-            'pendente': '⏳ Pendente'
+            'finalizado': '🎉 Finalizado',
+            'pendente': '⏳ Pendente',
+            'recusado': '❌ Recusado', 
+            'cancelado': '❌ Recusado' // Mapeia 'cancelado' para 'Recusado' visualmente
         };
-        return statusMap[status] || '✅ Confirmado';
+        return statusMap[s] || status;
     }
 
     function formatarMoeda(valor) {
@@ -606,7 +618,7 @@
 
     function sair() {
         localStorage.clear();
-        window.location.href = "login.html";
+        window.location.href = "index.html";
     }
 
     // Inicializar
@@ -614,7 +626,7 @@
     setInterval(() => {
         carregarPedidos();
         atualizarBadgeTotal();
-    }, 15000);
+    }, 5000);
 </script>
 </body>
 </html>

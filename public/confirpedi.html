@@ -135,6 +135,27 @@
       font-size: 12px;
       margin-top: 10px;
     }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      .resumo {
+        padding: 20px;
+      }
+      .lateral {
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid rgba(250, 204, 21, 0.3);
+        padding: 20px;
+      }
+      .botoes {
+        flex-direction: column;
+      }
+      .btn {
+        width: 100%;
+      }
+    }
   </style>
 </head>
 
@@ -272,9 +293,21 @@ function formatarMoeda(valor) {
 }
 
 //  TOTAL FINAL
-let totalFinal = pacoteValor + totalItens
+// GARANTIR NÚMEROS VÁLIDOS
+pacoteValor = Number(pacoteValor) || 0;
+totalItens = Number(totalItens) || 0;
+
+// TOTAL FINAL
+let totalFinal = pacoteValor + totalItens;
+
+// DEBUG
+console.log("pacoteValor:", pacoteValor);
+console.log("totalItens:", totalItens);
+console.log("totalFinal:", totalFinal);
+
+// MOSTRAR TOTAL
 document.getElementById("total").innerText =
-  formatarMoeda(totalFinal).replace("R$", "").trim()
+  totalFinal.toFixed(2).replace(".", ",");
 
 //  CANCELAR
 function cancelarPedido() {
@@ -290,54 +323,135 @@ function cancelarPedido() {
 //  CONFIRMAR → SEM TRAVAR (MESMO COM ERRO NO SERVIDOR)
 async function confirmarPedido() {
 
-  const usuario = JSON.parse(localStorage.getItem("usuario"));
   const eventoId = localStorage.getItem("eventoId");
+  const clienteId = Number(localStorage.getItem("clienteId"));
+
+  console.log("ITENS DO PEDIDO:");
+  console.table(pedido.itens);
+
+  // ITENS PARA O ORÇAMENTO
+  const itensOrcamento = pedido.itens.map(item => ({
+    item_servico_id: Number(item.id),
+    quantidade: Number(item.qtd),
+    valor: Number(item.preco)
+  }));
+
+  console.log("ITENS ENVIADOS PARA ORÇAMENTO:");
+  console.table(itensOrcamento);
+
+  // ITENS PARA O PEDIDO (manter estrutura original)
+  const itensPedido = pedido.itens.map(item => ({
+    id: Number(item.id),
+    nome: item.nome,
+    qtd: Number(item.qtd),
+    preco: Number(item.preco)
+  }));
 
   const pedidoFinal = {
-    cliente: pedido.cliente,
+    cliente_id: clienteId,
     evento_id: Number(eventoId),
     admin_id: 1,
-    itens: pedido.itens,
+    itens: itensPedido,  // ✅ CORRETO - estrutura do pedido
     total: totalFinal,
-    status: "pendente"
+    metodo_pagamento: null
   };
 
   try {
 
-    const res = await fetch("http://localhost:3000/pedidos", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(pedidoFinal)
-    });
+    // =========================
+    // SALVAR PEDIDO
+    // =========================
 
-    const data = await res.json();
+    const resPedido = await fetch(
+      "http://localhost:3000/pedidos",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(pedidoFinal)
+      }
+    );
 
-    if (!res.ok) {
-      alert(data.erro || "Erro ao salvar pedido");
+    const dataPedido = await resPedido.json();
+
+    if (!resPedido.ok) {
+      alert(dataPedido.erro || "Erro ao salvar pedido");
       return;
     }
 
-    alert("Pedido salvo com sucesso!");
+    console.log("✅ Pedido salvo:", dataPedido);
+
+    // =========================
+    // CRIAR ORÇAMENTO AUTOMÁTICO
+    // =========================
+
+    const orcamento = {
+      evento_id: Number(eventoId),
+      admin_id: 1,
+      valor_total: totalFinal,
+      itens: itensOrcamento,  // ✅ CORRETO - estrutura do orçamento
+      status: "pendente",
+      status_pagamento: "pendente"
+    };
+    
+
+    console.log("📋 Criando orçamento:", orcamento);
+
+    const resOrcamento = await fetch(
+      "http://localhost:3000/orcamentos",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(orcamento)
+      }
+    );
+
+    const dataOrcamento = await resOrcamento.json();
+
+    if (!resOrcamento.ok) {
+      console.error("❌ Erro ao criar orçamento:", dataOrcamento);
+      alert(dataOrcamento.erro || "Erro ao criar orçamento");
+      return;
+    }
+
+    console.log("✅ Orçamento criado:", dataOrcamento);
+
+    // =========================
+    // SALVAR PARA PAGAMENTO
+    // =========================
+
+    const usuario =
+      JSON.parse(localStorage.getItem("usuario")) || {};
 
     localStorage.setItem(
       "pedidoPagamento",
       JSON.stringify({
         ...pedidoFinal,
-        id: data.id
+        id: dataPedido.id,
+        orcamento_id: dataOrcamento.id,
+        cliente:
+          pedido.cliente ||
+          usuario.nome ||
+          "Cliente"
       })
     );
+
+    alert("Pedido confirmado com sucesso!");
 
     window.location.href = "pagamento.html";
 
   } catch (erro) {
 
-    console.error(erro);
+    console.error("❌ Erro geral:", erro);
 
     alert("Erro ao conectar com o servidor.");
   }
 }
+
+
 
 </script>
 

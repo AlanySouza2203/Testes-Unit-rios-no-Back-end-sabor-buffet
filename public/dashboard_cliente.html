@@ -192,7 +192,7 @@
         <a href="meu_pedido.html">
              <i class="fas fa-file-invoice"></i> <span>Meu Pedido</span>
         </a>
-        <a href="login.html" onclick="sair()">
+        <a href="index.html" onclick="sair()">
             <i class="fas fa-sign-out-alt"></i> <span>Sair</span>
         </a>
     </nav>
@@ -276,7 +276,7 @@
             container.innerHTML = `
                 <div class="sem-eventos">
                     <i class="fas fa-calendar-plus" style="font-size: 48px; margin-bottom: 15px;"></i>
-                    <p>✨ Você ainda não tem nenhum evento planejado</p>
+                    <p> Você ainda não tem nenhum evento planejado</p>
                     <p style="font-size: 14px; margin-top: 5px;">Clique em "Criar novo evento" para começar!</p>
                     <button onclick="criarNovoEvento()" style="margin-top: 20px; background: #d4a762; border: none; padding: 12px 24px; border-radius: 30px; cursor: pointer; font-weight: bold;">
                         <i class="fas fa-plus"></i> Criar meu primeiro evento
@@ -293,14 +293,6 @@
                     <p><i class="fas fa-map-marker-alt"></i> ${evento.local || "Local não definido"}</p>
                     <p><i class="fas fa-users"></i> ${evento.convidados || 0} convidados</p>
                     <p><strong>Status:</strong> ${evento.status || "Planejado"}</p>
-                </div>
-                <div>
-                    <button class="btn-eventos" onclick="verEvento(${evento.id})">
-                        <i class="fas fa-eye"></i> Ver detalhes
-                    </button>
-                    <button class="btn-mensagens" onclick="verMensagensEvento(${evento.id})">
-                        <i class="fas fa-comment"></i> Mensagens
-                    </button>
                 </div>
             </div>
         `).join("");
@@ -348,7 +340,7 @@
     
     function sair() {
         localStorage.clear();
-        window.location.href = "login.html";
+        window.location.href = "index.html";
     }
     
     // Carregar contagem de mensagens não lidas

@@ -1,1078 +1,809 @@
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Meu Pedido - Sabor & Arte</title>
-
+<title>Meu Orçamento - Sabor & Arte</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 <style>
-
-:root{
-    --gold:#d4a762;
-    --bg:#0a0a0a;
-    --card:#111;
-    --border:#222;
-    --text:#e0e0e0;
-    --muted:#888;
-    --green:#27ae60;
-    --blue:#3498db;
-    --orange:#f39c12;
+:root {
+    --gold: #d4a762;
+    --bg: #0a0a0a;
+    --card: #111;
+    --border: #222;
+    --text: #e0e0e0;
+    --muted: #888;
+    --green: #27ae60;
+    --blue: #3498db;
+    --orange: #f39c12;
+    --red: #e74c3c;
 }
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Segoe UI',sans-serif;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
 }
 
-body{
-    background:var(--bg);
-    color:var(--text);
+body {
+    background: var(--bg);
+    color: var(--text);
 }
 
-/* HEADER */
-
-.header{
-    background:#0d0d0d;
-    padding:15px 5%;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    border-bottom:1px solid rgba(212,167,98,.2);
+.header {
+    background: #0d0d0d;
+    padding: 15px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(212, 167, 98, .2);
+    flex-wrap: wrap;
+    gap: 15px;
 }
 
-.logo{
-    font-size:26px;
-    font-weight:bold;
+.logo {
+    font-size: 26px;
+    font-weight: bold;
 }
 
-.logo span{
-    color:var(--gold);
+.logo span {
+    color: var(--gold);
 }
 
-.menu{
-    display:flex;
-    gap:20px;
-    align-items:center;
+.menu {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
-.menu a{
-    color:#aaa;
-    text-decoration:none;
-    display:flex;
-    align-items:center;
-    gap:8px;
-    padding:10px 14px;
-    border-radius:10px;
-    transition:.3s;
+.menu a {
+    color: #aaa;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    transition: .3s;
 }
 
 .menu a:hover,
-.menu a.active{
-    background:rgba(212,167,98,.15);
-    color:var(--gold);
+.menu a.active {
+    background: rgba(212, 167, 98, .15);
+    color: var(--gold);
 }
 
-.badge{
-    background:var(--gold);
-    color:#000;
-    width:20px;
-    height:20px;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:11px;
-    font-weight:bold;
+.container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
 }
 
-/* CONTAINER */
-
-.container{
-    max-width:1000px;
-    margin:40px auto;
-    padding:0 20px;
+/* STATUS CARD */
+.status-card {
+    background: linear-gradient(135deg, #1a1a1a, #111);
+    border: 1px solid var(--gold);
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 30px;
+    text-align: center;
 }
 
-/* STATUS */
-
-.status-card{
-    background:linear-gradient(135deg,#1a1a1a,#111);
-    border:1px solid var(--gold);
-    border-radius:20px;
-    padding:30px;
-    margin-bottom:30px;
-    text-align:center;
+.status-icon {
+    font-size: 65px;
+    margin-bottom: 15px;
 }
 
-.status-icon{
-    font-size:65px;
-    margin-bottom:15px;
+.status-text {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 10px;
 }
 
-.status-text{
-    font-size:28px;
-    font-weight:bold;
-    margin-bottom:10px;
+.status-date {
+    color: var(--muted);
 }
 
-.status-date{
-    color:var(--muted);
+.status-pendente {
+    color: var(--orange);
 }
 
-.status-confirmado{
-    color:var(--green);
+.status-aprovado {
+    color: var(--green);
 }
 
-.status-preparando{
-    color:var(--blue);
+.status-recusado {
+    color: var(--red);
 }
-
-.status-entrega{
-    color:var(--orange);
-}
-
-.status-finalizado{
-    color:#2ecc71;
-}
-
 
 /* TIMELINE */
-
-.timeline{
-    display:flex;
-    justify-content:space-between;
-    margin:40px 0;
-    position:relative;
+.timeline {
+    display: flex;
+    justify-content: space-between;
+    margin: 40px 0;
+    position: relative;
 }
 
-.timeline::before{
-    content:'';
-    position:absolute;
-    top:25px;
-    left:0;
-    right:0;
-    height:2px;
-    background:#333;
-    z-index:0;
+.timeline::before {
+    content: '';
+    position: absolute;
+    top: 25px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #333;
+    z-index: 0;
 }
 
-.timeline-step{
-    flex:1;
-    text-align:center;
-    position:relative;
-    z-index:1;
+.timeline-step {
+    flex: 1;
+    text-align: center;
+    position: relative;
+    z-index: 1;
 }
 
-.timeline-circle{
-    width:50px;
-    height:50px;
-    border-radius:50%;
-    background:#222;
-    border:2px solid #444;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    margin:0 auto 10px;
+.timeline-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #222;
+    border: 2px solid #444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
 }
 
-.timeline-label{
-    font-size:13px;
-    color:var(--muted);
+.timeline-label {
+    font-size: 13px;
+    color: var(--muted);
 }
 
-.timeline-step.active .timeline-circle{
-    background:var(--gold);
-    border-color:var(--gold);
-    color:#000;
+.timeline-step.active .timeline-circle {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: #000;
 }
 
-.timeline-step.completed .timeline-circle{
-    background:var(--green);
-    border-color:var(--green);
-    color:#fff;
+.timeline-step.completed .timeline-circle {
+    background: var(--green);
+    border-color: var(--green);
+    color: #fff;
 }
 
 /* CARDS */
-
-.card{
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:18px;
-    padding:25px;
-    margin-bottom:25px;
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 25px;
+    margin-bottom: 25px;
 }
 
-.card h3{
-    color:var(--gold);
-    margin-bottom:20px;
-    display:flex;
-    align-items:center;
-    gap:10px;
+.card h3 {
+    color: var(--gold);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-/* INFO */
-
-.info-row{
-    display:flex;
-    justify-content:space-between;
-    padding:14px 0;
-    border-bottom:1px solid var(--border);
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
 }
 
-.info-row:last-child{
-    border-bottom:none;
+.info-row:last-child {
+    border-bottom: none;
 }
 
-.info-label{
-    color:var(--muted);
+.info-label {
+    color: var(--muted);
 }
 
-.info-value{
-    font-weight:bold;
+.info-value {
+    font-weight: bold;
 }
 
-/* ITENS */
-
-.item-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:12px 0;
-    border-bottom:1px solid var(--border);
+.item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
 }
 
-.item-info{
-    display:flex;
-    align-items:center;
-    gap:15px;
+.item-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
-.item-qtd{
-    background:var(--gold);
-    color:#000;
-    padding:3px 10px;
-    border-radius:20px;
-    font-size:12px;
-    font-weight:bold;
+.item-qtd {
+    background: var(--gold);
+    color: #000;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
 }
 
-.total{
-    display:flex;
-    justify-content:space-between;
-    margin-top:20px;
-    padding-top:20px;
-    border-top:2px solid var(--gold);
-    font-size:22px;
-    font-weight:bold;
+.total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px solid var(--gold);
+    font-size: 22px;
+    font-weight: bold;
 }
 
-.total span:last-child{
-    color:var(--gold);
+.total span:last-child {
+    color: var(--gold);
 }
 
-/* BUTTONS */
-
-.buttons{
-    display:flex;
-    gap:15px;
-    margin-top:25px;
+/* ALERTAS */
+.alert {
+    background: rgba(39, 174, 96, 0.1);
+    border: 1px solid var(--green);
+    border-radius: 12px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
-.btn{
-    flex:1;
-    padding:14px;
-    border:none;
-    border-radius:12px;
-    font-weight:bold;
-    cursor:pointer;
-    text-decoration:none;
-    text-align:center;
-    transition:.3s;
+.alert i {
+    color: var(--green);
+    font-size: 20px;
 }
 
-.btn:hover{
-    transform:translateY(-3px);
+.alert-warning {
+    background: rgba(243, 156, 18, 0.1);
+    border-color: var(--orange);
 }
 
-.btn-primary{
-    background:var(--gold);
-    color:#000;
+.alert-warning i {
+    color: var(--orange);
 }
 
-.btn-secondary{
-    background:#222;
-    color:#fff;
-    border:1px solid var(--gold);
+.alert-danger {
+    background: rgba(231, 76, 60, 0.1);
+    border-color: var(--red);
 }
 
-.btn-whatsapp{
-    background:#25D366;
-    color:#fff;
+.alert-danger i {
+    color: var(--red);
+}
+
+/* BOTÕES */
+.buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.btn {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    transition: .3s;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+}
+
+.btn-primary {
+    background: var(--gold);
+    color: #000;
+}
+
+.btn-secondary {
+    background: #222;
+    color: #fff;
+    border: 1px solid var(--gold);
+}
+
+.btn-whatsapp {
+    background: #25D366;
+    color: #fff;
+}
+
+/* Skeleton Loading */
+.skeleton {
+    background: linear-gradient(90deg, #1a1a1a 25%, #222 50%, #1a1a1a 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    border-radius: 8px;
+}
+
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.skeleton-text {
+    height: 20px;
+    margin: 10px 0;
+}
+
+.skeleton-title {
+    height: 30px;
+    width: 60%;
+    margin-bottom: 20px;
 }
 
 /* RESPONSIVO */
-
-@media(max-width:768px){
-
-    .menu span{
-        display:none;
+@media (max-width: 768px) {
+    .menu span {
+        display: none;
     }
-
-    .timeline{
-        flex-direction:column;
-        gap:15px;
+    
+    .timeline {
+        flex-direction: column;
+        gap: 15px;
     }
-
-    .timeline::before{
-        display:none;
+    
+    .timeline::before {
+        display: none;
     }
-
-    .timeline-step{
-        display:flex;
-        align-items:center;
-        gap:15px;
+    
+    .timeline-step {
+        display: flex;
+        align-items: center;
+        gap: 15px;
     }
-
-    .timeline-circle{
-        margin:0;
+    
+    .timeline-circle {
+        margin: 0;
     }
-
-    .buttons{
-        flex-direction:column;
+    
+    .buttons {
+        flex-direction: column;
     }
-
-    .info-row{
-        flex-direction:column;
-        gap:6px;
+    
+    .info-row {
+        flex-direction: column;
+        gap: 6px;
     }
-
+    
+    .header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .menu {
+        justify-content: center;
+    }
 }
-
 </style>
 </head>
-
 <body>
 
 <header class="header">
-
-    <div class="logo">
-        Sabor & <span>Arte</span>
-    </div>
-
+    <div class="logo">Sabor & <span>Arte</span></div>
     <nav class="menu">
-
         <a href="dashboard_cliente.html">
-            <i class="fas fa-home"></i>
-            <span>Início</span>
+            <i class="fas fa-home"></i> <span>Início</span>
         </a>
-
-       <a href="mensagens.html">
-    <i class="fas fa-envelope"></i>
-    <span>Mensagens</span>
-    <span class="badge" id="badgeMsg" style="display:none;">
-        0
-    </span>
-</a>
-
-<a href="meu-pedido.html" class="active">
-
-        <a href="meu-pedido.html" class="active">
-            <i class="fas fa-file-invoice"></i>
-            <span>Meu Pedido</span>
+        <a href="mensagens.html">
+            <i class="fas fa-envelope"></i> <span>Mensagens</span>
+            <span id="badgeMsg" class="badge" style="display:none;">0</span>
         </a>
-
-
+        <a href="meu_pedido.html" class="active">
+             <i class="fas fa-file-invoice"></i> <span>Meu Pedido</span>
         </a>
-
         <a href="index.html" onclick="sair()">
-            <i class="fas fa-sign-out-alt"></i>
-            <span>Sair</span>
+            <i class="fas fa-sign-out-alt"></i> <span>Sair</span>
         </a>
-
     </nav>
-
 </header>
 
 <div class="container">
-
-    <!-- STATUS -->
-
-    <div class="status-card">
-
-        <div class="status-icon status-confirmado" id="statusIcon">
-    <i class="fas fa-check-circle"></i>
-</div>
-
+    <!-- STATUS CARD -->
+    <div class="status-card" id="statusCard">
+        <div class="status-icon status-pendente" id="statusIcon">
+            <i class="fas fa-clock"></i>
+        </div>
         <div class="status-text" id="statusText">
-            Pedido Confirmado
+            Carregando...
         </div>
-
+        <div id="statusEventoNome" style="font-size: 16px; color: var(--gold); margin-top: -5px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">
+            <!-- Nome do evento aparecerá aqui -->
+        </div>
         <div class="status-date" id="statusDate">
-            Atualizado hoje
+            Aguardando informações
         </div>
-
     </div>
 
+    <!-- ALERTA -->
+    <div id="alertContainer"></div>
+
     <!-- TIMELINE -->
-
     <div class="timeline">
-
-        <div class="timeline-step completed" id="step1">
+        <div class="timeline-step" id="stepPendente">
+            <div class="timeline-circle">
+                <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="timeline-label">Solicitado</div>
+        </div>
+        <div class="timeline-step" id="stepAprovado">
             <div class="timeline-circle">
                 <i class="fas fa-check"></i>
             </div>
-            <div class="timeline-label">Confirmado</div>
+            <div class="timeline-label">Aprovado</div>
         </div>
-
-        <div class="timeline-step active" id="step2">
+        <div class="timeline-step" id="stepPreparando">
             <div class="timeline-circle">
                 <i class="fas fa-utensils"></i>
             </div>
             <div class="timeline-label">Preparando</div>
         </div>
-
-        <div class="timeline-step" id="step3">
-            <div class="timeline-circle">
-                <i class="fas fa-truck"></i>
-            </div>
-            <div class="timeline-label">Entrega</div>
-        </div>
-
-        <div class="timeline-step" id="step4">
+        <div class="timeline-step" id="stepFinalizado">
             <div class="timeline-circle">
                 <i class="fas fa-star"></i>
             </div>
             <div class="timeline-label">Finalizado</div>
         </div>
-
     </div>
 
-    <!-- EVENTO -->
-
-    <div class="card">
-
+    <!-- INFORMAÇÕES DO EVENTO -->
+    <div class="card" id="eventoCard" style="display: none;">
         <h3>
             <i class="fas fa-calendar-alt"></i>
             Informações do Evento
         </h3>
-
         <div class="info-row">
-            <span class="info-label">Tipo:</span>
-            <span class="info-value" id="eventoTipo">Casamento</span>
+            <span class="info-label">Cliente:</span>
+            <span class="info-value" id="clienteNome">-</span>
         </div>
-
+        <div class="info-row">
+            <span class="info-label">Tipo de Evento:</span>
+            <span class="info-value" id="eventoTipo">-</span>
+        </div>
         <div class="info-row">
             <span class="info-label">Data:</span>
-            <span class="info-value" id="eventoData">20/12/2025</span>
+            <span class="info-value" id="eventoData">-</span>
         </div>
-
         <div class="info-row">
             <span class="info-label">Local:</span>
-            <span class="info-value" id="eventoLocal">
-                Brasília - DF
-            </span>
+            <span class="info-value" id="eventoLocal">-</span>
         </div>
-
         <div class="info-row">
             <span class="info-label">Convidados:</span>
-            <span class="info-value" id="eventoConvidados">
-                150
-            </span>
+            <span class="info-value" id="eventoConvidados">-</span>
         </div>
-
     </div>
 
-    
-
-    <!-- PEDIDO -->
-
-    <!-- CARDÁPIO -->
-
-<div class="card">
-
-    <h3>
-        <i class="fas fa-utensils"></i>
-        Cardápio Selecionado
-    </h3>
-
-    <!-- ITENS DINÂMICOS -->
-    <div id="itensContainer"></div>
-
-</div>
-
-<!-- PACOTE -->
-
-<div class="card">
-
-    <h3>
-        <i class="fas fa-gift"></i>
-        Pacote Selecionado
-    </h3>
-
-    <div class="info-row">
-        <span class="info-label">Pacote:</span>
-
-        <span class="info-value" id="pacoteNome">
-            Carregando...
-        </span>
+    <!-- ITENS DO CARDÁPIO -->
+    <div class="card" id="itensCard" style="display: none;">
+        <h3>
+            <i class="fas fa-utensils"></i>
+            Cardápio Selecionado
+        </h3>
+        <div id="itensContainer"></div>
+        <div class="total">
+            <span>Total do Orçamento:</span>
+            <span id="totalOrcamento">R$ 0,00</span>
+        </div>
     </div>
-
-    <div class="info-row">
-        <span class="info-label">Valor:</span>
-
-        <span class="info-value" id="pacoteValor">
-            R$ 0,00
-        </span>
-    </div>
-
-</div>
-
-<!-- RESUMO TOTAL -->
-
-<div class="card">
-
-    <h3>
-        <i class="fas fa-money-bill-wave"></i>
-        Resumo Total
-    </h3>
-
-    <div class="info-row">
-
-        <span class="info-label">
-            Total Cardápio:
-        </span>
-
-        <span class="info-value" id="subtotalCardapio">
-            R$ 0,00
-        </span>
-
-    </div>
-
-    <div class="info-row">
-
-        <span class="info-label">
-            Pacote:
-        </span>
-
-        <span class="info-value" id="subtotalPacote">
-            R$ 0,00
-        </span>
-
-    </div>
-
-    <div class="total">
-
-        <span>Total Final:</span>
-
-        <span id="totalPedido">
-            R$ 0,00
-        </span>
-
-    </div>
-
-</div>
 
     <!-- BOTÕES -->
-
     <div class="buttons">
-
         <button class="btn btn-whatsapp" onclick="falarEquipe()">
             <i class="fab fa-whatsapp"></i>
             Falar com equipe
         </button>
-
-        <button class="btn btn-secondary" onclick="baixarComprovante()">
-            <i class="fas fa-download"></i>
-            Baixar comprovante
-        </button>
-
         <a href="cardapio.html" class="btn btn-primary">
             <i class="fas fa-plus"></i>
-            Adicionar itens
+            Solicitar novo orçamento
         </a>
-
     </div>
-
 </div>
 
 <script>
+let orcamentoAtual = null;
+let intervaloAtualizacao = null;
 
 const usuario = JSON.parse(localStorage.getItem("usuario"));
+const clienteId = Number(localStorage.getItem("clienteId"));
 
-if (!usuario) {
+if (!usuario || !clienteId) {
     window.location.href = "login.html";
 }
 
-/* =========================
-   WHATSAPP
-========================= */
-
-function falarEquipe() {
-
-    const numero = "5561999999999";
-
-    const mensagem = encodeURIComponent(
-        `Olá! Sou ${usuario.nome} e gostaria de informações sobre meu pedido.`
-    );
-
-    window.open(
-        `https://wa.me/${numero}?text=${mensagem}`,
-        "_blank"
-    );
-}
-
-/* =========================
-   LOGOUT
-========================= */
-
-function sair() {
-
-    localStorage.clear();
-
-    window.location.href = "login.html";
-}
-
-/* =========================
-   NOTIFICAÇÕES
-========================= */
-
-async function carregarNotificacoes() {
-
-    try {
-
-        const badge = document.getElementById("badgeMsg");
-
-        const total = Math.floor(Math.random() * 5);
-
-        if (total > 0) {
-
-            badge.innerText = total;
-            badge.style.display = "flex";
-
-        } else {
-
-            badge.style.display = "none";
+// Mapeamento de status
+const statusMap = {
+    'pendente': {
+        texto: 'Pendente',
+        icone: '<i class="fas fa-clock"></i>',
+        classe: 'status-pendente',
+        alerta: {
+            tipo: 'warning',
+            mensagem: 'Seu orçamento está sendo analisado. Em breve retornaremos!'
         }
+    },
+    'aprovado': {
+        texto: 'Aprovado! 🎉',
+        icone: '<i class="fas fa-check-circle"></i>',
+        classe: 'status-aprovado',
+        alerta: {
+            tipo: 'success',
+            mensagem: 'Seu orçamento foi aprovado! Já estamos preparando tudo.'
+        }
+    },
+    'recusado': {
+        texto: 'Orçamento Não Aprovado',
+        icone: '<i class="fas fa-times-circle"></i>',
+        classe: 'status-recusado',
+        alerta: {
+            tipo: 'danger',
+            mensagem: 'Infelizmente seu orçamento não foi aprovado. Entre em contato conosco para ajustes.'
+        }
+    },
+    'preparando': {
+        texto: 'Preparando seu Evento!',
+        icone: '<i class="fas fa-utensils"></i>',
+        classe: 'status-pendente',
+        alerta: {
+            tipo: 'info',
+            mensagem: 'Boa notícia! Seu orçamento foi aprovado e já estamos preparando tudo para o seu evento.'
+        }
+    }
+};
 
-    } catch (erro) {
-
-        console.log(erro);
+function atualizarTimeline(status) {
+    // Reset todos os steps
+    const steps = ['stepPendente', 'stepAprovado', 'stepPreparando', 'stepFinalizado'];
+    steps.forEach(step => {
+        const element = document.getElementById(step);
+        if (element) {
+            element.classList.remove('active', 'completed');
+        }
+    });
+    
+    // Mapeamento de status para step
+    const statusToStep = {
+        'pendente': ['stepPendente'],
+        'aprovado': ['stepPendente', 'stepAprovado'],
+        'preparando': ['stepPendente', 'stepAprovado', 'stepPreparando'],
+        'recusado': ['stepPendente'] // recusado mantém só o primeiro
+    };
+    
+    const stepsToActivate = statusToStep[status] || ['stepPendente'];
+    
+    stepsToActivate.forEach((step, index) => {
+        const element = document.getElementById(step);
+        if (element) {
+            if (index === stepsToActivate.length - 1 && status !== 'recusado') {
+                element.classList.add('active');
+            } else {
+                element.classList.add('completed');
+            }
+        }
+    });
+    
+    // Se for recusado, mostra com estilo diferente
+    if (status === 'recusado') {
+        const stepPendente = document.getElementById('stepPendente');
+        if (stepPendente) {
+            stepPendente.classList.add('active');
+            const circle = stepPendente.querySelector('.timeline-circle');
+            if (circle) {
+                circle.style.background = 'var(--red)';
+                circle.style.borderColor = 'var(--red)';
+            }
+        }
     }
 }
 
-/* =========================
-   ATUALIZA STATUS
-========================= */
-
-function atualizarStatus(status) {
-
-    const statusText = document.getElementById("statusText");
-    const statusIcon = document.getElementById("statusIcon");
-
-    document.querySelectorAll(".timeline-step")
-        .forEach(step => {
-            step.classList.remove("active", "completed");
-        });
-
-    switch ((status || "").toLowerCase()) {
-
-        case "confirmado":
-
-            statusText.innerText = "Pedido Confirmado";
-
-            statusIcon.className =
-                "status-icon status-confirmado";
-
-            statusIcon.innerHTML =
-                '<i class="fas fa-check-circle"></i>';
-
-            document.getElementById("step1")
-                .classList.add("active");
-
-        break;
-
-        case "preparando":
-
-            statusText.innerText = "Em Preparo";
-
-            statusIcon.className =
-                "status-icon status-preparando";
-
-            statusIcon.innerHTML =
-                '<i class="fas fa-utensils"></i>';
-
-            document.getElementById("step1")
-                .classList.add("completed");
-
-            document.getElementById("step2")
-                .classList.add("active");
-
-        break;
-
-        case "pronto":
-
-            statusText.innerText = "Pedido Pronto";
-
-            statusIcon.className =
-                "status-icon status-entrega";
-
-            statusIcon.innerHTML =
-                '<i class="fas fa-truck"></i>';
-
-            document.getElementById("step1")
-                .classList.add("completed");
-
-            document.getElementById("step2")
-                .classList.add("completed");
-
-            document.getElementById("step3")
-                .classList.add("active");
-
-        break;
-
-        case "entregue":
-
-            statusText.innerText = "Pedido Finalizado";
-
-            statusIcon.className =
-                "status-icon status-finalizado";
-
-            statusIcon.innerHTML =
-                '<i class="fas fa-star"></i>';
-
-            document.getElementById("step1")
-                .classList.add("completed");
-
-            document.getElementById("step2")
-                .classList.add("completed");
-
-            document.getElementById("step3")
-                .classList.add("completed");
-
-            document.getElementById("step4")
-                .classList.add("active");
-
-        break;
-    }
-}
-
-/* =========================
-   CARREGA ITENS
-========================= */
-
-function carregarItensPedido(pedido) {
-
-    const itensContainer =
-        document.getElementById("itensContainer");
-
-    itensContainer.innerHTML = "";
-
-    let totalItens = 0;
-
-    if (
-        pedido &&
-        pedido.itens &&
-        pedido.itens.length > 0
-    ) {
-
-        pedido.itens.forEach(item => {
-
-            const qtd = Number(
-                item.qtd ||
-                item.quantidade ||
-                1
-            );
-
-            const preco = Number(
-                item.preco ||
-                item.valor ||
-                0
-            );
-
-            const subtotal = qtd * preco;
-
-            totalItens += subtotal;
-
-            itensContainer.innerHTML += `
-                <div class="item-row">
-
-                    <div class="item-info">
-                        <span class="item-qtd">
-                            ${qtd}x
-                        </span>
-
-                        <span>
-                            ${item.nome}
-                        </span>
+function atualizarAlerta(status) {
+    const alertContainer = document.getElementById('alertContainer');
+    const statusInfo = statusMap[status];
+    
+    if (!statusInfo || status === 'recusado') {
+        if (status === 'recusado') {
+            alertContainer.innerHTML = `
+                <div class="alert alert-danger">
+                    <i class="fas fa-times-circle"></i>
+                    <div>
+                        <strong>Orçamento Recusado</strong><br>
+                        Infelizmente seu orçamento não foi aprovado. Entre em contato conosco para ajustes ou faça uma nova solicitação.
                     </div>
-
-                    <span>
-                        ${subtotal.toLocaleString("pt-BR",{
-                            style:"currency",
-                            currency:"BRL"
-                        })}
-                    </span>
-
                 </div>
             `;
-        });
-
-    } else {
-
-        itensContainer.innerHTML = `
-            <p style="color:#888">
-                Nenhum item encontrado.
-            </p>
-        `;
-    }
-
-    return totalItens;
-}
-
-/* =========================
-   ATUALIZA TELA
-========================= */
-
-function atualizarTela(pedido) {
-
-    atualizarStatus(pedido.status);
-
-    document.getElementById("eventoTipo").innerText =
-        pedido.tipo || "-";
-
-    document.getElementById("eventoLocal").innerText =
-        pedido.local || "-";
-
-    document.getElementById("eventoConvidados").innerText =
-        pedido.convidados || "-";
-
-    if (pedido.data) {
-
-        document.getElementById("eventoData").innerText =
-            new Date(pedido.data)
-            .toLocaleDateString("pt-BR");
-    }
-
-    const totalItens =
-        carregarItensPedido(pedido);
-
-    const pacote =
-        JSON.parse(localStorage.getItem("pacote"));
-
-    let valorPacote = 0;
-
-    if (pacote) {
-
-        valorPacote = Number(
-            pacote.preco || 0
-        );
-
-        document.getElementById("pacoteNome")
-            .innerText = pacote.nome;
-
-        document.getElementById("pacoteValor")
-            .innerText =
-            valorPacote.toLocaleString("pt-BR", {
-                style: "currency",
-                currency: "BRL"
-            });
-
-    } else {
-
-        document.getElementById("pacoteNome")
-            .innerText = "Nenhum pacote";
-
-        document.getElementById("pacoteValor")
-            .innerText = "R$ 0,00";
-    }
-
-    document.getElementById("subtotalCardapio")
-        .innerText =
-        totalItens.toLocaleString("pt-BR", {
-            style: "currency",
-            currency: "BRL"
-        });
-
-    document.getElementById("subtotalPacote")
-        .innerText =
-        valorPacote.toLocaleString("pt-BR", {
-            style: "currency",
-            currency: "BRL"
-        });
-
-    const totalFinal =
-        totalItens + valorPacote;
-
-    document.getElementById("totalPedido")
-        .innerText =
-        totalFinal.toLocaleString("pt-BR", {
-            style: "currency",
-            currency: "BRL"
-        });
-}
-
-/* =========================
-   CARREGA PEDIDO
-========================= */
-
-async function carregarPedido() {
-
-    try {
-
-        const resposta = await fetch(
-            `http://localhost:3000/meu-pedido/${usuario.id}`
-        );
-
-        if (!resposta.ok) {
-            throw new Error(
-                "Erro ao carregar pedido"
-            );
+        } else {
+            alertContainer.innerHTML = '';
         }
-
-        const pedido = await resposta.json();
-
-        localStorage.setItem(
-            "pedidoAtual",
-            JSON.stringify(pedido)
-        );
-
-        atualizarTela(pedido);
-
-    } catch (erro) {
-
-        console.log(erro);
-
-        const pedidoLocal =
-            JSON.parse(
-                localStorage.getItem(
-                    "pedidoAtual"
-                )
-            );
-
-        if (pedidoLocal) {
-            atualizarTela(pedidoLocal);
-        }
+        return;
     }
+    
+    const alerta = statusInfo.alerta;
+    let alertClass = '';
+    if (alerta.tipo === 'success') alertClass = '';
+    if (alerta.tipo === 'warning') alertClass = 'alert-warning';
+    if (alerta.tipo === 'danger') alertClass = 'alert-danger';
+    
+    alertContainer.innerHTML = `
+        <div class="alert ${alertClass}">
+            <i class="fas ${alerta.tipo === 'success' ? 'fa-check-circle' : alerta.tipo === 'warning' ? 'fa-clock' : 'fa-info-circle'}"></i>
+            <div>
+                <strong>${statusInfo.texto}</strong><br>
+                ${alerta.mensagem}
+            </div>
+        </div>
+    `;
 }
 
-/* =========================
-   COMPROVANTE
-========================= */
+function atualizarStatusUI(status) {
+    const statusInfo = statusMap[status];
+    
+    if (statusInfo) {
+        document.getElementById('statusIcon').innerHTML = statusInfo.icone;
+        document.getElementById('statusIcon').className = `status-icon ${statusInfo.classe}`;
+        document.getElementById('statusText').innerText = statusInfo.texto;
+    } else {
+        document.getElementById('statusText').innerText = 'Status desconhecido';
+    }
+    
+    const now = new Date();
+    document.getElementById('statusDate').innerHTML = `
+        <i class="fas fa-sync-alt"></i> 
+        Última atualização: ${now.toLocaleTimeString('pt-BR')}
+    `;
+    
+    atualizarTimeline(status);
+    atualizarAlerta(status);
+}
 
-function baixarComprovante() {
-
-    const pacote =
-        JSON.parse(localStorage.getItem("pacote"));
-
-    const pedido =
-        JSON.parse(localStorage.getItem("pedidoAtual"));
-
-    let valorPacote = Number(
-        pacote?.preco || 0
-    );
-
-    let totalItens = 0;
-
-    let texto = `
-=============================
-     SABOR & ARTE BUFFET
-=============================
-
-Cliente: ${usuario.nome}
-
-`;
-
-    texto += `
-PACOTE
------------------------------
-${pacote?.nome || "Nenhum"}
-${valorPacote.toLocaleString("pt-BR",{
-style:"currency",
-currency:"BRL"
-})}
-
-CARDÁPIO
------------------------------
-`;
-
-    pedido?.itens?.forEach(item => {
-
-        const subtotal =
-            Number(item.preco || 0) *
-            Number(item.qtd || 1);
-
-        totalItens += subtotal;
-
-        texto += `
-${item.nome}
-${item.qtd}x - ${subtotal.toLocaleString("pt-BR",{
-style:"currency",
-currency:"BRL"
-})}
-`;
+function formatarMoeda(valor) {
+    return Number(valor || 0).toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
     });
-
-    const totalFinal =
-        totalItens + valorPacote;
-
-    texto += `
-
------------------------------
-Total Cardápio:
-${totalItens.toLocaleString("pt-BR",{
-style:"currency",
-currency:"BRL"
-})}
-
-Pacote:
-${valorPacote.toLocaleString("pt-BR",{
-style:"currency",
-currency:"BRL"
-})}
-
-TOTAL FINAL:
-${totalFinal.toLocaleString("pt-BR",{
-style:"currency",
-currency:"BRL"
-})}
-`;
-
-    const blob = new Blob(
-        [texto],
-        { type: "text/plain" }
-    );
-
-    const link =
-        document.createElement("a");
-
-    link.href =
-        URL.createObjectURL(blob);
-
-    link.download =
-        "comprovante-pedido.txt";
-
-    link.click();
 }
 
-/* =========================
-   INICIAR
-========================= */
+function carregarItens(orcamentoId) {
+    return fetch(`http://localhost:3000/cliente/orcamento/${orcamentoId}/itens`)
+        .then(res => res.json())
+        .then(itens => {
+            const container = document.getElementById('itensContainer');
+            container.innerHTML = '';
+            
+            if (!itens || itens.length === 0) {
+                container.innerHTML = '<p style="color:#888">Nenhum item encontrado.</p>';
+                return 0;
+            }
+            
+            let total = 0;
+            itens.forEach(item => {
+                const subtotal = item.valor * item.quantidade;
+                total += subtotal;
+                
+                container.innerHTML += `
+                    <div class="item-row">
+                        <div class="item-info">
+                            <span class="item-qtd">${item.quantidade}x</span>
+                            <span>${item.nome}</span>
+                            <small style="color:#888">(${item.categoria || 'Geral'})</small>
+                        </div>
+                        <span>${formatarMoeda(subtotal)}</span>
+                    </div>
+                `;
+            });
+            
+            return total;
+        });
+}
 
-carregarPedido();
-carregarNotificacoes();
+async function carregarOrcamento() {
+    try {
+const response = await fetch(`http://localhost:3000/cliente/orcamento/${clienteId}`);
+        const data = await response.json();
+        
+        if (!data.existe && !data.id) {
+            document.getElementById('statusText').innerText = 'Nenhum orçamento encontrado';
+            document.getElementById('statusIcon').innerHTML = '<i class="fas fa-file-alt"></i>';
+            document.getElementById('eventoCard').style.display = 'none';
+            document.getElementById('itensCard').style.display = 'none';
+            return;
+        }
+        
+        orcamentoAtual = data;
+        
+        // Atualizar status
+        const status = data.status || 'pendente';
+        atualizarStatusUI(status);
+        
+        // Mostrar cards
+        document.getElementById('eventoCard').style.display = 'block';
+        document.getElementById('itensCard').style.display = 'block';
+        
+        // Preencher dados do evento
+        document.getElementById('clienteNome').innerText = data.cliente_nome || usuario.nome;
+        document.getElementById('eventoTipo').innerText = data.evento_tipo || '-';
+        document.getElementById('statusEventoNome').innerText = data.evento_tipo || '';
+        document.getElementById('eventoData').innerText = data.evento_data ? new Date(data.evento_data).toLocaleDateString('pt-BR') : '-';
+        document.getElementById('eventoLocal').innerText = data.evento_local || '-';
+        document.getElementById('eventoConvidados').innerText = data.convidados || '-';
+        
+        // Carregar itens e total
+        const totalItens = await carregarItens(data.id);
+        const total = totalItens;
+        document.getElementById('totalOrcamento').innerHTML = formatarMoeda(data.valor_total || total);
+        
+    } catch (error) {
+        console.error('Erro ao carregar orçamento:', error);
+        document.getElementById('statusText').innerText = 'Erro ao carregar dados';
+    }
+}
 
-setInterval(
-    carregarNotificacoes,
-    15000
-);
+function falarEquipe() {
+    const numero = "5561999999999";
+    const status = orcamentoAtual?.status || 'pendente';
+    let mensagem = `Olá! Sou ${usuario.nome} e gostaria de informações sobre meu orçamento.`;
+    
+    if (status === 'aprovado') {
+        mensagem = `Olá! Sou ${usuario.nome} e meu orçamento foi aprovado! Gostaria de confirmar os próximos passos.`;
+    } else if (status === 'pendente') {
+        mensagem = `Olá! Sou ${usuario.nome} e gostaria de saber quando meu orçamento será analisado.`;
+    } else if (status === 'recusado') {
+        mensagem = `Olá! Sou ${usuario.nome} e gostaria de entender por que meu orçamento não foi aprovado.`;
+    }
+    
+    window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`, "_blank");
+}
+
+    async function carregarNotificacoes() {
+        try {
+            const response = await fetch(`http://localhost:3000/cliente/mensagens/nao-lidas/count?cliente_id=${clienteId}`);
+            const data = await response.json();
+            
+            const badge = document.getElementById("badgeMsg");
+            if (badge && data.total > 0) {
+                badge.innerText = data.total;
+                badge.style.display = "inline-flex";
+            } else if (badge) {
+                badge.style.display = "none";
+            }
+        } catch (error) {
+            console.error("Erro ao carregar notificações:", error);
+        }
+    }
+
+function sair() {
+    if (intervaloAtualizacao) {
+        clearInterval(intervaloAtualizacao);
+    }
+    localStorage.clear();
+    window.location.href = "index.html";
+}
+
+// Iniciar polling (atualização automática a cada 5 segundos)
+function iniciarPolling() {
+    carregarOrcamento();
+    carregarNotificacoes();
+    if (intervaloAtualizacao) {
+        clearInterval(intervaloAtualizacao);
+    }
+    intervaloAtualizacao = setInterval(() => {
+        carregarOrcamento();
+        carregarNotificacoes();
+    }, 5000);
+}
+
+iniciarPolling();
 </script>
-
 </body>
 </html>
-

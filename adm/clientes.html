@@ -960,12 +960,11 @@ async function editar(id){
   modal.style.display = "flex"
 }
 
-// REMOVER
+
+// REMOVER - VERSÃO QUE FUNCIONAVA ANTES
 async function remover(id){
 
-  if(!confirm(
-    "Excluir cliente, pedidos e eventos?"
-  )) return
+  if(!confirm("Excluir cliente, pedidos e eventos?")) return;
 
   try{
 
@@ -1028,6 +1027,7 @@ async function remover(id){
     alert("Erro ao excluir")
   }
 }
+
 // INIT
 carregarClientes()
 
