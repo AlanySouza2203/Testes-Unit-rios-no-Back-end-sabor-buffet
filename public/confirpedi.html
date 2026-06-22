@@ -183,10 +183,9 @@
         <div id="itens"></div>
       </div>
 
-      <div class="total">
-        Total: R$ <span id="total">0</span>
-      </div>
-
+    <div class="total">
+  Total: <span id="total">R$ 0,00</span>
+</div>
       <!-- BOTÕES -->
       <div class="botoes">
 
@@ -307,7 +306,7 @@ console.log("totalFinal:", totalFinal);
 
 // MOSTRAR TOTAL
 document.getElementById("total").innerText =
-  totalFinal.toFixed(2).replace(".", ",");
+  formatarMoeda(totalFinal);
 
 //  CANCELAR
 function cancelarPedido() {
@@ -351,7 +350,7 @@ async function confirmarPedido() {
     cliente_id: clienteId,
     evento_id: Number(eventoId),
     admin_id: 1,
-    itens: itensPedido,  // ✅ CORRETO - estrutura do pedido
+    itens: itensPedido,  
     total: totalFinal,
     metodo_pagamento: null
   };
@@ -380,7 +379,7 @@ async function confirmarPedido() {
       return;
     }
 
-    console.log("✅ Pedido salvo:", dataPedido);
+    console.log(" Pedido salvo:", dataPedido);
 
     // =========================
     // CRIAR ORÇAMENTO AUTOMÁTICO
@@ -390,13 +389,13 @@ async function confirmarPedido() {
       evento_id: Number(eventoId),
       admin_id: 1,
       valor_total: totalFinal,
-      itens: itensOrcamento,  // ✅ CORRETO - estrutura do orçamento
+      itens: itensOrcamento,  
       status: "pendente",
       status_pagamento: "pendente"
     };
     
 
-    console.log("📋 Criando orçamento:", orcamento);
+    console.log(" Criando orçamento:", orcamento);
 
     const resOrcamento = await fetch(
       "http://localhost:3000/orcamentos",
@@ -417,7 +416,7 @@ async function confirmarPedido() {
       return;
     }
 
-    console.log("✅ Orçamento criado:", dataOrcamento);
+    console.log(" Orçamento criado:", dataOrcamento);
 
     // =========================
     // SALVAR PARA PAGAMENTO

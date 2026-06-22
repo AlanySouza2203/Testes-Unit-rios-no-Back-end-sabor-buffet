@@ -10,9 +10,9 @@ app.use(express.json());
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "",
+  password: "senac",
   database: "buffet_db",
-  port: 3306
+  port: 3307
 });
 
 db.connect((err) => {
