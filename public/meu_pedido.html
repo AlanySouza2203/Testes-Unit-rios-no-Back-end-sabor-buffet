@@ -17,7 +17,6 @@
     --blue: #3498db;
     --orange: #f39c12;
     --red: #e74c3c;
-    --info: #3498db;
 }
 
 * {
@@ -321,55 +320,6 @@ body {
     color: #fff;
 }
 
-/* ESTILOS PARA MENSAGENS (COPIADO DE MENSAGENS.HTML) */
-.mensagens-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    padding: 25px;
-    margin-bottom: 25px;
-}
-
-.lista-mensagens {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    max-height: 400px;
-    overflow-y: auto;
-    padding-right: 10px;
-}
-
-.mensagem {
-    padding: 16px;
-    border-radius: 10px;
-    border: 1px solid #2a2a2a;
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-}
-
-.mensagem .icone {
-    width: 40px;
-    height: 40px;
-    flex-shrink: 0;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(52, 152, 219, 0.1);
-    color: var(--info);
-}
-
-.mensagem .texto {
-    font-size: 15px;
-    color: #ddd;
-}
-
-.mensagem .data {
-    font-size: 12px;
-    color: #777;
-    margin-top: 6px;
-}
 /* Skeleton Loading */
 .skeleton {
     background: linear-gradient(90deg, #1a1a1a 25%, #222 50%, #1a1a1a 75%);
@@ -447,7 +397,10 @@ body {
         <a href="dashboard_cliente.html">
             <i class="fas fa-home"></i> <span>Início</span>
         </a>
-
+        <a href="mensagens.html">
+            <i class="fas fa-envelope"></i> <span>Mensagens</span>
+            <span id="badgeMsg" class="badge" style="display:none;">0</span>
+        </a>
         <a href="meu_pedido.html" class="active">
              <i class="fas fa-file-invoice"></i> <span>Meu Pedido</span>
         </a>
@@ -503,15 +456,6 @@ body {
             </div>
             <div class="timeline-label">Finalizado</div>
         </div>
-    </div>
-
-    <!-- MENSAGENS DA EQUIPE -->
-    <div class="mensagens-card" id="mensagensCard" style="display: none;">
-        <h3>
-            <i class="fas fa-comments"></i>
-            Atualizações da Nossa Equipe
-        </h3>
-        <div id="listaMensagens"></div>
     </div>
 
     <!-- INFORMAÇÕES DO EVENTO -->
@@ -616,15 +560,6 @@ const statusMap = {
             tipo: 'info',
             mensagem: 'Boa notícia! Seu orçamento foi aprovado e já estamos preparando tudo para o seu evento.'
         }
-    },
-    'finalizado': {
-        texto: 'Evento Finalizado!',
-        icone: '<i class="fas fa-star"></i>',
-        classe: 'status-aprovado',
-        alerta: {
-            tipo: 'success',
-            mensagem: 'Seu evento foi concluído com sucesso! Agradecemos a confiança.'
-        }
     }
 };
 
@@ -643,8 +578,7 @@ function atualizarTimeline(status) {
         'pendente': ['stepPendente'],
         'aprovado': ['stepPendente', 'stepAprovado'],
         'preparando': ['stepPendente', 'stepAprovado', 'stepPreparando'],
-        'finalizado': ['stepPendente', 'stepAprovado', 'stepPreparando', 'stepFinalizado'],
-        'recusado': ['stepPendente']
+        'recusado': ['stepPendente'] // recusado mantém só o primeiro
     };
     
     const stepsToActivate = statusToStep[status] || ['stepPendente'];
@@ -652,7 +586,7 @@ function atualizarTimeline(status) {
     stepsToActivate.forEach((step, index) => {
         const element = document.getElementById(step);
         if (element) {
-            if (index === stepsToActivate.length - 1 && status !== 'recusado' && status !== 'finalizado') {
+            if (index === stepsToActivate.length - 1 && status !== 'recusado') {
                 element.classList.add('active');
             } else {
                 element.classList.add('completed');
@@ -773,58 +707,9 @@ function carregarItens(orcamentoId) {
         });
 }
 
-async function carregarMensagens() {
-    const container = document.getElementById("listaMensagens");
-    const card = document.getElementById("mensagensCard");
-
-    try {
-        const res = await fetch(`http://localhost:3000/mensagens?cliente_id=${clienteId}`);
-        const mensagens = await res.json();
-
-        if (!res.ok || !Array.isArray(mensagens)) {
-            throw new Error('Erro ao buscar mensagens');
-        }
-
-        if (mensagens.length === 0) {
-            card.style.display = 'none';
-            return;
-        }
-
-        card.style.display = 'block';
-        container.innerHTML = ''; // Limpa o container
-
-        mensagens.forEach(msg => {
-            const data = new Date(msg.criado_em);
-            const dataFormatada = data.toLocaleDateString('pt-BR', {
-                day: '2-digit',
-                month: 'long',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-
-            container.innerHTML += `
-                <div class="mensagem">
-                    <div class="icone">
-                        <i class="fas fa-bell"></i>
-                    </div>
-                    <div class="conteudo">
-                        <div class="texto">${msg.mensagem}</div>
-                        <div class="data">${dataFormatada}</div>
-                    </div>
-                </div>
-            `;
-        });
-
-    } catch (err) {
-        console.error("Erro ao carregar mensagens:", err);
-        card.style.display = 'none';
-    }
-}
-
 async function carregarOrcamento() {
     try {
-        // Usaremos o novo endpoint que traz tudo de uma vez
-        const response = await fetch(`http://localhost:3000/cliente/orcamento-completo/${clienteId}`);
+const response = await fetch(`http://localhost:3000/cliente/orcamento/${clienteId}`);
         const data = await response.json();
         
         if (!data.existe && !data.id) {
@@ -836,9 +721,6 @@ async function carregarOrcamento() {
         }
         
         orcamentoAtual = data;
-
-        // Carrega as mensagens relacionadas
-        await carregarMensagens();
         
         // Atualizar status
         const status = data.status || 'pendente';
@@ -849,30 +731,17 @@ async function carregarOrcamento() {
         document.getElementById('itensCard').style.display = 'block';
         
         // Preencher dados do evento
-        document.getElementById('clienteNome').innerText = data.cliente.nome || usuario.nome;
-        document.getElementById('eventoTipo').innerText = data.evento.tipo || '-';
-        document.getElementById('statusEventoNome').innerText = data.evento.tipo || '';
-        document.getElementById('eventoData').innerText = data.evento.data ? new Date(data.evento.data).toLocaleDateString('pt-BR') : '-';
-        document.getElementById('eventoLocal').innerText = data.evento.local || '-';
-        document.getElementById('eventoConvidados').innerText = data.evento.convidados || '-';
+        document.getElementById('clienteNome').innerText = data.cliente_nome || usuario.nome;
+        document.getElementById('eventoTipo').innerText = data.evento_tipo || '-';
+        document.getElementById('statusEventoNome').innerText = data.evento_tipo || '';
+        document.getElementById('eventoData').innerText = data.evento_data ? new Date(data.evento_data).toLocaleDateString('pt-BR') : '-';
+        document.getElementById('eventoLocal').innerText = data.evento_local || '-';
+        document.getElementById('eventoConvidados').innerText = data.convidados || '-';
         
         // Carregar itens e total
-        const containerItens = document.getElementById('itensContainer');
-        containerItens.innerHTML = '';
-        if (data.itens && data.itens.length > 0) {
-            data.itens.forEach(item => {
-                containerItens.innerHTML += `
-                    <div class="item-row">
-                        <div class="item-info">
-                            <span class="item-qtd">${item.quantidade}x</span>
-                            <span>${item.nome}</span>
-                        </div>
-                        <span>${formatarMoeda(item.subtotal)}</span>
-                    </div>
-                `;
-            });
-        }
-        document.getElementById('totalOrcamento').innerHTML = formatarMoeda(data.valor_total);
+        const totalItens = await carregarItens(data.id);
+        const total = totalItens;
+        document.getElementById('totalOrcamento').innerHTML = formatarMoeda(data.valor_total || total);
         
     } catch (error) {
         console.error('Erro ao carregar orçamento:', error);

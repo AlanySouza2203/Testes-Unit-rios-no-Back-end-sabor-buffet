@@ -6,6 +6,7 @@ CREATE  DATABASE buffet_db;
 USE buffet_db;
 
 
+
 -- =========================================
 -- USUÁRIOS
 -- =========================================
@@ -146,8 +147,7 @@ CREATE TABLE orcamento (
     status ENUM(
         'pendente',
         'aprovado',
-        'recusado',
-        'preparando'
+        'recusado'
     ) DEFAULT 'pendente',
 
     status_pagamento ENUM(
@@ -296,6 +296,22 @@ CREATE TABLE pagamento (
 );
 
 -- =========================================
+-- MENSAGENS / NOTIFICAÇÕES
+-- =========================================
+
+CREATE TABLE mensagens (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    pedido_id INT,
+    cliente_id INT NOT NULL,
+    mensagem TEXT NOT NULL,
+    tipo ENUM('admin', 'cliente') NOT NULL,
+    lida BOOLEAN DEFAULT FALSE,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (pedido_id) REFERENCES pedidos(id) ON DELETE CASCADE,
+    FOREIGN KEY (cliente_id) REFERENCES cliente(id) ON DELETE CASCADE
+);
+
+-- =========================================
 -- USUÁRIOS
 -- =========================================
 
@@ -382,14 +398,34 @@ VALUES
     'https://i.pinimg.com/736x/fe/50/6b/fe506b764c144d32330995c945a0f364.jpg'
 ),
 (
+    'Pacote Festa Infantil Premium',
+    'servico',
+    'pacote',
+    4500.00,
+    'https://via.placeholder.com/120'
+);
+
+-- =========================================
+-- INSERIR NOVO ITEM/SERVIÇO
+-- =========================================
+
+INSERT INTO item_servico (
+    nome,
+    tipo,
+    categoria,
+    valor,
+    imagem
+)
+VALUES (
     'Macarrão',
     'comida',
     'principal',
     28.00,
     'https://i.pinimg.com/736x/96/4d/fb/964dfbd9d27f85e7b1fc155bccd04bac.jpg'
 );
+
 -- =========================================
--- EVENTOS/ ITEN
+-- RELACIONAR ITEM AO EVENTO
 -- =========================================
 
 INSERT INTO evento_item (
@@ -398,11 +434,11 @@ INSERT INTO evento_item (
     quantidade
 )
 VALUES
-(1, 1, 150),
-(1, 2, 150),
-(2, 4, 100),
-(2, 5, 100),
-(3, 3, 200);
+(1, 1, 150), -- Casamento: Hambúrguer
+(1, 2, 150), -- Casamento: Pizza
+(2, 4, 100), -- Aniversário: Bolo Pedaço
+(2, 6, 100), -- Aniversário: Macarrão
+(3, 3, 200); -- Formatura: Sushi
 -- =========================================
 -- ORÇAMENTOS
 -- =========================================
@@ -444,6 +480,9 @@ VALUES
 (3, 1, 100, 15.00);
 
 -- =========================================
+-- PEDIDOS (DADOS CORRIGIDOS COM VALOR E QUANTIDADE)
+-- =========================================
+-- =========================================
 -- PEDIDOS
 -- =========================================
 
@@ -464,7 +503,7 @@ VALUES
     JSON_ARRAY(
         JSON_OBJECT('nome','Hambúrguer','qtd',150),
         JSON_OBJECT('nome','Pizza','qtd',150)
-    ),
+    ), -- OLD: Missing 'valor'
     6750.00,
     'Pendente'
 ),
@@ -476,7 +515,7 @@ VALUES
     JSON_ARRAY(
         JSON_OBJECT('nome','Bolo Pedaço','qtd',100),
         JSON_OBJECT('nome','Macarrão','qtd',100)
-    ),
+    ), -- OLD: Missing 'valor'
     4000.00,
     'Pendente'
 ),
@@ -509,30 +548,6 @@ VALUES
 (3, 'pix', 9500.00, 'pendente', 1);
 
 SHOW TABLES;
-
--- =========================================
--- MENSAGENS
--- =========================================
-
-CREATE TABLE mensagens (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    pedido_id INT,
-    cliente_id INT NOT NULL,
-    mensagem TEXT NOT NULL,
-    tipo ENUM('admin', 'cliente') DEFAULT 'cliente',
-    lida BOOLEAN DEFAULT FALSE,
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
-    FOREIGN KEY (pedido_id)
-        REFERENCES pedidos(id)
-        ON DELETE CASCADE,
-
-    FOREIGN KEY (cliente_id)
-        REFERENCES cliente(id)
-        ON DELETE CASCADE
-);
-
-
 SELECT * FROM cliente;
 USE buffet_db;
 

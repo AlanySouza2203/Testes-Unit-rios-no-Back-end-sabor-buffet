@@ -144,7 +144,6 @@ body{
     display:flex;
     flex-direction:column;
     gap:12px;
-
     padding-top:20px;
     border-top:1px solid rgba(255,255,255,0.05);
 }
@@ -709,9 +708,9 @@ body{
 
         <div class="sidebar-footer">
 
-            <a href="funcionarios.html" id="link-funcionarios" style="display: none;">
-                <i data-lucide="user-cog"></i>
-                Funcionários
+            <a href="#">
+                <i data-lucide="panel-left-close"></i>
+                Recolher
             </a>
 
             <a href="../public/login.html">
@@ -852,11 +851,7 @@ lucide.createIcons();
 
 const usuario = JSON.parse(localStorage.getItem("usuario"));
 
-if (usuario && usuario.email === 'admin@email.com') {
-    document.getElementById('link-funcionarios').style.display = 'flex';
-}
-
-if (!usuario || (usuario.tipo !== "admin" && usuario.tipo !== "funcionario")) {
+if (!usuario || usuario.tipo !== "admin") {
     window.location.href = "../public/login.html";
 }
 
@@ -902,9 +897,11 @@ async function carregarEventos() {
 
     try {
 
-        console.log("Carregando eventos...");
+        console.log("Carregando eventos para admin_id:", usuario.id);
 
-        const res = await fetch(`http://localhost:3000/eventos`);
+        const res = await fetch(
+            `http://localhost:3000/eventos?admin_id=${usuario.id}`
+        );
 
         eventos = await res.json();
 
@@ -916,6 +913,7 @@ async function carregarEventos() {
         sel.innerHTML = `<option value="">Selecione um evento...</option>`;
 
         if (eventos.length === 0) {
+            console.warn("Nenhum evento carregado para admin_id:", usuario.id);
             sel.innerHTML += `<option value="" disabled>Nenhum evento disponível</option>`;
         }
 
@@ -1066,6 +1064,24 @@ function fecharModal() {
     document.getElementById("modal").style.display = "none";
 }
 
+/* =====================
+   ITENS NO MODAL (DESCONTINUADO)
+===================== */
+
+// As funções abaixo não são mais usadas
+// Os itens são agora apenas exibidos (read-only)
+
+function adicionarItem() {
+    // Função descontinuada - itens são criados automaticamente com o cliente
+}
+
+function removerItemModal(index) {
+    // Função descontinuada - itens não podem ser removidos
+}
+
+function renderItensModal() {
+    // Função descontinuada - usar renderInfoItens() em seu lugar
+}
 
 /* =====================
    SALVAR STATUS DO ORÇAMENTO
