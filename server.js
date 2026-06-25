@@ -10,9 +10,9 @@ app.use(express.json());
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "senac",
+  password: "",
   database: "buffet_db",
-  port: 3307
+  port: 3306
 });
 
 db.connect((err) => {
@@ -311,7 +311,7 @@ app.post("/clientes", (req, res) => {
 // LISTAR CLIENTES
 app.get("/clientes", (req, res) => {
 
-    let sql = "SELECT * FROM cliente ORDER BY id DESC";
+    const sql = "SELECT * FROM cliente ORDER BY id DESC";
 
     db.query(sql, (err, result) => {
 
@@ -376,54 +376,86 @@ app.put("/clientes/:id", (req, res) => {
 });
 
 
-// DELETAR CLIENTE
+// DELETAR CLIENTE (E DADOS ASSOCIADOS)
 app.delete("/clientes/:id", (req, res) => {
-
     const { id } = req.params;
+    console.log(`Iniciando exclusão do cliente ID: ${id} e seus dados associados.`);
 
-    db.query(
-        "SELECT id FROM evento WHERE cliente_id = ?",
-        [id],
-        (err, eventos) => {
-
-            if (err) {
-                console.log("Erro ao verificar eventos:", err);
-                return res.status(500).json({
-                    erro: "Erro interno"
-                });
-            }
-
-            if (eventos.length > 0) {
-                return res.status(400).json({
-                    erro: "Cliente possui eventos vinculados"
-                });
-            }
-
-            db.query(
-                "DELETE FROM cliente WHERE id = ?",
-                [id],
-                (err2, result) => {
-
-                    if (err2) {
-                        console.log("Erro ao deletar cliente:", err2);
-                        return res.status(500).json({
-                            erro: "Erro ao deletar cliente"
-                        });
-                    }
-
-                    if (result.affectedRows === 0) {
-                        return res.status(404).json({
-                            erro: "Cliente não encontrado"
-                        });
-                    }
-
-                    res.json({
-                        mensagem: "Cliente removido com sucesso"
-                    });
-                }
-            );
+    // Usando transação para garantir a integridade dos dados
+    db.beginTransaction(err => {
+        if (err) {
+            console.error("Erro ao iniciar transação:", err);
+            return res.status(500).json({ erro: "Erro no servidor" });
         }
-    );
+
+        // 1. Encontrar todos os eventos do cliente
+        db.query("SELECT id FROM evento WHERE cliente_id = ?", [id], (err, eventos) => {
+            if (err) {
+                return db.rollback(() => res.status(500).json({ erro: "Erro ao buscar eventos do cliente" }));
+            }
+
+            const eventoIds = eventos.map(e => e.id);
+            console.log(`Eventos encontrados para o cliente ${id}:`, eventoIds);
+
+            if (eventoIds.length > 0) {
+                // 2. Deletar itens dos orçamentos associados aos eventos
+                db.query("DELETE FROM item_orcamento WHERE orcamento_id IN (SELECT id FROM orcamento WHERE evento_id IN (?))", [eventoIds], (err) => {
+                    if (err) {
+                        return db.rollback(() => res.status(500).json({ erro: "Erro ao deletar itens de orçamentos" }));
+                    }
+                    console.log("Itens de orçamentos deletados.");
+
+                    // 3. Deletar orçamentos
+                    db.query("DELETE FROM orcamento WHERE evento_id IN (?)", [eventoIds], (err) => {
+                        if (err) {
+                            return db.rollback(() => res.status(500).json({ erro: "Erro ao deletar orçamentos" }));
+                        }
+                        console.log("Orçamentos deletados.");
+
+                        // 4. Deletar pedidos
+                        db.query("DELETE FROM pedidos WHERE evento_id IN (?)", [eventoIds], (err) => {
+                            if (err) {
+                                return db.rollback(() => res.status(500).json({ erro: "Erro ao deletar pedidos" }));
+                            }
+                            console.log("Pedidos deletados.");
+
+                            // 5. Deletar eventos
+                            db.query("DELETE FROM evento WHERE id IN (?)", [eventoIds], (err) => {
+                                if (err) {
+                                    return db.rollback(() => res.status(500).json({ erro: "Erro ao deletar eventos" }));
+                                }
+                                console.log("Eventos deletados.");
+                                deletarClienteFinal();
+                            });
+                        });
+                    });
+                });
+            } else {
+                deletarClienteFinal();
+            }
+        });
+
+        function deletarClienteFinal() {
+            // 6. Deletar o cliente
+            db.query("DELETE FROM cliente WHERE id = ?", [id], (err, result) => {
+                if (err) {
+                    return db.rollback(() => res.status(500).json({ erro: "Erro ao deletar o cliente" }));
+                }
+                if (result.affectedRows === 0) {
+                    return db.rollback(() => res.status(404).json({ erro: "Cliente não encontrado" }));
+                }
+                console.log(`Cliente ${id} deletado.`);
+
+                db.commit(err => {
+                    if (err) {
+                        return db.rollback(() => res.status(500).json({ erro: "Erro ao finalizar a transação" }));
+                    }
+                    console.log(`Transação para exclusão do cliente ${id} concluída com sucesso.`);
+                    res.json({ mensagem: "Cliente e todos os dados associados foram removidos com sucesso" });
+                });
+            });
+        }
+    });
 });
 
 // ===============================
@@ -525,11 +557,6 @@ app.get("/eventos", (req, res) => {
         params.push(cliente_id);
     }
 
-    if (admin_id) {
-        sql += " AND e.admin_id = ?";
-        params.push(admin_id);
-    }
-
     sql += " ORDER BY e.id DESC";
 
     db.query(sql, params, (err, result) => {
@@ -604,10 +631,10 @@ app.post("/login", (req, res) => {
 
     const sql = `
         SELECT
-            u.*,
-            c.id AS clienteId
+            u.id, u.nome, u.email, u.senha, u.tipo,
+            c.id AS clienteId 
         FROM usuario u
-        LEFT JOIN cliente c ON c.usuario_id = u.id
+        LEFT JOIN cliente c ON u.id = c.usuario_id
         WHERE u.email = ?
     `;
 
@@ -641,7 +668,8 @@ app.post("/login", (req, res) => {
                 id: usuario.id,
                 nome: usuario.nome,
                 email: usuario.email,
-                tipo: usuario.tipo
+                // Garante que tanto 'admin' quanto 'funcionario' sejam tratados como 'admin' no frontend
+                tipo: (usuario.tipo === 'admin' || usuario.tipo === 'funcionario') ? 'admin' : 'cliente'
             },
             clienteId: usuario.clienteId || null
         });
@@ -714,6 +742,101 @@ app.post("/usuarios", (req, res) => {
             );
         }
     );
+});
+
+// ===============================
+// FUNCIONÁRIOS (NOVO)
+// ===============================
+
+// LISTAR FUNCIONÁRIOS
+app.get("/funcionarios", (req, res) => {
+    const sql = "SELECT id, nome, telefone, email, tipo FROM usuario WHERE tipo = 'funcionario' ORDER BY id DESC";
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.log("Erro ao buscar funcionários:", err);
+            return res.status(500).json({ erro: "Erro ao buscar funcionários" });
+        }
+        res.json(result);
+    });
+});
+
+// CRIAR FUNCIONÁRIO
+app.post("/funcionarios", (req, res) => {
+    const { nome, telefone, email, senha } = req.body;
+
+    if (!nome || !email || !senha) {
+        return res.status(400).json({ erro: "Nome, email e senha são obrigatórios" });
+    }
+
+    const sql = `
+        INSERT INTO usuario (nome, telefone, email, senha, tipo)
+        VALUES (?, ?, ?, ?, 'funcionario')
+    `;
+    db.query(sql, [nome, telefone, email, senha], (err, result) => {
+        if (err) {
+            console.log("Erro ao criar funcionário:", err);
+            if (err.code === "ER_DUP_ENTRY") {
+                return res.status(400).json({ erro: "E-mail já cadastrado" });
+            }
+            return res.status(500).json({ erro: "Erro ao criar funcionário" });
+        }
+        res.status(201).json({
+            mensagem: "Funcionário criado com sucesso",
+            id: result.insertId
+        });
+    });
+});
+
+// ATUALIZAR FUNCIONÁRIO
+app.put("/funcionarios/:id", (req, res) => {
+    const { id } = req.params;
+    const { nome, telefone, email } = req.body;
+
+    if (!nome || !email) {
+        return res.status(400).json({ erro: "Nome e email são obrigatórios" });
+    }
+
+    // Não atualizamos a senha aqui para segurança
+    const sql = `
+        UPDATE usuario SET nome = ?, telefone = ?, email = ?
+        WHERE id = ? AND tipo = 'funcionario'
+    `;
+    db.query(sql, [nome, telefone, email, id], (err, result) => {
+        if (err) {
+            console.log("Erro ao atualizar funcionário:", err);
+            if (err.code === "ER_DUP_ENTRY") {
+                return res.status(400).json({ erro: "E-mail já está em uso por outro usuário" });
+            }
+            return res.status(500).json({ erro: "Erro ao atualizar funcionário" });
+        }
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ erro: "Funcionário não encontrado" });
+        }
+        res.json({ mensagem: "Funcionário atualizado com sucesso" });
+    });
+});
+
+// DELETAR FUNCIONÁRIO
+app.delete("/funcionarios/:id", (req, res) => {
+    const { id } = req.params;
+
+    // Verificação para não se auto-deletar (exemplo, se o admin logado tivesse id 1)
+    // A lógica de quem está logado precisaria ser passada na requisição real
+    // if (id == idDoAdminLogado) {
+    //     return res.status(403).json({ erro: "Não é possível remover o próprio usuário." });
+    // }
+
+    const sql = "DELETE FROM usuario WHERE id = ? AND tipo = 'funcionario'";
+    db.query(sql, [id], (err, result) => {
+        if (err) {
+            console.log("Erro ao deletar funcionário:", err);
+            return res.status(500).json({ erro: "Erro ao deletar funcionário" });
+        }
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ erro: "Funcionário não encontrado ou não é um funcionário" });
+        }
+        res.json({ mensagem: "Funcionário removido com sucesso" });
+    });
 });
 
 // ===============================
@@ -851,6 +974,136 @@ app.get("/pedidos", (req, res) => {
     });
 });
 
+// ===============================
+// MENSAGENS
+// ===============================
+
+// CRIAR MENSAGEM
+app.post("/mensagens", (req, res) => {
+    const { pedido_id, cliente_id, mensagem, tipo } = req.body;
+
+    if (!cliente_id || !mensagem) {
+        return res.status(400).json({
+            erro: "Dados incompletos para enviar mensagem"
+        });
+    }
+
+    const sql = `
+        INSERT INTO mensagens
+        (pedido_id, cliente_id, mensagem, tipo)
+        VALUES (?, ?, ?, ?)
+    `;
+
+    db.query(
+        sql,
+        [pedido_id || null, cliente_id, mensagem, tipo || 'admin'],
+        (err, result) => {
+            if (err) {
+                console.log("Erro ao enviar mensagem:", err);
+                return res.status(500).json({
+                    erro: "Erro ao enviar mensagem"
+                });
+            }
+
+            res.json({
+                mensagem: "Mensagem enviada com sucesso",
+                id: result.insertId
+            });
+        }
+    );
+});
+
+// LISTAR MENSAGENS (PARA O CLIENTE)
+app.get("/mensagens", (req, res) => {
+    const { cliente_id, pedido_id } = req.query;
+
+    if (!cliente_id && !pedido_id) {
+        return res.status(400).json({
+            erro: "ID do cliente ou do pedido é obrigatório"
+        });
+    }
+
+    let sql = `
+        SELECT * FROM mensagens
+        WHERE 1=1
+    `;
+    const params = [];
+
+    if (cliente_id) {
+        sql += " AND cliente_id = ?";
+        params.push(cliente_id);
+    }
+    if (pedido_id) {
+        sql += " AND pedido_id = ?";
+        params.push(pedido_id);
+    }
+
+    sql += " ORDER BY criado_em DESC";
+
+    db.query(sql, params, (err, result) => {
+        if (err) {
+            console.log("Erro ao buscar mensagens:", err);
+            return res.status(500).json({ erro: "Erro ao buscar mensagens" });
+        }
+        res.json(result);
+    });
+});
+
+// MARCAR MENSAGENS COMO LIDAS
+app.put("/cliente/mensagens/marcar-lidas", (req, res) => {
+    const { pedido_id, cliente_id } = req.body;
+
+    if (!pedido_id || !cliente_id) {
+        return res.status(400).json({ erro: "Dados incompletos" });
+    }
+
+    const sql = `
+        UPDATE mensagens 
+        SET lida = TRUE 
+        WHERE pedido_id = ? AND cliente_id = ? AND tipo = 'admin'
+    `;
+
+    db.query(sql, [pedido_id, cliente_id], (err, result) => {
+        if (err) {
+            console.log("Erro ao marcar mensagens como lidas:", err);
+            return res.status(500).json({ erro: "Erro no servidor" });
+        }
+        res.json({ mensagem: "Mensagens marcadas como lidas" });
+    });
+});
+
+// CLIENTE ENVIAR MENSAGEM
+app.post("/cliente/enviar-mensagem", (req, res) => {
+    const { pedido_id, cliente_id, mensagem } = req.body;
+
+    if (!pedido_id || !cliente_id || !mensagem) {
+        return res.status(400).json({ erro: "Dados incompletos" });
+    }
+
+    const sql = `
+        INSERT INTO mensagens (pedido_id, cliente_id, mensagem, tipo)
+        VALUES (?, ?, ?, 'cliente')
+    `;
+
+    db.query(sql, [pedido_id, cliente_id, mensagem], (err, result) => {
+        if (err) {
+            console.log("Erro ao enviar mensagem pelo cliente:", err);
+            return res.status(500).json({ erro: "Erro ao enviar mensagem" });
+        }
+        res.json({ id: result.insertId, mensagem: "Mensagem enviada" });
+    });
+});
+
+// CONTAGEM DE MENSAGENS NÃO LIDAS
+app.get("/cliente/mensagens/nao-lidas/count", (req, res) => {
+    const { cliente_id } = req.query;
+    const sql = "SELECT COUNT(*) AS total FROM mensagens WHERE cliente_id = ? AND tipo = 'admin' AND lida = FALSE";
+    db.query(sql, [cliente_id], (err, result) => {
+        if (err) return res.status(500).json({ erro: "Erro ao contar mensagens" });
+        res.json(result[0]);
+    });
+});
+
 app.get("/meu-pedido/:clienteId", (req, res) => {
 
     const clienteId = req.params.clienteId;
@@ -910,13 +1163,13 @@ app.put("/pedidos/:id/status", (req, res) => {
             db.query("SELECT evento_id FROM pedidos WHERE id = ?", [id], (err2, rows) => {
                 if (!err2 && rows.length > 0) {
                     const evId = rows[0].evento_id;
-                    let statusOrcamento = 'pendente';
+                    let statusOrcamento = 'pendente'; // Status padrão
                     
-                    // Mapeamento para o status do orçamento (usado na timeline do cliente)
-                    if (status === 'Confirmado') statusOrcamento = 'aprovado';
-                    if (status === 'Preparando') statusOrcamento = 'preparando';
-                    if (status === 'Cancelado') statusOrcamento = 'recusado';
-                    if (status === 'Finalizado') statusOrcamento = 'aprovado';
+                    // Mapeamento de status do Pedido para o Orçamento (usado na timeline do cliente)
+                    if (status.toLowerCase() === 'confirmado') statusOrcamento = 'aprovado';
+                    if (status.toLowerCase() === 'preparando') statusOrcamento = 'preparando';
+                    if (status.toLowerCase() === 'cancelado') statusOrcamento = 'recusado';
+                    if (status.toLowerCase() === 'finalizado') statusOrcamento = 'finalizado'; // Sincroniza o status 'finalizado'
 
                     db.query("UPDATE orcamento SET status = ? WHERE evento_id = ?", [statusOrcamento, evId], (err3) => {
                         if (err3) console.error("Erro ao sincronizar orçamento:", err3);
@@ -1546,11 +1799,6 @@ app.get("/orcamentos", (req, res) => {
     `;
 
     const params = [];
-
-    if (admin_id) {
-        sql += " AND o.admin_id = ?";
-        params.push(admin_id);
-    }
 
     sql += " ORDER BY o.id DESC";
 

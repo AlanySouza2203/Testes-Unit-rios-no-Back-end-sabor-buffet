@@ -615,9 +615,9 @@ body{
 
     <div class="sidebar-footer">
 
-      <a href="#">
-        <i data-lucide="panel-left-close"></i>
-        Recolher
+      <a href="funcionarios.html" id="link-funcionarios" style="display: none;">
+        <i data-lucide="user-cog"></i>
+        Funcionários
       </a>
 
       <a href="../public/login.html">
@@ -712,7 +712,12 @@ lucide.createIcons()
 
 const usuario = JSON.parse(localStorage.getItem("usuario"))
 
-if(!usuario || usuario.tipo !== "admin"){
+if (usuario && usuario.email === 'admin@email.com') {
+    document.getElementById('link-funcionarios').style.display = 'flex';
+}
+
+
+if(!usuario || (usuario.tipo !== "admin" && usuario.tipo !== "funcionario")){
   window.location.href = "../public/login.html"
 }
 
@@ -961,64 +966,28 @@ async function editar(id){
 }
 
 
-// REMOVER - VERSÃO QUE FUNCIONAVA ANTES
+// REMOVER
 async function remover(id){
 
-  if(!confirm("Excluir cliente, pedidos e eventos?")) return;
+  if(!confirm("Deseja excluir este cliente e todos os seus dados (eventos, pedidos, orçamentos)? Esta ação não pode ser desfeita.")) return;
 
   try{
-
-    // APAGA EVENTOS DO CLIENTE
-    const eventos =
-      await fetch(
-        `http://localhost:3000/eventos?cliente_id=${id}`
-      )
-
-    const listaEventos =
-      await eventos.json()
-
-    for(const evento of listaEventos){
-
-      await fetch(
-        `http://localhost:3000/eventos/${evento.id}`,
-        {
-          method:"DELETE"
-        }
-      )
-    }
-
-
-    // APAGA PEDIDOS DO CLIENTE
-    const pedidos =
-      await fetch(
-        `http://localhost:3000/pedidos?cliente_id=${id}`
-      )
-
-    const listaPedidos =
-      await pedidos.json()
-
-    for(const pedido of listaPedidos){
-
-      await fetch(
-        `http://localhost:3000/pedidos/${pedido.id}`,
-        {
-          method:"DELETE"
-        }
-      )
-    }
-
-
-    // APAGA CLIENTE
-    await fetch(
+    // O backend agora cuida da exclusão em cascata
+    const resposta = await fetch(
       `http://localhost:3000/clientes/${id}`,
       {
         method:"DELETE"
       }
     )
 
+    if (!resposta.ok) {
+      const erro = await resposta.json();
+      throw new Error(erro.erro || "Erro ao remover cliente");
+    }
+
     carregarClientes()
 
-    alert("Cliente removido")
+    alert("Cliente e todos os seus dados foram removidos com sucesso.")
 
   }catch(err){
 

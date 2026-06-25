@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Sabor & Arte - Funcionários</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Inter',sans-serif;
+}
+
+:root{
+
+  --bg:#020617;
+  --sidebar:#0f172a;
+  --card:#111827;
+
+  --text:#e2e8f0;
+  --muted:#94a3b8;
+
+  --yellow:#facc15;
+  --green:#22c55e;
+  --red:#ef4444;
+
+  --border:rgba(255,255,255,0.06);
+
+  --radius:18px;
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+}
+
+.container{
+  display:flex;
+  min-height:100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+  width:260px;
+  background:var(--sidebar);
+
+  border-right:1px solid var(--border);
+
+  padding:24px 18px;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+.sidebar-top{
+  display:flex;
+  flex-direction:column;
+}
+
+.logo{
+  font-size:28px;
+  font-weight:700;
+  margin-bottom:40px;
+}
+
+.logo span{
+  color:var(--yellow);
+}
+
+.menu{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.menu a{
+  display:flex;
+  align-items:center;
+  gap:12px;
+
+  text-decoration:none;
+
+  color:var(--muted);
+
+  padding:14px 16px;
+
+  border-radius:14px;
+
+  transition:0.2s;
+
+  font-size:15px;
+  font-weight:500;
+}
+
+.menu a svg{
+  width:18px;
+  height:18px;
+}
+
+.menu a:hover{
+  background:rgba(250,204,21,0.08);
+  color:white;
+}
+
+.menu a.active{
+  background:var(--yellow);
+  color:black;
+  font-weight:700;
+}
+
+/* FOOTER SIDEBAR */
+
+.sidebar-footer{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+
+  padding-top:20px;
+
+  border-top:1px solid rgba(255,255,255,0.05);
+}
+
+.sidebar-footer a{
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  text-decoration:none;
+
+  color:var(--muted);
+
+  padding:12px 14px;
+
+  border-radius:12px;
+
+  transition:0.2s;
+
+  font-size:14px;
+}
+
+.sidebar-footer a svg{
+  width:17px;
+  height:17px;
+}
+
+.sidebar-footer a:hover{
+  background:rgba(255,255,255,0.05);
+  color:white;
+}
+
+/* CONTENT */
+
+.content{
+  flex:1;
+  padding:28px;
+  overflow-y:auto;
+}
+
+.topo{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  margin-bottom:24px;
+}
+
+.titulo h1{
+  font-size:38px;
+  margin-bottom:5px;
+}
+
+.titulo p{
+  color:var(--muted);
+}
+
+.btn{
+  background:var(--yellow);
+
+  border:none;
+
+  padding:14px 18px;
+
+  border-radius:12px;
+
+  cursor:pointer;
+
+  font-weight:600;
+
+  display:flex;
+  align-items:center;
+  gap:8px;
+
+  transition:0.2s;
+}
+
+.btn:hover{
+  transform:scale(1.03);
+}
+
+/* BOX */
+
+.box{
+  background:var(--card);
+
+  border:1px solid var(--border);
+
+  border-radius:24px;
+
+  padding:22px;
+}
+
+.busca{
+  position:relative;
+  margin-bottom:24px;
+}
+
+.busca i{
+  position:absolute;
+
+  left:16px;
+  top:15px;
+
+  color:var(--muted);
+}
+
+.busca input{
+  width:100%;
+
+  background:#0b1120;
+
+  border:1px solid var(--border);
+
+  color:white;
+
+  padding:14px 16px 14px 45px;
+
+  border-radius:14px;
+
+  outline:none;
+}
+
+/* FUNCIONARIOS */
+
+.lista-funcionarios{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.funcionario{
+  background:#0b1120;
+
+  border:1px solid rgba(255,255,255,0.04);
+
+  border-radius:18px;
+
+  padding:18px;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  transition:0.2s;
+}
+
+.funcionario:hover{
+  transform:translateY(-2px);
+}
+
+.funcionario-esquerda{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.avatar{
+  width:42px;
+  height:42px;
+
+  border-radius:50%;
+
+  background:rgba(59, 130, 246, 0.12);
+
+  color:var(--blue);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-weight:700;
+}
+
+.info h3{
+  margin-bottom:5px;
+}
+
+.info small{
+  color:var(--muted);
+
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.info small span{
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+
+.funcionario-direita{
+  display:flex;
+  align-items:center;
+  gap:28px;
+}
+
+.status{
+  background:rgba(34,197,94,0.15);
+
+  color:var(--green);
+
+  padding:8px 14px;
+
+  border-radius:999px;
+
+  font-size:13px;
+  font-weight:600;
+}
+
+.acoes{
+  display:flex;
+  gap:8px;
+}
+
+.acoes button{
+  width:38px;
+  height:38px;
+
+  border:none;
+
+  border-radius:10px;
+
+  cursor:pointer;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  transition:0.2s;
+}
+
+.btn-editar{
+  background:rgba(250,204,21,0.12);
+  color:var(--yellow);
+}
+
+.btn-remover{
+  background:rgba(239,68,68,0.12);
+  color:var(--red);
+}
+
+.acoes button:hover{
+  transform:scale(1.05);
+}
+
+/* MODAL */
+
+.modal{
+  position:fixed;
+  inset:0;
+
+  background:rgba(0,0,0,0.7);
+
+  display:none;
+  justify-content:center;
+  align-items:center;
+
+  z-index:999;
+}
+
+.modal-content{
+  width:100%;
+  max-width:400px;
+
+  background:var(--card);
+
+  border:1px solid var(--border);
+
+  border-radius:24px;
+
+  padding:24px;
+}
+
+.modal-content h3{
+  margin-bottom:20px;
+  font-size:24px;
+}
+
+.modal-content input{
+  width:100%;
+
+  background:#0b1120;
+
+  border:1px solid var(--border);
+
+  color:white;
+
+  padding:14px;
+
+  border-radius:12px;
+
+  outline:none;
+
+  margin-bottom:14px;
+}
+
+.modal-botoes{
+  display:flex;
+  gap:10px;
+  margin-top:10px;
+}
+
+.cancelar{
+  background:#1e293b;
+  color:white;
+}
+
+/* =========================
+   MENU MOBILE
+========================= */
+
+.menu-mobile{
+
+  position:fixed;
+  top:20px;
+  left:20px;
+
+  width:55px;
+  height:55px;
+
+  border:none;
+  border-radius:14px;
+
+  background:var(--yellow);
+  color:#000;
+
+  font-size:30px;
+
+  display:none;
+
+  z-index:9999;
+
+  cursor:pointer;
+}
+
+/* =========================
+   RESPONSIVO
+========================= */
+
+@media(max-width:900px){
+
+  .menu-mobile{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .sidebar{
+
+    position:fixed;
+
+    top:0;
+    left:-270px;
+
+    width:260px;
+    height:100vh;
+
+    background:var(--sidebar);
+
+    transition:0.3s;
+
+    z-index:9998;
+
+    overflow-y:auto;
+  }
+
+  .sidebar.ativo{
+    left:0 !important;
+  }
+
+  .content{
+    width:100%;
+    padding:20px;
+    padding-top:90px;
+  }
+
+  .topo{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:18px;
+  }
+
+  .titulo h1{
+    font-size:32px;
+  }
+
+  .funcionario{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:20px;
+  }
+
+  .funcionario-direita{
+    width:100%;
+    justify-content:space-between;
+  }
+
+  .info small{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:8px;
+  }
+
+  .modal-content{
+    width:90%;
+  }
+}
+
+</style>
+
+</head>
+
+<body>
+  <button class="menu-mobile" onclick="toggleMenu()">
+  <i class="bi bi-list"></i>
+</button>
+
+<div class="container">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+
+    <div class="sidebar-top">
+
+      <div class="logo">
+        Sabor<span>&Arte</span>
+      </div>
+
+      <nav class="menu">
+
+        <a href="dashboard.html">
+          <i data-lucide="layout-dashboard"></i>
+          Dashboard
+        </a>
+
+        <a href="clientes.html">
+          <i data-lucide="users"></i>
+          Clientes
+        </a>
+
+        <a href="servicos.html">
+          <i data-lucide="utensils-crossed"></i>
+          Serviços
+        </a>
+
+        <a href="eventos.html">
+          <i data-lucide="calendar"></i>
+          Eventos
+        </a>
+
+        <a href="pedidos.html">
+          <i data-lucide="shopping-bag"></i>
+          Pedidos
+        </a>
+
+        <a href="orcamentos.html">
+          <i data-lucide="file-text"></i>
+          Orçamentos
+        </a>
+
+      </nav>
+
+    </div>
+
+    <div class="sidebar-footer">
+
+      <a href="funcionarios.html" id="link-funcionarios" class="active">
+        <i data-lucide="user-cog"></i>
+        Funcionários
+      </a>
+
+      <a href="../public/login.html">
+        <i data-lucide="log-out"></i>
+        Sair
+      </a>
+
+    </div>
+
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <div class="topo">
+
+      <div class="titulo">
+        <h1>Funcionários</h1>
+        <p id="totalFuncionarios">0 funcionários cadastrados</p>
+      </div>
+
+      <button class="btn" onclick="abrirModal()">
+        <i data-lucide="plus"></i>
+        Novo Funcionário
+      </button>
+
+    </div>
+
+    <div class="box">
+
+      <div class="busca">
+
+        <i data-lucide="search"></i>
+
+        <input
+          type="text"
+          placeholder="Buscar funcionários..."
+          oninput="buscar(this.value)"
+        >
+
+      </div>
+
+      <div class="lista-funcionarios" id="listaFuncionarios"></div>
+
+    </div>
+
+  </main>
+
+</div>
+
+<!-- MODAL -->
+
+<div class="modal">
+
+  <div class="modal-content">
+
+    <h3>Novo Funcionário</h3>
+
+    <input type="text" id="nome" placeholder="Nome">
+    <input type="text" id="telefone" placeholder="Telefone">
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="senha" placeholder="Senha (mín. 6 caracteres)">
+
+    <div class="modal-botoes">
+
+      <button class="btn" onclick="salvar()">
+        Salvar
+      </button>
+
+      <button class="btn cancelar" onclick="fecharModal()">
+        Cancelar
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  function toggleMenu(){
+    const sidebar = document.getElementById("sidebar");
+    sidebar.classList.toggle("ativo");
+  }
+
+  lucide.createIcons();
+
+  const usuario = JSON.parse(localStorage.getItem("usuario"));
+
+  // Proteção de rota e controle de acesso
+  if(!usuario || (usuario.tipo !== "admin" && usuario.tipo !== "funcionario")){
+    window.location.href = "../public/login.html";
+  }
+  if (usuario.email !== 'admin@email.com') {
+      // Se não for o admin principal, redireciona para o dashboard normal
+      window.location.href = "dashboard.html";
+  }
+
+  let funcionarios = [];
+  let editando = null;
+  const modal = document.querySelector(".modal");
+
+  // CARREGAR FUNCIONÁRIOS
+  async function carregarFuncionarios(){
+    try{
+      const res = await fetch(`http://localhost:3000/funcionarios`);
+      funcionarios = await res.json();
+      if(!Array.isArray(funcionarios)){
+        funcionarios = [];
+      }
+      render(funcionarios);
+    } catch(err){
+      console.log(err);
+    }
+  }
+
+  // RENDER
+  function render(lista = funcionarios){
+    const container = document.getElementById("listaFuncionarios");
+    const total = document.getElementById("totalFuncionarios");
+    container.innerHTML = "";
+    total.innerText = `${lista.length} funcionários cadastrados`;
+
+    lista.forEach(f => {
+      let inicial = f.nome ? f.nome.charAt(0).toUpperCase() : "F";
+      container.innerHTML += `
+        <div class="funcionario">
+          <div class="funcionario-esquerda">
+            <div class="avatar">${inicial}</div>
+            <div class="info">
+              <h3>${f.nome}</h3>
+              <small>
+                <span><i data-lucide="mail"></i>${f.email}</span>
+                <span><i data-lucide="phone"></i>${f.telefone || 'Não informado'}</span>
+              </small>
+            </div>
+          </div>
+          <div class="funcionario-direita">
+            <span class="status">Ativo</span>
+            <div class="acoes">
+              <button class="btn-editar" onclick="editar(${f.id})"><i data-lucide="pencil"></i></button>
+              <button class="btn-remover" onclick="remover(${f.id})"><i data-lucide="trash-2"></i></button>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+    lucide.createIcons();
+  }
+
+  // MODAL
+  function abrirModal(){
+    document.querySelector(".modal-content h3").innerText = "Novo Funcionário";
+    document.getElementById('senha').style.display = 'block';
+    modal.style.display = "flex";
+  }
+
+  function fecharModal(){
+    modal.style.display = "none";
+    limpar();
+  }
+
+  function limpar(){
+    document.getElementById("nome").value = "";
+    document.getElementById("telefone").value = "";
+    document.getElementById("email").value = "";
+    document.getElementById("senha").value = "";
+    editando = null;
+  }
+
+  // SALVAR
+  async function salvar(){
+    let resposta;
+    const dadosFuncionario = {
+      nome: document.getElementById("nome").value.trim(),
+      telefone: document.getElementById("telefone").value.trim(),
+      email: document.getElementById("email").value.trim(),
+      senha: document.getElementById("senha").value.trim()
+    };
+
+    if(!dadosFuncionario.nome || !dadosFuncionario.email) {
+      return alert("Nome e Email são obrigatórios.");
+    }
+
+    try {
+      if(editando !== null){
+        // EDITAR FUNCIONÁRIO (não envia a senha)
+        const { senha, ...dadosUpdate } = dadosFuncionario;
+        resposta = await fetch(`http://localhost:3000/funcionarios/${editando}`, {
+          method:"PUT",
+          headers:{"Content-Type":"application/json"},
+          body: JSON.stringify(dadosUpdate)
+        });
+      } else {
+        // NOVO FUNCIONÁRIO
+        if (!dadosFuncionario.senha || dadosFuncionario.senha.length < 3) {
+            return alert("A senha é obrigatória para novos funcionários (mín. 3 caracteres).");
+        }
+        resposta = await fetch("http://localhost:3000/funcionarios", {
+          method:"POST",
+          headers:{"Content-Type":"application/json"},
+          body: JSON.stringify(dadosFuncionario)
+        });
+      }
+
+      if(!resposta.ok){
+        const erro = await resposta.json();
+        throw new Error(erro.erro || "Erro ao salvar funcionário");
+      }
+
+      const eraEdicao = editando !== null;
+      fecharModal();
+      await carregarFuncionarios();
+      alert(eraEdicao ? "Funcionário atualizado!" : "Funcionário criado!");
+
+    } catch(err){
+      console.log("ERRO REAL:", err);
+      alert(err.message || "Erro no servidor");
+    }
+  }
+
+  // EDITAR
+  async function editar(id){
+    const f = funcionarios.find(func => func.id == id);
+    if(!f) return alert("Funcionário não encontrado");
+
+    editando = id;
+    document.getElementById("nome").value = f.nome || "";
+    document.getElementById("telefone").value = f.telefone || "";
+    document.getElementById("email").value = f.email || "";
+    document.getElementById("senha").value = ""; // Limpa o campo de senha
+    document.getElementById("senha").style.display = 'none'; // Oculta o campo de senha na edição
+
+    document.querySelector(".modal-content h3").innerText = "Editar Funcionário";
+    modal.style.display = "flex";
+  }
+
+  // REMOVER
+  async function remover(id){
+    if (id === usuario.id) {
+        return alert("Você não pode remover seu próprio usuário.");
+    }
+    if(!confirm("Deseja realmente excluir este funcionário?")) return;
+
+    try{
+      const resposta = await fetch(`http://localhost:3000/funcionarios/${id}`, { method:"DELETE" });
+      if (!resposta.ok) {
+        const erro = await resposta.json();
+        throw new Error(erro.erro || "Erro ao remover funcionário");
+      }
+      carregarFuncionarios();
+      alert("Funcionário removido com sucesso.");
+    } catch(err){
+      console.log(err);
+      alert(err.message || "Erro ao excluir");
+    }
+  }
+
+  // BUSCAR
+  function buscar(texto) {
+      const filtrados = funcionarios.filter(f =>
+          f.nome.toLowerCase().includes(texto.toLowerCase()) ||
+          f.email.toLowerCase().includes(texto.toLowerCase())
+      );
+      render(filtrados);
+  }
+
+  // INIT
+  carregarFuncionarios();
+
+</script>
+
+</body>
+</html>

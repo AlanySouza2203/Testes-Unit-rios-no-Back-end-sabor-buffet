@@ -691,9 +691,9 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
     <div class="sidebar-footer">
 
 
-      <a href="#">
-        <i data-lucide="panel-left-close"></i>
-        Recolher
+      <a href="funcionarios.html" id="link-funcionarios" style="display: none;">
+        <i data-lucide="user-cog"></i>
+        Funcionários
       </a>
 
 
@@ -789,6 +789,16 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
   sidebar.classList.toggle("ativo");
 }
 
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+
+    if (usuario && usuario.email === 'admin@email.com') {
+        document.getElementById('link-funcionarios').style.display = 'flex';
+    }
+
+    if (!usuario || (usuario.tipo !== "admin" && usuario.tipo !== "funcionario")) {
+        window.location.href = "../public/login.html";
+    }
+
     lucide.createIcons();
 
     let itens = [];
@@ -879,7 +889,7 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
                 class="btn-editar"
                 onclick="editar(${item.id})"
               >
-                ✏️ Editar
+                Editar
               </button>
 
               <button

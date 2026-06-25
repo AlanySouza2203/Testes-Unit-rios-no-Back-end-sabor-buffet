@@ -522,6 +522,46 @@ td{
 }
 }
 
+/* FOOTER SIDEBAR (Estilo que faltava) */
+
+.sidebar-footer{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+
+  padding-top:20px;
+
+  border-top:1px solid rgba(255,255,255,0.05);
+}
+
+.sidebar-footer a{
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  text-decoration:none;
+
+  color:var(--muted);
+
+  padding:12px 14px;
+
+  border-radius:12px;
+
+  transition:0.2s;
+
+  font-size:14px;
+}
+
+.sidebar-footer a svg{
+  width:17px;
+  height:17px;
+}
+
+.sidebar-footer a:hover{
+  background:rgba(255,255,255,0.05);
+  color:white;
+}
+
 
 </style>
 </head>
@@ -536,58 +576,59 @@ td{
 <div class="container">
 
 
- <aside class="sidebar" id="sidebar">
+  <aside class="sidebar" id="sidebar">
 
+    <div class="sidebar-top">
 
-    <div class="logo">
-      Sabor<span>&Arte</span>
+      <div class="logo">
+        Sabor<span>&Arte</span>
+      </div>
+
+      <nav class="menu">
+        <a href="dashboard.html" class="active">
+          <i data-lucide="layout-dashboard"></i>
+          Dashboard
+        </a>
+        <a href="clientes.html">
+          <i data-lucide="users"></i>
+          Clientes
+        </a>
+        <a href="servicos.html">
+          <i data-lucide="utensils-crossed"></i>
+          Serviços
+        </a>
+        <a href="eventos.html">
+          <i data-lucide="calendar"></i>
+          Eventos
+        </a>
+        <a href="pedidos.html">
+          <i data-lucide="shopping-bag"></i>
+          Pedidos
+        </a>
+        <a href="orcamentos.html">
+          <i data-lucide="file-text"></i>
+          Orçamentos
+        </a>
+      </nav>
+
     </div>
 
+    <!-- SIDEBAR FOOTER -->
+    <div class="sidebar-footer">
 
-    <nav class="menu">
-
-
-      <a href="dashboard.html" class="active">
-        <i data-lucide="layout-dashboard"></i>
-        Dashboard
+      <a href="funcionarios.html" id="link-funcionarios" style="display: none;">
+        <i data-lucide="user-cog"></i>
+        Funcionários
       </a>
 
-
-      <a href="clientes.html">
-        <i data-lucide="users"></i>
-        Clientes
+      <a href="../public/login.html">
+        <i data-lucide="log-out"></i>
+        Sair
       </a>
 
-
-      <a href="servicos.html">
-        <i data-lucide="utensils-crossed"></i>
-        Serviços
-      </a>
-
-
-      <a href="eventos.html">
-        <i data-lucide="calendar"></i>
-        Eventos
-      </a>
-
-
-      <a href="pedidos.html">
-        <i data-lucide="shopping-bag"></i>
-        Pedidos
-      </a>
-
-
-      <a href="orcamentos.html">
-        <i data-lucide="file-text"></i>
-        Orçamentos
-      </a>
-
-
-    </nav>
-
+    </div>
 
   </aside>
-
 
   <main class="content">
 
@@ -756,16 +797,20 @@ function toggleMenu(){
 }
 
 
+const usuario = JSON.parse(localStorage.getItem("usuario"))
+
+if (usuario && usuario.email === 'admin@email.com') {
+    document.getElementById('link-funcionarios').style.display = 'flex';
+}
+
+
 
 
 lucide.createIcons()
 
 
-const usuario = JSON.parse(localStorage.getItem("usuario"))
-
-
 // PROTEÇÃO
-if (!usuario || usuario.tipo !== "admin" || !usuario.id) {
+if (!usuario || (usuario.tipo !== "admin" && usuario.tipo !== "funcionario") || !usuario.id) {
   window.location.href = "../public/login.html"
 }
 
@@ -784,7 +829,7 @@ async function carregarPedidos() {
   try {
 
 
-    let res = await fetch(`http://localhost:3000/pedidos?admin_id=${usuario.id}`)
+    let res = await fetch(`http://localhost:3000/pedidos`)
 
 
     pedidos = await res.json()
@@ -814,7 +859,7 @@ async function carregarClientes() {
   try {
 
 
-    let res = await fetch(`http://localhost:3000/clientes?admin_id=${usuario.id}`)
+    let res = await fetch(`http://localhost:3000/clientes`)
 
 
     clientes = await res.json()
@@ -843,7 +888,7 @@ async function carregarEventos() {
   try {
 
 
-    let res = await fetch(`http://localhost:3000/eventos?admin_id=${usuario.id}`)
+    let res = await fetch(`http://localhost:3000/eventos`)
 
 
     eventos = await res.json()

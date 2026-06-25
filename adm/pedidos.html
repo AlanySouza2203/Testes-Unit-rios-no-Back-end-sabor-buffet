@@ -585,9 +585,9 @@ body{
 
         <div class="sidebar-footer">
 
-            <a href="#">
-                <i data-lucide="panel-left-close"></i>
-                Recolher
+            <a href="funcionarios.html" id="link-funcionarios" style="display: none;">
+                <i data-lucide="user-cog"></i>
+                Funcionários
             </a>
 
             <a href="../public/login.html">
@@ -631,6 +631,12 @@ function toggleMenu(){
 
 lucide.createIcons()
 
+const usuario = JSON.parse(localStorage.getItem("usuario"));
+
+if (usuario && usuario.email === 'admin@email.com') {
+    document.getElementById('link-funcionarios').style.display = 'flex';
+}
+
 let pedidos = []
 
 // EVENTO URL
@@ -638,22 +644,21 @@ const params = new URLSearchParams(window.location.search)
 
 const eventoId = params.get("evento_id")
 
+if (!usuario || (usuario.tipo !== "admin" && usuario.tipo !== "funcionario")) {
+    window.location.href = "../public/login.html";
+}
+
 // CARREGAR PEDIDOS
 async function carregarPedidos() {
 
     try {
 
-        const usuario =
-            JSON.parse(localStorage.getItem("usuario"))
-
         if (!usuario || !usuario.id) return
 
         let url =
             `http://localhost:3000/pedidos?admin_id=${usuario.id}`
-
-        if (eventoId) {
-            url += `&evento_id=${eventoId}`
-        }
+        // O filtro por admin_id não é mais necessário no backend
+        url = `http://localhost:3000/pedidos`
 
         const res = await fetch(url)
 
@@ -724,10 +729,10 @@ function renderPedidos() {
         let statusTexto = "Pendente"
 
         if (status === "preparando") {
-            statusTexto = "Em preparo"
+            statusTexto = "Preparando"
         }
 
-        if (status === "entregue") {
+        if (status === "finalizado") {
             statusTexto = "Finalizado"
         }
 
@@ -773,7 +778,7 @@ function renderPedidos() {
 
                 <button
                     class="btn-preparar"
-                    onclick="preparar(${p.id})">
+                    onclick="preparar(${p.id}, ${p.cliente_id})">
 
                     Preparar
 
@@ -781,17 +786,9 @@ function renderPedidos() {
 
                 <button
                     class="btn-entregar"
-                    onclick="entregar(${p.id})">
+                    onclick="finalizar(${p.id}, ${p.cliente_id})">
 
                     Finalizar
-
-                </button>
-
-                <button
-                    class="btn-editar"
-                    onclick="editarPedido(${p.id})">
-
-                    Editar
 
                 </button>
 
@@ -813,6 +810,11 @@ function renderPedidos() {
     lucide.createIcons()
 }
 function formatarMoeda(valor) {
+    // Garante que o valor é um número antes de formatar
+    const numero = Number(valor);
+    if (isNaN(numero)) {
+        return "R$ 0,00";
+    }
     return Number(valor || 0).toLocaleString("pt-BR", {
         style: "currency",
         currency: "BRL"
@@ -820,65 +822,75 @@ function formatarMoeda(valor) {
 }
 
 // PREPARAR
-async function preparar(id) {
+async function preparar(pedidoId, clienteId) {
+    if (!confirm("Deseja marcar este pedido como 'Preparando' e notificar o cliente?")) return;
 
-    await fetch(
-        `http://localhost:3000/pedidos/${id}/status`,
-        {
-            method:"PUT",
+    try {
+        // 1. Atualizar o status do pedido
+        await fetch(`http://localhost:3000/pedidos/${pedidoId}/status`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: "Preparando" })
+        });
 
-            headers:{
-                "Content-Type":"application/json"
-            },
-
-            body:JSON.stringify({
-                status:"preparando"
+        // 2. Enviar mensagem para o cliente
+        await fetch(`http://localhost:3000/mensagens`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                pedido_id: pedidoId,
+                cliente_id: clienteId,
+                mensagem: "Seu pedido começou a ser preparado! 🎉",
+                tipo: "admin"
             })
-        }
-    )
+        });
 
-    carregarPedidos()
+        alert("Status alterado e cliente notificado!");
+        carregarPedidos();
+
+    } catch (err) {
+        console.error("Erro ao preparar pedido:", err);
+        alert("Ocorreu um erro. Tente novamente.");
+    }
 }
 
 // FINALIZAR
-async function entregar(id) {
+async function finalizar(pedidoId, clienteId) {
+    if (!confirm("Deseja marcar este pedido como 'Finalizado' e notificar o cliente?")) return;
 
-    await fetch(
-        `http://localhost:3000/pedidos/${id}/status`,
-        {
-            method:"PUT",
+    try {
+        // 1. Atualizar o status do pedido
+        await fetch(`http://localhost:3000/pedidos/${pedidoId}/status`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: "Finalizado" })
+        });
 
-            headers:{
-                "Content-Type":"application/json"
-            },
-
-            body:JSON.stringify({
-                status:"entregue"
+        // 2. Enviar mensagem para o cliente
+        await fetch(`http://localhost:3000/mensagens`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                pedido_id: pedidoId,
+                cliente_id: clienteId,
+                mensagem: "Seu pedido foi finalizado! Agradecemos a preferência.",
+                tipo: "admin"
             })
-        }
-    )
+        });
 
-    carregarPedidos()
+        alert("Status alterado e cliente notificado!");
+        carregarPedidos();
+
+    } catch (err) {
+        console.error("Erro ao finalizar pedido:", err);
+        alert("Ocorreu um erro. Tente novamente.");
+    }
 }
 
-// EDITAR
-function editarPedido(id) {
-
-    const pedido =
-        pedidos.find(p => p.id === id)
-
-    if (!pedido) return
-
-    let novoStatus = prompt(
-        "Novo status:",
-        pedido.status
-    )
-
-    if (!novoStatus) return
-
-    alterarPedido(id, {
-        status:novoStatus
-    })
+// Função para capitalizar a primeira letra
+function capitalize(s) {
+    if (typeof s !== 'string') return ''
+    return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
 // ALTERAR
@@ -919,7 +931,7 @@ async function remover(id) {
 carregarPedidos()
 
 // AUTO UPDATE
-setInterval(carregarPedidos, 4000)
+setInterval(carregarPedidos, 5000)
 
 </script>
 
